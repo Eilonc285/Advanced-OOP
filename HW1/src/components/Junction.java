@@ -21,6 +21,7 @@ public class Junction {
 		this.location = loc;
 		this.priorityRoadIndex = rand.nextInt(this.enteringRoads.size());
 		System.out.printf("Junction %s has been created\n", this.junctionName);
+
 	}
 
 	public String getJunctionName() {

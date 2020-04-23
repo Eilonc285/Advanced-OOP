@@ -18,6 +18,22 @@ public class Route {
 
 	}
 
+	public ArrayList<Junction> getJunctions() {
+		return junctions;
+	}
+
+	public ArrayList<Road> getRoads() {
+		return roads;
+	}
+
+	public double getDelay() {
+		return delay;
+	}
+
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
 	public Junction getStart() {
 		return this.junctions.get(0);
 	}
