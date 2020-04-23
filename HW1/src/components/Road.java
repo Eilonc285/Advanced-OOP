@@ -3,6 +3,8 @@ package components;
 import java.util.ArrayList;
 import java.util.Random;
 
+import game.Driving;
+
 public class Road {
 	private Junction fromJunc;
 	private Junction toJunc;
@@ -18,8 +20,14 @@ public class Road {
 		Random rand = new Random();
 		this.isOpen = rand.nextBoolean();
 		this.isEnabled = rand.nextBoolean();
-		// set allowed vehicles
+		for (int i = 0; i < Driving.getTypes().length; i++) {
+			if (rand.nextBoolean()) {
+				this.allowedVehicles.add(Driving.getTypes()[i].getTypeName());
+			}
+		}
 		this.length = this.countLength();
+		System.out.printf("Road from %s to %s has been created\n", this.fromJunc.getJunctionName(),
+				this.toJunc.getJunctionName());
 	}
 
 	public Road(Junction from, Junction to, ArrayList<String> allowed, boolean open, boolean enabled) {
@@ -28,6 +36,9 @@ public class Road {
 		this.allowedVehicles = allowed;
 		this.isOpen = open;
 		this.isEnabled = enabled;
+		System.out.printf("Road from %s to %s has been created\n", this.fromJunc.getJunctionName(),
+				this.toJunc.getJunctionName());
+
 	}
 
 	public Junction getFromJunc() {
@@ -89,12 +100,22 @@ public class Road {
 
 	@Override
 	public String toString() {
-		// implement
+		return String.format("Road from %s to %s\n", this.fromJunc.getJunctionName(), this.toJunc.getJunctionName());
 	}
 
 	@Override
 	public boolean equals(Object other) {
-		// implement
+		if (other instanceof Road) {
+			return this.fromJunc.equals(((Road) other).fromJunc) && this.toJunc.equals(((Road) other).toJunc)
+					&& this.allowedVehicles.equals(((Road) other).getAllowedVehicles())
+					&& this.isOpen == ((Road) other).isOpen() && this.isEnabled == ((Road) other).isEnabled()
+					&& this.maxSpeed == ((Road) other).getMaxSpeed();
+		}
+		return false;
+	}
+
+	public ArrayList<String> getAllowedVehicles() {
+		return allowedVehicles;
 	}
 
 }

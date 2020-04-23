@@ -9,8 +9,10 @@ public class VehicleType {
 		this.speed = speed;
 	}
 
+	@Override
 	public String toString() {
-
+//		implement
+		return String.format("toString VehicleType\n");
 	}
 
 	public boolean equals(Object other) {
@@ -18,6 +20,7 @@ public class VehicleType {
 			return this.typeName.equals(((VehicleType) other).getTypeName())
 					&& this.speed == ((VehicleType) other).getSpeed();
 		}
+		return false;
 	}
 
 	public String getTypeName() {

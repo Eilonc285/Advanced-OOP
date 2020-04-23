@@ -10,6 +10,15 @@ import components.Vehicles;
 import utilities.Point;
 
 public class Driving {
+//	private String[] types = { "car", "bus", "bicycle", "motorcycle", "truck", "tram", "jeep", "van" };
+	private static final VehicleType[] types = { new VehicleType("car", 90), new VehicleType("bus", 60),
+			new VehicleType("bicycle", 40), new VehicleType("motorcycle", 120), new VehicleType("truck", 80),
+			new VehicleType("tram", 50), new VehicleType("jeep", 85), new VehicleType("van", 75) };
+
+	public static VehicleType[] getTypes() {
+		return types;
+	}
+
 	private int numOfJuncs;
 	private int numOfVehicles;
 	private Map currentMap;
@@ -24,8 +33,8 @@ public class Driving {
 //		Point temp = new Point(1, 2);
 		ArrayList<Junction> jncs = new ArrayList<Junction>();
 		for (int i = 0; i < numOfJuncs; i++) {
-			double x = Math.random() * 1000000;
-			double y = Math.random() * 800;
+			double x = -1;
+			double y = -1;
 			Junction j = new Junction(String.format("Number %d", i + 1), new Point(x, y));
 			jncs.add(j);
 		}
@@ -33,7 +42,7 @@ public class Driving {
 	}
 
 	public int getNumOfJuncs() {
-		return numOfJuncs;
+		return this.numOfJuncs;
 	}
 
 	public void setNumOfJuncs(int numOfJuncs) {
@@ -41,7 +50,7 @@ public class Driving {
 	}
 
 	public int getNumOfVehicles() {
-		return numOfVehicles;
+		return this.numOfVehicles;
 	}
 
 	public void setNumOfVehicles(int numOfVehicles) {
@@ -49,7 +58,7 @@ public class Driving {
 	}
 
 	public Map getCurrentMap() {
-		return currentMap;
+		return this.currentMap;
 	}
 
 	public void setCurrentMap(Map currentMap) {
@@ -73,7 +82,7 @@ public class Driving {
 	}
 
 	public int getMaxTime() {
-		return maxTime;
+		return this.maxTime;
 	}
 
 	public void setMaxTime(int maxTime) {
@@ -97,9 +106,13 @@ public class Driving {
 	public void addVehicles() {
 		Random rand = new Random();
 		int num = rand.nextInt(7) + 2;
-		for(int i = 0; i < num; i++) {
-			Vehicles v = new Vehicles(i, String.format("Type %d", i + 1), this.currentMap.)
-			
+		for (int i = 0; i < num; i++) {
+			Vehicles v = new Vehicles(i, this.types[rand.nextInt(this.types.length)].getTypeName(),
+					this.currentMap.getJunctions().get(rand.nextInt(this.currentMap.getJunctions().size())));
 		}
+	}
+
+	public void startDrive(int maxTime) {
+		this.maxTime = maxTime;
 	}
 }

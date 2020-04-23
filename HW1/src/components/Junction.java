@@ -12,10 +12,13 @@ public class Junction {
 	private boolean hasLights;
 	private int delay;
 	private ArrayList<Road> vehicles;
+	private int priorityRoadIndex;
 
 	public Junction(String name, Point loc) {
 		this.junctionName = name;
 		this.location = loc;
+		this.priorityRoadIndex = 0;
+		System.out.printf("Junction %s has been created\n", this.junctionName);
 	}
 
 	public String getJunctionName() {
@@ -78,16 +81,20 @@ public class Junction {
 	}
 
 	public boolean checkAvailability(Road r) {
+		return this.enteringRoads.indexOf(r) == this.priorityRoadIndex;
 	}
 
 	@Override
 	public String toString() {
-//		return String.format("");
+		return String.format("Junction %s", this.junctionName);
 	}
 
 	@Override
 	public boolean equals(Object other) {
-//		return true 
+		if (other instanceof Junction) {
+			return this.location.equals(((Junction) other).getLocation());
+		}
+		return false;
 	}
 
 }

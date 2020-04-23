@@ -15,7 +15,7 @@ public class Map {
 		for (int i = 0; i < 20; i++) {
 
 			Point p = new Point(rand.nextInt(p_temp.getX_max()), rand.nextInt(p_temp.getY_max()));
-			Junction j = new Junction(String.format("Number %d", i + 1), p);
+			Junction j = new Junction(String.format("%d", i), p);
 			this.junctions.add(j);
 		}
 
@@ -44,6 +44,14 @@ public class Map {
 			}
 		}
 
+	}
+
+	public ArrayList<Junction> getJunctions() {
+		return junctions;
+	}
+
+	public ArrayList<Road> getRoads() {
+		return roads;
 	}
 
 	public Map(ArrayList<Junction> juncs) {
