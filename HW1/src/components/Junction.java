@@ -1,6 +1,7 @@
 package components;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import utilities.Point;
 
@@ -15,9 +16,10 @@ public class Junction {
 	private int priorityRoadIndex;
 
 	public Junction(String name, Point loc) {
+		Random rand = new Random();
 		this.junctionName = name;
 		this.location = loc;
-		this.priorityRoadIndex = 0;
+		this.priorityRoadIndex = rand.nextInt(this.enteringRoads.size());
 		System.out.printf("Junction %s has been created\n", this.junctionName);
 	}
 

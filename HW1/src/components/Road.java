@@ -12,6 +12,7 @@ public class Road {
 	private boolean isOpen;
 	private boolean isEnabled;
 	private double length;
+	private final int[] speedPossibilities = { 20, 40, 60, 80, 100, 120, 140 };
 	private int maxSpeed;
 
 	public Road(Junction from, Junction to) {
@@ -28,6 +29,7 @@ public class Road {
 		this.length = this.countLength();
 		System.out.printf("Road from %s to %s has been created\n", this.fromJunc.getJunctionName(),
 				this.toJunc.getJunctionName());
+		this.maxSpeed = this.speedPossibilities[rand.nextInt(this.speedPossibilities.length)];
 	}
 
 	public Road(Junction from, Junction to, ArrayList<String> allowed, boolean open, boolean enabled) {
