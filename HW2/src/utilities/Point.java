@@ -63,7 +63,7 @@ public abstract class Point implements Utilities {
 
 	@Override
 	public String toString() {
-		return String.format("(%f, %f)", this.x, this.y);
+		return String.format("Point (%f, %f)", this.x, this.y);
 	}
 
 	public double calcDistance(Point other) {
