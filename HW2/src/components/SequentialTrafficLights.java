@@ -1,5 +1,5 @@
 package components;
 
-public class SequentialTrafficLights {
+public class SequentialTrafficLights extends TrafficLights {
 
 }
