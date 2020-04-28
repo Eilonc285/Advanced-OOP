@@ -17,4 +17,6 @@ public abstract class TrafficLights {
 	public abstract void changeIndex();
 	public void changeLights(){}
 	public void incrementDrivingTime() {}
+	
+	
 }
