@@ -7,5 +7,4 @@ public class SequentialTrafficLights extends TrafficLights {
 	
 	public SequentialTrafficLights (ArrayList<Road> roads) {}
 	public void changeIndex() {}
-	
 }

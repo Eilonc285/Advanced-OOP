@@ -12,5 +12,5 @@ public class LightedJunction extends Junction {
 	public double calcEstimatedTime(Object obj) {}
 	public boolean canLeave(Vehicle vehicle) {}
 	
-	
+
 }
