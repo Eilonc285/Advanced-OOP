@@ -13,15 +13,15 @@ public abstract class Point implements Utilities {
 	}
 
 	public Point(double x, double y) {
-		if (0 < x && x < 800) {
+		if (this.checkValue(x, this.minVal, this.maxX)) {
 			this.x = x;
 		} else {
-			this.x = Math.random() * 800;
+			this.x = this.getRandomInt(this.minVal, this.maxX);
 		}
-		if (0 < y && y < 600) {
+		if (this.checkValue(y, this.minVal, this.maxY)) {
 			this.y = y;
 		} else {
-			this.y = Math.random() * 600;
+			this.y = this.getRandomInt(this.minVal, this.maxY);
 		}
 	}
 
