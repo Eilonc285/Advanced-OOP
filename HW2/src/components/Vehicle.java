@@ -2,6 +2,7 @@ package components;
 
 import utilities.Timer;
 import utilities.Utilities;
+import utilities.VehicleType;
 
 public class Vehicle implements Timer, Utilities {
 	private int id;

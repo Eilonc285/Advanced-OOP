@@ -9,8 +9,10 @@ public class LightedJunction extends Junction {
 	}
 	public LightedJunction(String name, double x, double y, boolean sequential, boolean lightsOn) {}
 	
-	public double calcEstimatedTime(Object obj) {}
-	public boolean canLeave(Vehicle vehicle) {}
+	public double calcEstimatedTime(Object obj) {
+		return 0;}
+	public boolean canLeave(Vehicle vehicle) {
+		return false;}
 	
 
 }

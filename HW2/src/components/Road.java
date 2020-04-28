@@ -18,12 +18,16 @@ public class Road implements RouteParts, Utilities {
 	
 	public Road (Junction start, Junction end) {}
 	public void addVehicleToWaitingVehicles(Vehicle vehicle) {}
-	public double calcEstimatedTime(Object obj) {}
-	public double calcLength() {}
-	public boolean canLeave(Vehicle vehicle) {}
-	public void checkIn(Vehicle vehicle);
+	public double calcEstimatedTime(Object obj) {
+		return length;}
+	public double calcLength() {
+		return length;}
+	public boolean canLeave(Vehicle vehicle) {
+		return enable;}
+	public void checkIn(Vehicle vehicle) {}
 	public void checkout(Vehicle vehicle) {}
-	public RouteParts findNextPart(Vehicle vehicle) {}
+	public RouteParts findNextPart(Vehicle vehicle) {
+		return endJunction;}
 	public void removeVehicleFromWaitingVehicles(Vehicle vehicle) {}
 	public void stayOnCurrentPart(Vehicle vehicle) {}
 	
