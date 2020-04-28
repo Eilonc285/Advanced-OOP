@@ -2,7 +2,10 @@ package components;
 
 import java.util.ArrayList;
 
-public abstract class TrafficLights {
+import utilities.Timer;
+import utilities.Utilities;
+
+public abstract class TrafficLights implements Timer, Utilities {
 	private int objectsCount;
 	private int delay;
 	private int greenLightIndex;
