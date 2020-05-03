@@ -1,6 +1,7 @@
 package components;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import utilities.Timer;
 import utilities.Utilities;
@@ -26,7 +27,20 @@ public class Driving implements Timer, Utilities {
 	 * @param numOfVehicles:  The amount of vehicle objects to be created.
 	 */
 	public Driving(int numOfJunctions, int numOfVehicles) {
-		// TODO Auto-generated constructor stub
+		Random rand = new Random();
+		this.map = new Map(numOfJunctions);
+		for (int i = 0; i < numOfVehicles; i++) {
+			this.vehicles.add(new Vehicle(this.map.getRoads().get(rand.nextInt(this.map.getRoads().size()))));
+		}
+		this.drivingTime = 0;
+		for (int i = 0; i < this.vehicles.size(); i++) {
+			this.allTimedElements.add(this.vehicles.get(i));
+		}
+		for (int i = 0; i < this.map.getJunctions().size(); i++) {
+			if (this.map.getJunctions().get(i) instanceof LightedJunction) {
+				this.allTimedElements.add(((LightedJunction) this.map.getJunctions().get(i)).getLights());
+			}
+		}
 	}
 
 	/**
@@ -145,7 +159,9 @@ public class Driving implements Timer, Utilities {
 	 * program.
 	 */
 	public void incrementDrivingTime() {
-		// TODO implement
+		for (int i = 0; i < this.allTimedElements.size(); i++) {
+			this.allTimedElements.get(i).incrementDrivingTime();
+		}
 	}
 
 }

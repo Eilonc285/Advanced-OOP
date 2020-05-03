@@ -8,20 +8,20 @@ public abstract class Point implements Utilities {
 	private double y;
 
 	public Point() {
-		this.x = Math.random() * 800;
-		this.y = Math.random() * 600;
+		this.x = Math.random() * maxX;
+		this.y = Math.random() * maxY;
 	}
 
 	public Point(double x, double y) {
 		if (this.checkValue(x, this.minVal, this.maxX)) {
 			this.x = x;
 		} else {
-			this.x = this.getRandomInt(this.minVal, this.maxX);
+			this.x = Math.random() * maxX;
 		}
 		if (this.checkValue(y, this.minVal, this.maxY)) {
 			this.y = y;
 		} else {
-			this.y = this.getRandomInt(this.minVal, this.maxY);
+			this.y = Math.random() * maxY;
 		}
 	}
 

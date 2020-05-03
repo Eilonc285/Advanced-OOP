@@ -38,7 +38,7 @@ public class Road implements RouteParts, Utilities {
 		this.waitingVehicles.add(vehicle);
 	}
 
-	public void checkout(Vehicle vehicle) {
+	public void checkOut(Vehicle vehicle) {
 		this.removeVehicleFromWaitingVehicles(vehicle);
 		System.out.printf("The vehicle %s has checked out of the road from %s to %s\n", vehicle.toString(),
 				this.startJunction.getJunctionName());
@@ -53,6 +53,79 @@ public class Road implements RouteParts, Utilities {
 	}
 
 	public void stayOnCurrentPart(Vehicle vehicle) {
+		System.out.printf("%s stays in the current route part", vehicle.toString());
+	}
+
+	public int[] getAllowedSpeedOptions() {
+		return allowedSpeedOptions;
+	}
+
+	public boolean isEnable() {
+		return enable;
+	}
+
+	public Junction getStartJunction() {
+		return startJunction;
+	}
+
+	public Junction getEndJunction() {
+		return endJunction;
+	}
+
+	public boolean isGreenlight() {
+		return greenlight;
+	}
+
+	public double getLength() {
+		return length;
+	}
+
+	public int getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	public VehicleType[] getVehicleTypes() {
+		return vehicleTypes;
+	}
+
+	public ArrayList<Vehicle> getWaitingVehicles() {
+		return waitingVehicles;
+	}
+
+	public void setAllowedSpeedOptions(int[] allowedSpeedOptions) {
+		this.allowedSpeedOptions = allowedSpeedOptions;
+	}
+
+	public void setEnable(boolean enable) {
+		this.enable = enable;
+	}
+
+	public void setStartJunction(Junction startJunction) {
+		this.startJunction = startJunction;
+	}
+
+	public void setEndJunction(Junction endJunction) {
+		this.endJunction = endJunction;
+	}
+
+	public void setGreenlight(boolean greenlight) {
+		this.greenlight = greenlight;
+	}
+
+	public void setLength(double length) {
+		this.length = length;
+	}
+
+	public void setMaxSpeed(int maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	public void setVehicleTypes(VehicleType[] vehicleTypes) {
+		this.vehicleTypes = vehicleTypes;
+	}
+
+	public void setWaitingVehicles(ArrayList<Vehicle> waitingVehicles) {
+		this.waitingVehicles = waitingVehicles;
 	}
 
 }

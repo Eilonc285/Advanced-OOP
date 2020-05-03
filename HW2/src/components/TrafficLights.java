@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import utilities.Timer;
 import utilities.Utilities;
 
-public abstract class TrafficLights implements Timer, Utilities {
+public class TrafficLights implements Timer, Utilities {
 	private int objectsCount;
 	private int delay;
 	private int greenLightIndex;
@@ -16,8 +16,29 @@ public abstract class TrafficLights implements Timer, Utilities {
 	private boolean trafficLightsOn;
 	private int workingTime;
 
-	public TrafficLights(ArrayList<Road> roads) {}
-	public abstract void changeIndex();
-	public void changeLights(){}
-	public void incrementDrivingTime() {}
+	public TrafficLights() {
+	}
+
+	public TrafficLights(ArrayList<Road> roads) {
+
+	}
+
+	public void changeIndex() {
+
+	}
+
+	public void changeLights() {
+	}
+
+	public void incrementDrivingTime() {
+	}
+
+	public boolean isTrafficLightsOn() {
+		return trafficLightsOn;
+	}
+
+	public void setTrafficLightsOn(boolean trafficLightsOn) {
+		this.trafficLightsOn = trafficLightsOn;
+	}
+
 }

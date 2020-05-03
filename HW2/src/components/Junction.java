@@ -11,16 +11,23 @@ import utilities.Point;
  *
  */
 public class Junction extends Point implements RouteParts {
-	private int objectCounts;
+	private static int objectCounts;
 	private ArrayList<Road> enteringRoads;
 	private ArrayList<Road> exitingRoads;
 	private String junctionName;
+
+	static {
+		objectCounts = 0;
+	}
 
 	/**
 	 * This constructor gives a random value to the point position, and generates a
 	 * name from this objects index.
 	 */
 	public Junction() {
+		super();
+		this.junctionName = String.format("%s", String.valueOf(Junction.objectCounts));
+		Junction.objectCounts++;
 	}
 
 	/**
@@ -31,6 +38,9 @@ public class Junction extends Point implements RouteParts {
 	 * @param y:            The position of the junction on the y axis.
 	 */
 	public Junction(String junctionName, double x, double y) {
+		super(x, y);
+		this.junctionName = junctionName;
+		Junction.objectCounts++;
 	}
 
 	/**
@@ -39,6 +49,7 @@ public class Junction extends Point implements RouteParts {
 	 * @param road: The road to be added.
 	 */
 	public void addEnteringRoad(Road road) {
+		this.enteringRoads.add(road);
 	}
 
 	/**
@@ -47,6 +58,7 @@ public class Junction extends Point implements RouteParts {
 	 * @param road: The road to be added.
 	 */
 	public void addExitingRoad(Road road) {
+		this.exitingRoads.add(road);
 	}
 
 	/**
