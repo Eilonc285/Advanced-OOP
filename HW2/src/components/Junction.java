@@ -44,7 +44,7 @@ public class Junction extends Point implements RouteParts {
 	}
 
 	/**
-	 * Add a Road object to the entering roads array.
+	 * Add a Road object to the entering roads array
 	 * 
 	 * @param road: The road to be added.
 	 */
