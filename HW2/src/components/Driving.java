@@ -27,6 +27,8 @@ public class Driving implements Timer, Utilities {
 	 * @param numOfVehicles:  The amount of vehicle objects to be created.
 	 */
 	public Driving(int numOfJunctions, int numOfVehicles) {
+		this.vehicles = new ArrayList();
+		this.allTimedElements = new ArrayList();
 		Random rand = new Random();
 		this.map = new Map(numOfJunctions);
 		for (int i = 0; i < numOfVehicles; i++) {

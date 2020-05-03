@@ -1,6 +1,7 @@
 package components;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import utilities.Utilities;
 import utilities.VehicleType;
@@ -17,9 +18,19 @@ public class Road implements RouteParts, Utilities {
 	private ArrayList<Vehicle> waitingVehicles;
 
 	public Road(Junction start, Junction end) {
+		Random rand = new Random();
+		this.waitingVehicles = new ArrayList();
+		this.startJunction = start;
+		this.startJunction.getExitingRoads().add(this);
+		this.endJunction = end;
+		this.endJunction.getEnteringRoads().add(this);
+		this.greenlight = false;
+		this.length = this.calcLength();
+		this.maxSpeed = VehicleType.values()[rand.nextInt(VehicleType.values().length)].getAverageSpeed();
 	}
 
 	public void addVehicleToWaitingVehicles(Vehicle vehicle) {
+		this.waitingVehicles.add(vehicle);
 	}
 
 	public double calcEstimatedTime(Object obj) {
@@ -27,21 +38,24 @@ public class Road implements RouteParts, Utilities {
 	}
 
 	public double calcLength() {
-		return length;
+		return Math.sqrt(Math.pow(this.startJunction.getX() - this.endJunction.getX(), 2)
+				+ Math.pow(this.startJunction.getY() - this.endJunction.getY(), 2));
 	}
 
 	public boolean canLeave(Vehicle vehicle) {
-		return enable;
+		return this.calcEstimatedTime(this) <= vehicle.getTimeOnCurrentPart();
 	}
 
 	public void checkIn(Vehicle vehicle) {
 		this.waitingVehicles.add(vehicle);
+		System.out.printf("The vehicle %s has checked in to the road from %s to %s", vehicle.toString(),
+				this.startJunction.getJunctionName(), this.endJunction.getJunctionName());
 	}
 
 	public void checkOut(Vehicle vehicle) {
 		this.removeVehicleFromWaitingVehicles(vehicle);
 		System.out.printf("The vehicle %s has checked out of the road from %s to %s\n", vehicle.toString(),
-				this.startJunction.getJunctionName());
+				this.startJunction.getJunctionName(), this.endJunction.getJunctionName());
 	}
 
 	public RouteParts findNextPart(Vehicle vehicle) {

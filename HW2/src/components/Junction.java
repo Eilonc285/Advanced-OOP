@@ -26,6 +26,8 @@ public class Junction extends Point implements RouteParts {
 	 */
 	public Junction() {
 		super();
+		this.enteringRoads = new ArrayList();
+		this.exitingRoads = new ArrayList();
 		this.junctionName = String.format("%s", String.valueOf(Junction.objectCounts));
 		Junction.objectCounts++;
 	}
@@ -39,6 +41,8 @@ public class Junction extends Point implements RouteParts {
 	 */
 	public Junction(String junctionName, double x, double y) {
 		super(x, y);
+		this.enteringRoads = new ArrayList();
+		this.exitingRoads = new ArrayList();
 		this.junctionName = junctionName;
 		Junction.objectCounts++;
 	}

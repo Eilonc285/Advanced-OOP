@@ -8,6 +8,7 @@ public class Route implements RouteParts {
 	private Vehicle vehicle;
 
 	public Route(RouteParts start, Vehicle vehicle) {
+		this.routeParts = new ArrayList();
 		Random rand = new Random();
 		this.vehicle = vehicle;
 		this.routeParts.add(start);

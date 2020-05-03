@@ -11,6 +11,9 @@ public class Map implements Utilities {
 	private ArrayList<TrafficLights> lights;
 
 	public Map(int numOfJunctions) {
+		this.junctions = new ArrayList();
+		this.roads = new ArrayList();
+		this.lights = new ArrayList();
 		Random rand = new Random();
 		for (int i = 0; i < numOfJunctions; i++) {
 			if (rand.nextBoolean()) {
