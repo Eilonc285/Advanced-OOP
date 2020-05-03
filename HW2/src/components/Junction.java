@@ -134,4 +134,28 @@ public class Junction extends Point implements RouteParts {
 	public void stayOnCurrentPart(Vehicle vehicle) {
 	}
 
+	public static int getObjectCounts() {
+		return objectCounts;
+	}
+
+	public static void setObjectCounts(int objectCounts) {
+		Junction.objectCounts = objectCounts;
+	}
+
+	public ArrayList<Road> getEnteringRoads() {
+		return enteringRoads;
+	}
+
+	public void setEnteringRoads(ArrayList<Road> enteringRoads) {
+		this.enteringRoads = enteringRoads;
+	}
+
+	public ArrayList<Road> getExitingRoads() {
+		return exitingRoads;
+	}
+
+	public void setExitingRoads(ArrayList<Road> exitingRoads) {
+		this.exitingRoads = exitingRoads;
+	}
+
 }

@@ -30,6 +30,7 @@ public class Vehicle implements Timer, Utilities {
 		this.timeFromRouteStart = 0;
 		this.timeOnCurrentPart = 0;
 		this.status = "waiting";
+		this.currentRoute = new Route(road, this);
 	}
 
 	public int getId() {
