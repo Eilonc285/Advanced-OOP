@@ -31,9 +31,13 @@ public class Route implements RouteParts {
 	}
 
 	public void checkIn(Vehicle vehicle) {
+		System.out.printf("%s has checked in to route from %s to %s", vehicle.toString(), this.routeParts.get(0),
+				this.routeParts.get(this.routeParts.size() - 1));
 	}
 
 	public void checkout(Vehicle vehicle) {
+		System.out.printf("%s has checked out from route from %s to %s", vehicle.toString(), this.routeParts.get(0),
+				this.routeParts.get(this.routeParts.size() - 1));
 	}
 
 	public RouteParts findNextPart(Vehicle vehicle) {
