@@ -22,29 +22,44 @@ public class Route implements RouteParts {
 		}
 	}
 
+	@Override
 	public double calcEstimatedTime(Object obj) {
 		return 0;
 	}
 
+	@Override
 	public boolean canLeave(Vehicle vehicle) {
-		return false;
+		return vehicle.getCurrentRoutePart().equals(this.routeParts.get(this.routeParts.size() - 1));
 	}
 
+	@Override
 	public void checkIn(Vehicle vehicle) {
-		System.out.printf("%s has checked in to route from %s to %s", vehicle.toString(), this.routeParts.get(0),
+		System.out.printf("%s has checked in to route from %s to %s\n", vehicle.toString(), this.routeParts.get(0),
 				this.routeParts.get(this.routeParts.size() - 1));
 	}
 
-	public void checkout(Vehicle vehicle) {
-		System.out.printf("%s has checked out from route from %s to %s", vehicle.toString(), this.routeParts.get(0),
+	@Override
+	public void checkOut(Vehicle vehicle) {
+		System.out.printf("%s has checked out from route from %s to %s\n", vehicle.toString(), this.routeParts.get(0),
 				this.routeParts.get(this.routeParts.size() - 1));
 	}
 
+	@Override
 	public RouteParts findNextPart(Vehicle vehicle) {
-		return null;
+		if (this.routeParts.indexOf(vehicle.getCurrentRoutePart()) != this.routeParts.size() - 1) {
+			return this.routeParts.get(this.routeParts.indexOf(vehicle.getCurrentRoutePart()) + 1);
+		} else {
+			if (((Junction) vehicle.getCurrentRoutePart()).getExitingRoads().size() > 0) {
+				return new Route(vehicle.getLastRoad(), vehicle);
+			} else {
+				return new Route(this.routeParts.get(0), vehicle);
+			}
+		}
 	}
 
+	@Override
 	public void stayOnCurrentPart(Vehicle vehicle) {
+		System.out.printf("The vehicle %s is staying on the current route part\n", vehicle.toString());
 	}
 
 }
