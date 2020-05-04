@@ -6,7 +6,7 @@ import java.util.Random;
 import utilities.Timer;
 import utilities.Utilities;
 
-public class TrafficLights implements Timer, Utilities {
+public abstract class TrafficLights implements Timer, Utilities {
 	private static int objectsCount;
 	private int delay;
 	private int greenLightIndex;
@@ -31,12 +31,7 @@ public class TrafficLights implements Timer, Utilities {
 		TrafficLights.objectsCount++;
 	}
 
-	public void changeIndex() {
-		this.greenLightIndex++;
-		if (this.greenLightIndex >= this.roads.size()) {
-			this.greenLightIndex -= this.roads.size();
-		}
-	}
+	public abstract void changeIndex();
 
 	public void changeLights() {
 		this.changeIndex();
@@ -63,6 +58,62 @@ public class TrafficLights implements Timer, Utilities {
 
 	public void setTrafficLightsOn(boolean trafficLightsOn) {
 		this.trafficLightsOn = trafficLightsOn;
+	}
+
+	public static int getObjectsCount() {
+		return objectsCount;
+	}
+
+	public static void setObjectsCount(int objectsCount) {
+		TrafficLights.objectsCount = objectsCount;
+	}
+
+	public int getDelay() {
+		return delay;
+	}
+
+	public void setDelay(int delay) {
+		this.delay = delay;
+	}
+
+	public int getGreenLightIndex() {
+		return greenLightIndex;
+	}
+
+	public void setGreenLightIndex(int greenLightIndex) {
+		this.greenLightIndex = greenLightIndex;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public ArrayList<Road> getRoads() {
+		return roads;
+	}
+
+	public void setRoads(ArrayList<Road> roads) {
+		this.roads = roads;
+	}
+
+	public int getWorkingTime() {
+		return workingTime;
+	}
+
+	public void setWorkingTime(int workingTime) {
+		this.workingTime = workingTime;
+	}
+
+	public int getMinDelay() {
+		return minDelay;
+	}
+
+	public int getMaxDelay() {
+		return maxDelay;
 	}
 
 }

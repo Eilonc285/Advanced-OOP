@@ -7,10 +7,9 @@ public class LightedJunction extends Junction {
 
 	public LightedJunction() {
 		super();
-		this.lights = new TrafficLights(this.getEnteringRoads());
 		Random rand = new Random();
 		if (rand.nextBoolean()) {
-			this.lights = new TrafficLights(this.getEnteringRoads());
+			this.lights = new SequentialTrafficLights(this.getEnteringRoads());
 		} else {
 			this.lights = new RandomTrafficLights(this.getEnteringRoads());
 		}
@@ -18,9 +17,8 @@ public class LightedJunction extends Junction {
 
 	public LightedJunction(String name, double x, double y, boolean sequential, boolean lightsOn) {
 		super(name, x, y);
-		this.lights = new TrafficLights(this.getEnteringRoads());
 		if (sequential) {
-			this.lights = new TrafficLights(this.getEnteringRoads());
+			this.lights = new SequentialTrafficLights(this.getEnteringRoads());
 		} else {
 			this.lights = new RandomTrafficLights(this.getEnteringRoads());
 		}
