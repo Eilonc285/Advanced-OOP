@@ -74,7 +74,10 @@ public class Junction extends Point implements RouteParts {
 	 * @param obj: The vehicle to estimate wait time for.
 	 */
 	public double calcEstimatedTime(Object obj) {
-		return objectCounts;
+		if(obj instanceof Vehicle) {
+			return ((double)((Junction)((Vehicle)obj).getCurrentRoutePart()).enteringRoads.indexOf(((Vehicle)obj).getLastRoad()) + 1);
+		}
+		else return 0;
 	}
 
 	/**
@@ -84,7 +87,7 @@ public class Junction extends Point implements RouteParts {
 	 * @param vehicle: The vehicle for which to check if it can leave.
 	 */
 	public boolean canLeave(Vehicle vehicle) {
-		return false;
+		return checkAvailability(vehicle);
 	}
 
 	public String getJunctionName() {
@@ -104,7 +107,9 @@ public class Junction extends Point implements RouteParts {
 	 * @return: Boolean of if the vehicle is available or not.
 	 */
 	public boolean checkAvailability(Vehicle vehicle) {
-		return false;
+		if(vehicle.getLastRoad().getEndJunction().getExitingRoads().isEmpty()) return false;
+		if(vehicle.getLastRoad().getWaitingVehicles().indexOf(vehicle) != 0) return false;
+		else return true;
 	}
 
 	/**
