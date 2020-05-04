@@ -11,9 +11,9 @@ public class Map implements Utilities {
 	private ArrayList<TrafficLights> lights;
 
 	public Map(int numOfJunctions) {
-		this.junctions = new ArrayList();
-		this.roads = new ArrayList();
-		this.lights = new ArrayList();
+		this.junctions = new ArrayList<Junction>();
+		this.roads = new ArrayList<Road>();
+		this.lights = new ArrayList<TrafficLights>();
 		Random rand = new Random();
 		for (int i = 0; i < numOfJunctions; i++) {
 			if (rand.nextBoolean()) {
@@ -32,7 +32,7 @@ public class Map implements Utilities {
 			for (int j = 0; j < i; j++) {
 				// two roads between every two junctions for each direction.
 				this.roads.add(new Road(this.junctions.get(j), this.junctions.get(i)));
-				this.roads.add(new Road(this.junctions.get(i), this.junctions.get(j)));
+//				this.roads.add(new Road(this.junctions.get(i), this.junctions.get(j)));
 			}
 		}
 	}
