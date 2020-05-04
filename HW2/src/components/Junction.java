@@ -120,6 +120,7 @@ public class Junction extends Point implements RouteParts {
 	 */
 	// TODO: rewrite javadoc after implementation.
 	public void checkIn(Vehicle vehicle) {
+		this.enteringRoads.add(vehicle.getLastRoad())
 	}
 
 	/**
