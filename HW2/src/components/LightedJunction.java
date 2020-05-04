@@ -4,20 +4,24 @@ import java.util.Random;
 
 public class LightedJunction extends Junction {
 	private TrafficLights lights;
-	private boolean sequential;
 
 	public LightedJunction() {
 		super();
 		Random rand = new Random();
-		this.lights = new TrafficLights();
-		this.sequential = rand.nextBoolean();
+		if (rand.nextBoolean()) {
+			this.lights = new SequentialTrafficLights(this.getEnteringRoads());
+		} else {
+			this.lights = new RandomTrafficLights(this.getEnteringRoads());
+		}
 	}
 
 	public LightedJunction(String name, double x, double y, boolean sequential, boolean lightsOn) {
 		super(name, x, y);
-		Random rand = new Random();
-		this.lights = new TrafficLights();
-		this.sequential = rand.nextBoolean();
+		if (sequential) {
+			this.lights = new SequentialTrafficLights(this.getEnteringRoads());
+		} else {
+			this.lights = new RandomTrafficLights(this.getEnteringRoads());
+		}
 	}
 
 	public double calcEstimatedTime(Object obj) {
@@ -33,7 +37,7 @@ public class LightedJunction extends Junction {
 	}
 
 	public boolean isSequential() {
-		return sequential;
+		return !(this.lights instanceof RandomTrafficLights);
 	}
 
 }

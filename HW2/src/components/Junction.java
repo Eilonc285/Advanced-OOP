@@ -26,8 +26,8 @@ public class Junction extends Point implements RouteParts {
 	 */
 	public Junction() {
 		super();
-		this.enteringRoads = new ArrayList();
-		this.exitingRoads = new ArrayList();
+		this.enteringRoads = new ArrayList<Road>();
+		this.exitingRoads = new ArrayList<Road>();
 		this.junctionName = String.format("%s", String.valueOf(Junction.objectCounts));
 		Junction.objectCounts++;
 	}
@@ -41,8 +41,8 @@ public class Junction extends Point implements RouteParts {
 	 */
 	public Junction(String junctionName, double x, double y) {
 		super(x, y);
-		this.enteringRoads = new ArrayList();
-		this.exitingRoads = new ArrayList();
+		this.enteringRoads = new ArrayList<Road>();
+		this.exitingRoads = new ArrayList<Road>();
 		this.junctionName = junctionName;
 		Junction.objectCounts++;
 	}
@@ -74,10 +74,11 @@ public class Junction extends Point implements RouteParts {
 	 * @param obj: The vehicle to estimate wait time for.
 	 */
 	public double calcEstimatedTime(Object obj) {
-		if(obj instanceof Vehicle) {
-			return ((double)((Junction)((Vehicle)obj).getCurrentRoutePart()).enteringRoads.indexOf(((Vehicle)obj).getLastRoad()) + 1);
-		}
-		else return 0;
+		if (obj instanceof Vehicle) {
+			return ((double) ((Junction) ((Vehicle) obj).getCurrentRoutePart()).enteringRoads
+					.indexOf(((Vehicle) obj).getLastRoad()) + 1);
+		} else
+			return 0;
 	}
 
 	/**
@@ -107,9 +108,12 @@ public class Junction extends Point implements RouteParts {
 	 * @return: Boolean of if the vehicle is available or not.
 	 */
 	public boolean checkAvailability(Vehicle vehicle) {
-		if(vehicle.getLastRoad().getEndJunction().getExitingRoads().isEmpty()) return false;
-		if(vehicle.getLastRoad().getWaitingVehicles().indexOf(vehicle) != 0) return false;
-		else return true;
+		if (vehicle.getLastRoad().getEndJunction().getExitingRoads().isEmpty())
+			return false;
+		if (vehicle.getLastRoad().getWaitingVehicles().indexOf(vehicle) != 0)
+			return false;
+		else
+			return true;
 	}
 
 	/**
