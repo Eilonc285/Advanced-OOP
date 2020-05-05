@@ -152,10 +152,11 @@ public class Junction extends Point implements RouteParts {
 	 * @param vehicle: The given vehicle for which to find the next road segment.
 	 */
 	public RouteParts findNextPart(Vehicle vehicle) {
-		for(Road r:exitingRoads) {
-			if(r.isEnable()) {
-				for(VehicleType v:r.getVehicleTypes()) {
-					if(v.equals(vehicle.getVehicleType())) return r;
+		for (Road r : exitingRoads) {
+			if (r.isEnable()) {
+				for (VehicleType v : r.getVehicleTypes()) {
+					if (v.equals(vehicle.getVehicleType()))
+						return r;
 				}
 			}
 		}
@@ -191,7 +192,10 @@ public class Junction extends Point implements RouteParts {
 
 	@Override
 	public String toString() {
-		return String.format("Junction %s (%f , %f)", this.junctionName, this.getX(), this.getY());
+		if (this instanceof LightedJunction) {
+			return String.format("Junction %s (Lighted)", this.junctionName);
+		}
+		return String.format("Junction %s", this.junctionName);
 	}
 
 	@Override

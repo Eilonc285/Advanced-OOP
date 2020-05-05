@@ -14,4 +14,17 @@ public class RandomTrafficLights extends TrafficLights {
 			this.setGreenLightIndex(rand.nextInt(this.getRoads().size()));
 		}
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof RandomTrafficLights) {
+			return super.equals(other);
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Random Traffic lights %d", this.getId());
+	}
 }
