@@ -37,7 +37,16 @@ public class LightedJunction extends Junction {
 	}
 
 	public boolean isSequential() {
-		return !(this.lights instanceof RandomTrafficLights);
+		return this.lights instanceof SequentialTrafficLights;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("Junction %s (Lighted)", this.getJunctionName());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return super.equals(other);
+	}
 }

@@ -17,4 +17,17 @@ public class SequentialTrafficLights extends TrafficLights {
 			this.setGreenLightIndex((this.getGreenLightIndex() + this.increment) % this.getRoads().size());
 		}
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof SequentialTrafficLights) {
+			return super.equals(other);
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Sequesntial Traffic lights %d", this.getId());
+	}
 }

@@ -25,6 +25,7 @@ public class Map implements Utilities {
 		}
 		this.SetAllRoads();
 		this.turnLightsOn();
+		System.out.println("================= GAME MAP HAS BEEN CREATED =================");
 	}
 
 	public void SetAllRoads() {
@@ -37,10 +38,20 @@ public class Map implements Utilities {
 	}
 
 	public void turnLightsOn() {
+		System.out.println("================= TRAFFIC LIGHTS TURN ON =================");
 		for (int i = 0; i < this.junctions.size(); i++) {
 			Random rand = new Random();
 			if (this.junctions.get(i) instanceof LightedJunction) {
 				((LightedJunction) this.junctions.get(i)).getLights().setTrafficLightsOn(rand.nextBoolean());
+				if (((LightedJunction) this.junctions.get(i)).getLights().isTrafficLightsOn()) {
+					System.out.printf("%s turned ON, delay time: %d\n",
+							((LightedJunction) this.junctions.get(i)).getLights().toString(),
+							((LightedJunction) this.junctions.get(i)).getLights().getDelay());
+					int entRoad = rand.nextInt(this.junctions.get(i).getEnteringRoads().size());
+					((LightedJunction) this.junctions.get(i)).getLights().setGreenLightIndex(entRoad);
+					this.junctions.get(i).getEnteringRoads().get(entRoad).setGreenlight(true);
+					;
+				}
 			}
 		}
 	}

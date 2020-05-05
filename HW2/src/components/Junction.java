@@ -141,8 +141,8 @@ public class Junction extends Point implements RouteParts {
 			// vehicle.getCurrentRoute().getRouteParts()
 			vehicle.setStatus("- has left the" + toString());
 			System.out.println(vehicle.getStatus());
-		}
-		else stayOnCurrentPart(vehicle);
+		} else
+			stayOnCurrentPart(vehicle);
 	}
 
 	/**
@@ -193,9 +193,9 @@ public class Junction extends Point implements RouteParts {
 
 	@Override
 	public String toString() {
-		if (this instanceof LightedJunction) {
-			return String.format("Junction %s (Lighted)", this.junctionName);
-		}
+//		if (this instanceof LightedJunction) {
+//			return String.format("Junction %s (Lighted)", this.junctionName);
+//		}
 		return String.format("Junction %s", this.junctionName);
 	}
 
