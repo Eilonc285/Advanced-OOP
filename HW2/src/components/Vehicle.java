@@ -21,6 +21,42 @@ public class Vehicle implements Timer, Utilities {
 		objectsCount = 0;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setVehicleType(VehicleType vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public void setCurrentRoute(Route currentRoute) {
+		this.currentRoute = currentRoute;
+	}
+
+	public void setCurrentRoutePart(RouteParts currentRoutePart) {
+		this.currentRoutePart = currentRoutePart;
+	}
+
+	public void setTimeFromRouteStart(int timeFromRouteStart) {
+		this.timeFromRouteStart = timeFromRouteStart;
+	}
+
+	public void setTimeOnCurrentPart(int timeOnCurrentPart) {
+		this.timeOnCurrentPart = timeOnCurrentPart;
+	}
+
+	public static void setObjectsCount(int objectsCount) {
+		Vehicle.objectsCount = objectsCount;
+	}
+
+	public void setLastRoad(Road lastRoad) {
+		this.lastRoad = lastRoad;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public Vehicle(Road road) {
 		Random rand = new Random();
 		this.id = Vehicle.objectsCount++;
