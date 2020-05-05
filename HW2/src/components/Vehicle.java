@@ -59,7 +59,7 @@ public class Vehicle implements Timer, Utilities {
 
 	public Vehicle(Road road) {
 		Random rand = new Random();
-		this.id = Vehicle.objectsCount++;
+		this.id = ++Vehicle.objectsCount;
 		this.currentRoutePart = road;
 		this.lastRoad = road;
 		this.vehicleType = VehicleType.values()[rand.nextInt(VehicleType.values().length)];
@@ -67,6 +67,7 @@ public class Vehicle implements Timer, Utilities {
 		this.timeOnCurrentPart = 0;
 		this.status = "waiting";
 		this.currentRoute = new Route(road, this);
+		System.out.printf("%s has been created\n", this.toString());
 	}
 
 	public int getId() {
@@ -119,6 +120,21 @@ public class Vehicle implements Timer, Utilities {
 		this.timeOnCurrentPart++;
 		move();
 
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Vehicle %d: %s, average speed: %d", this.id, this.vehicleType.toString(),
+				this.vehicleType.getAverageSpeed());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Vehicle) {
+			return this.id == ((Vehicle) other).getId() && this.vehicleType.equals(((Vehicle) other).getVehicleType())
+					&& this.currentRoutePart.equals(((Vehicle) other).getCurrentRoutePart());
+		}
+		return false;
 	}
 
 }

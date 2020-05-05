@@ -23,11 +23,11 @@ public abstract class TrafficLights implements Timer, Utilities {
 
 	public TrafficLights(ArrayList<Road> roads) {
 		Random rand = new Random();
-		this.roads = roads;
+		this.roads = new ArrayList(roads);
 		this.id = TrafficLights.objectsCount;
 		this.workingTime = 0;
 		this.delay = rand.nextInt(this.maxDelay - this.minDelay + 1) + this.minDelay;
-		this.greenLightIndex = rand.nextInt(this.roads.size());
+		this.greenLightIndex = 0;
 		TrafficLights.objectsCount++;
 	}
 

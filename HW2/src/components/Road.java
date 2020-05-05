@@ -27,6 +27,7 @@ public class Road implements RouteParts, Utilities {
 		this.greenlight = false;
 		this.length = this.calcLength();
 		this.maxSpeed = VehicleType.values()[rand.nextInt(VehicleType.values().length)].getAverageSpeed();
+		System.out.printf("%s has been created.\n", this.toString());
 	}
 
 	public void addVehicleToWaitingVehicles(Vehicle vehicle) {
@@ -140,6 +141,12 @@ public class Road implements RouteParts, Utilities {
 
 	public void setWaitingVehicles(ArrayList<Vehicle> waitingVehicles) {
 		this.waitingVehicles = waitingVehicles;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Road form Junction %s to Junction %s, length: %f, max speed %d",
+				this.startJunction.getJunctionName(), this.endJunction.getJunctionName(), this.length, this.maxSpeed);
 	}
 
 }
