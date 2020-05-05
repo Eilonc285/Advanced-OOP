@@ -142,6 +142,7 @@ public class Junction extends Point implements RouteParts {
 			vehicle.setStatus("- has left the" + toString());
 			System.out.println(vehicle.getStatus());
 		}
+		else stayOnCurrentPart(vehicle);
 	}
 
 	/**
