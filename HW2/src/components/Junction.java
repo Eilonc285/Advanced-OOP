@@ -3,6 +3,7 @@ package components;
 import java.util.ArrayList;
 
 import utilities.Point;
+import utilities.VehicleType;
 
 /**
  * A class that represents a junction with no traffic lights.
@@ -151,6 +152,13 @@ public class Junction extends Point implements RouteParts {
 	 * @param vehicle: The given vehicle for which to find the next road segment.
 	 */
 	public RouteParts findNextPart(Vehicle vehicle) {
+		for(Road r:exitingRoads) {
+			if(r.isEnable()) {
+				for(VehicleType v:r.getVehicleTypes()) {
+					if(v.equals(vehicle.getVehicleType())) return r;
+				}
+			}
+		}
 		return null;
 	}
 
