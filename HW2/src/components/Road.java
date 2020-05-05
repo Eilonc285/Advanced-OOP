@@ -35,7 +35,12 @@ public class Road implements RouteParts, Utilities {
 	}
 
 	public double calcEstimatedTime(Object obj) {
-		return length;
+		if(obj instanceof Vehicle) {
+			double dx = ((Vehicle)obj).getLastRoad().getStartJunction().calcDistance((((Vehicle)obj).getLastRoad().getEndJunction()));
+			double dv = Math.min(this.maxSpeed, ((Vehicle)obj).getVehicleType().getAverageSpeed());
+			return (double)Math.round(dx/dv);
+		}
+		return -1;
 	}
 
 	public double calcLength() {
