@@ -149,4 +149,13 @@ public class Road implements RouteParts, Utilities {
 				this.startJunction.getJunctionName(), this.endJunction.getJunctionName(), this.length, this.maxSpeed);
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Road) {
+			return this.startJunction.equals(((Road) other).getStartJunction())
+					&& this.endJunction.equals(((Road) other).getEndJunction());
+		}
+		return false;
+	}
+
 }
