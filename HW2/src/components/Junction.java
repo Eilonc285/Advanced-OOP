@@ -183,7 +183,7 @@ public class Junction extends Point implements RouteParts {
 
 	@Override
 	public String toString() {
-		return String.format("Junction %s (%f , %f).", this.junctionName, this.getX(), this.getY());
+		return String.format("Junction %s (%f , %f)", this.junctionName, this.getX(), this.getY());
 	}
 
 	@Override
