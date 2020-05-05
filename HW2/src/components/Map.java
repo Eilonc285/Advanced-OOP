@@ -28,11 +28,11 @@ public class Map implements Utilities {
 	}
 
 	public void SetAllRoads() {
-		for (int i = this.junctions.size() - 1; i >= 0; i++) {
+		for (int i = this.junctions.size() - 1; i >= 0; i--) {
 			for (int j = 0; j < i; j++) {
 				// two roads between every two junctions for each direction.
 				this.roads.add(new Road(this.junctions.get(j), this.junctions.get(i)));
-//				this.roads.add(new Road(this.junctions.get(i), this.junctions.get(j)));
+				this.roads.add(new Road(this.junctions.get(i), this.junctions.get(j)));
 			}
 		}
 	}

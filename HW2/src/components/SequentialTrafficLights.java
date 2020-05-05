@@ -7,9 +7,14 @@ public class SequentialTrafficLights extends TrafficLights {
 
 	public SequentialTrafficLights(ArrayList<Road> roads) {
 		super(roads);
+		this.increment = 1;
 	}
 
 	public void changeIndex() {
-		this.setGreenLightIndex((this.getGreenLightIndex() + 1) % this.getRoads().size());
+		if (this.getRoads().size() == 0) {
+			this.setGreenLightIndex((this.getGreenLightIndex() + this.increment));
+		} else {
+			this.setGreenLightIndex((this.getGreenLightIndex() + this.increment) % this.getRoads().size());
+		}
 	}
 }

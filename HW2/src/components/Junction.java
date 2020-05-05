@@ -28,8 +28,9 @@ public class Junction extends Point implements RouteParts {
 		super();
 		this.enteringRoads = new ArrayList<Road>();
 		this.exitingRoads = new ArrayList<Road>();
-		this.junctionName = String.format("%s", String.valueOf(Junction.objectCounts));
 		Junction.objectCounts++;
+		this.junctionName = String.format("%s", String.valueOf(Junction.objectCounts));
+		System.out.printf("%s has been created.\n", this.toString());
 	}
 
 	/**
@@ -134,9 +135,9 @@ public class Junction extends Point implements RouteParts {
 	 * the relevant fields and prints a message.
 	 */
 	public void checkOut(Vehicle vehicle) {
-		if(this.canLeave(vehicle)) {
-			//((Road)vehicle.getCurrentRoutePart()).removeVehicleFromWaitingVehicles(vehicle);
-			//vehicle.getCurrentRoute().getRouteParts()
+		if (this.canLeave(vehicle)) {
+			// ((Road)vehicle.getCurrentRoutePart()).removeVehicleFromWaitingVehicles(vehicle);
+			// vehicle.getCurrentRoute().getRouteParts()
 			vehicle.setStatus("- has left the" + toString());
 			System.out.println(vehicle.getStatus());
 		}
@@ -182,17 +183,15 @@ public class Junction extends Point implements RouteParts {
 
 	@Override
 	public String toString() {
-		return new String("Junction " + junctionName);
-}
+		return String.format("Junction %s (%f , %f)", this.junctionName, this.getX(), this.getY());
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-		Junction other=(Junction)obj;
-		if ( other==null||
-			!this.enteringRoads.equals(other.enteringRoads)||
-			!this.exitingRoads.equals(other.exitingRoads)||
-			!this.junctionName.equals(other.junctionName))
-		{	
-				return false;
+		Junction other = (Junction) obj;
+		if (other == null || !this.enteringRoads.equals(other.enteringRoads)
+				|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
+			return false;
 		}
 		return true;
 	}
