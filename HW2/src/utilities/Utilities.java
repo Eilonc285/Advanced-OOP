@@ -76,7 +76,7 @@ public interface Utilities {
 	 * @return: The produced array of random integers.
 	 */
 	default ArrayList<Integer> getRandomIntArray(int min, int max, int arraySize) {
-		ArrayList<Integer> arr = new ArrayList();
+		ArrayList<Integer> arr = new ArrayList<Integer>();
 		for (int i = 0; i < arraySize; i++) {
 			arr.add(this.getRandomInt(min, max));
 		}
