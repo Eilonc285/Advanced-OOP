@@ -127,7 +127,6 @@ public class Junction extends Point implements RouteParts {
 		vehicle.setCurrentRoutePart(this);
 		vehicle.setStatus("- Has arrived to" + toString());
 		System.out.println(vehicle.getStatus());
-		
 	}
 
 	/**
