@@ -25,11 +25,11 @@ public class LightedJunction extends Junction {
 	}
 
 	public double calcEstimatedTime(Object obj) {
-		return 0;
+			return ((this.lights.getRoads().size() - 1) * this.lights.getDelay()) + 1;
 	}
 
 	public boolean canLeave(Vehicle vehicle) {
-		return false;
+		return this.lights.isTrafficLightsOn();
 	}
 
 	public TrafficLights getLights() {

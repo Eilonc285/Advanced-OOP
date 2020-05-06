@@ -25,7 +25,14 @@ public class Route implements RouteParts {
 
 	@Override
 	public double calcEstimatedTime(Object obj) {
-		return 0;
+		double sum = 0;
+		if (obj instanceof Vehicle) {
+			for(RouteParts rp:((Vehicle)obj).getCurrentRoute().getRouteParts()) {
+				sum = sum + rp.calcEstimatedTime(obj);
+			}
+			return sum;
+		}
+		return -1;
 	}
 
 	@Override
@@ -61,6 +68,22 @@ public class Route implements RouteParts {
 	@Override
 	public void stayOnCurrentPart(Vehicle vehicle) {
 		System.out.printf("The vehicle %s is staying on the current route part\n", vehicle.toString());
+	}
+
+	public ArrayList<RouteParts> getRouteParts() {
+		return routeParts;
+	}
+
+	public void setRouteParts(ArrayList<RouteParts> routeParts) {
+		this.routeParts = routeParts;
+	}
+
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
 
 }
