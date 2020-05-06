@@ -31,6 +31,7 @@ public class Driving implements Timer, Utilities {
 		this.allTimedElements = new ArrayList<Timer>();
 		Random rand = new Random();
 		this.map = new Map(numOfJunctions);
+		System.out.println("================= CREATING VEHICLES =================");
 		for (int i = 0; i < numOfVehicles; i++) {
 			this.vehicles.add(new Vehicle(this.map.getRoads().get(rand.nextInt(this.map.getRoads().size()))));
 		}
