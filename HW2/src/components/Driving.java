@@ -152,7 +152,9 @@ public class Driving implements Timer, Utilities {
 	 *                    function.
 	 */
 	public void drive(int numOfTurns) {
+		System.out.println("================= START DRIVING=================");
 		for (int i = 0; i < numOfTurns; i++) {
+			System.out.printf("***************TURN %d***************", i);
 			this.incrementDrivingTime();
 		}
 	}

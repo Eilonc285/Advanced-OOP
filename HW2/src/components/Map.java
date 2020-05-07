@@ -50,7 +50,6 @@ public class Map implements Utilities {
 					int entRoad = rand.nextInt(this.junctions.get(i).getEnteringRoads().size());
 					((LightedJunction) this.junctions.get(i)).getLights().setGreenLightIndex(entRoad);
 					this.junctions.get(i).getEnteringRoads().get(entRoad).setGreenlight(true);
-					;
 				}
 			}
 		}

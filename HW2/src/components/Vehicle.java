@@ -66,8 +66,10 @@ public class Vehicle implements Timer, Utilities {
 		this.timeFromRouteStart = 0;
 		this.timeOnCurrentPart = 0;
 		this.status = "waiting";
-		this.currentRoute = new Route(road, this);
 		System.out.printf("%s has been created\n", this.toString());
+		this.currentRoute = new Route(road, this);
+		System.out.printf("is starting to move on road\n");
+//		move();
 	}
 
 	public int getId() {
@@ -107,19 +109,34 @@ public class Vehicle implements Timer, Utilities {
 	}
 
 	public void move() {
-		if (this.currentRoutePart instanceof Junction && this.currentRoutePart.canLeave(this)) {
+		if (this.currentRoutePart.canLeave(this)) {
 			RouteParts nextPart = this.currentRoute.findNextPart(this);
-			this.currentRoutePart.checkOut(this);
-			nextPart.checkIn(this);
-
+			if (nextPart instanceof Route) {
+				this.currentRoute = (Route) nextPart;
+				this.currentRoutePart = ((Route) nextPart).getRouteParts().get(0);
+				this.currentRoutePart.checkIn(this);
+			} else {
+				this.currentRoutePart.checkOut(this);
+				nextPart.checkIn(this);
+			}
+		} else {
+			if (this.currentRoutePart instanceof Road && this.timeOnCurrentPart != 0) {
+				System.out.println("is still driving");
+			} else {
+				if (this.currentRoutePart instanceof LightedJunction) {
+					if (((LightedJunction) this.currentRoutePart).getLights().isTrafficLightsOn()) {
+						System.out.println("waiting for green light");
+					}
+				}
+				System.out.println("is waiting for previous cars");
+			}
 		}
 	}
 
 	public void incrementDrivingTime() {
+		move();
 		this.timeFromRouteStart++;
 		this.timeOnCurrentPart++;
-		move();
-
 	}
 
 	@Override

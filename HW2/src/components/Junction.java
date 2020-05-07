@@ -126,6 +126,7 @@ public class Junction extends Point implements RouteParts {
 	 */
 	// TODO: rewrite javadoc after implementation.
 	public void checkIn(Vehicle vehicle) {
+		vehicle.setTimeOnCurrentPart(0);
 		vehicle.setCurrentRoutePart(this);
 		vehicle.setStatus("- Has arrived to" + toString());
 		System.out.println(vehicle.getStatus());
@@ -193,19 +194,22 @@ public class Junction extends Point implements RouteParts {
 
 	@Override
 	public String toString() {
-//		if (this instanceof LightedJunction) {
-//			return String.format("Junction %s (Lighted)", this.junctionName);
-//		}
+		if (this instanceof LightedJunction) {
+			return String.format("Junction %s (Lighted)", this.junctionName);
+		}
 		return String.format("Junction %s", this.junctionName);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		Junction other = (Junction) obj;
-		if (other == null || !this.enteringRoads.equals(other.enteringRoads)
-				|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
-			return false;
+		if (obj instanceof Junction) {
+			Junction other = (Junction) obj;
+			if (other == null || !this.enteringRoads.equals(other.enteringRoads)
+					|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
+				return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 }

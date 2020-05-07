@@ -41,10 +41,11 @@ public class Road implements RouteParts, Utilities {
 	}
 
 	public double calcEstimatedTime(Object obj) {
-		if(obj instanceof Vehicle) {
-			double dx = ((Vehicle)obj).getLastRoad().getStartJunction().calcDistance((((Vehicle)obj).getLastRoad().getEndJunction()));
-			double dv = Math.min(this.maxSpeed, ((Vehicle)obj).getVehicleType().getAverageSpeed());
-			return (double)Math.round(dx/dv);
+		if (obj instanceof Vehicle) {
+			double dx = ((Vehicle) obj).getLastRoad().getStartJunction()
+					.calcDistance((((Vehicle) obj).getLastRoad().getEndJunction()));
+			double dv = Math.min(this.maxSpeed, ((Vehicle) obj).getVehicleType().getAverageSpeed());
+			return (double) Math.round(dx / dv);
 		}
 		return -1;
 	}
@@ -55,10 +56,11 @@ public class Road implements RouteParts, Utilities {
 	}
 
 	public boolean canLeave(Vehicle vehicle) {
-		return this.calcEstimatedTime(this) <= vehicle.getTimeOnCurrentPart();
+		return this.calcEstimatedTime(vehicle) <= vehicle.getTimeOnCurrentPart();
 	}
 
 	public void checkIn(Vehicle vehicle) {
+		vehicle.setTimeOnCurrentPart(0);
 		this.waitingVehicles.add(vehicle);
 		System.out.printf("The vehicle %s has checked in to the road from %s to %s", vehicle.toString(),
 				this.startJunction.getJunctionName(), this.endJunction.getJunctionName());

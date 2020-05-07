@@ -21,13 +21,14 @@ public class Route implements RouteParts {
 				this.routeParts.add(exRoads.get(rand.nextInt(exRoads.size())));
 			}
 		}
+		System.out.printf("- is starting a new route\n");
 	}
 
 	@Override
 	public double calcEstimatedTime(Object obj) {
 		double sum = 0;
 		if (obj instanceof Vehicle) {
-			for(RouteParts rp:((Vehicle)obj).getCurrentRoute().getRouteParts()) {
+			for (RouteParts rp : ((Vehicle) obj).getCurrentRoute().getRouteParts()) {
 				sum = sum + rp.calcEstimatedTime(obj);
 			}
 			return sum;
