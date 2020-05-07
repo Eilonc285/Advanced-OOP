@@ -67,8 +67,8 @@ public class Vehicle implements Timer, Utilities {
 		this.timeOnCurrentPart = 0;
 		this.status = "waiting";
 		System.out.printf("%s has been created\n", this.toString());
-		this.currentRoute = new Route(road, this);
-		System.out.printf("is starting to move on road\n");
+		this.currentRoute = new Route(this.currentRoutePart, this);
+		((Road) this.currentRoutePart).checkIn(this);
 	}
 
 	public int getId() {

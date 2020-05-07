@@ -62,14 +62,14 @@ public class Road implements RouteParts, Utilities {
 	public void checkIn(Vehicle vehicle) {
 		vehicle.setTimeOnCurrentPart(0);
 		this.waitingVehicles.add(vehicle);
-		System.out.printf("The vehicle %s has checked in to the road from %s to %s", vehicle.toString(),
-				this.startJunction.getJunctionName(), this.endJunction.getJunctionName());
+		System.out.printf("- is starting to move on %s, time to finish: %f\n", this.toString(),
+				this.calcEstimatedTime(vehicle));
 	}
 
 	public void checkOut(Vehicle vehicle) {
 		this.removeVehicleFromWaitingVehicles(vehicle);
-		System.out.printf("The vehicle %s has checked out of the road from %s to %s\n", vehicle.toString(),
-				this.startJunction.getJunctionName(), this.endJunction.getJunctionName());
+		System.out.printf("- has finished %s, time spent on road: %d\n", this.toString(),
+				vehicle.getTimeOnCurrentPart());
 	}
 
 	public RouteParts findNextPart(Vehicle vehicle) {

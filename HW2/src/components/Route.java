@@ -21,7 +21,7 @@ public class Route implements RouteParts {
 				this.routeParts.add(exRoads.get(rand.nextInt(exRoads.size())));
 			}
 		}
-		System.out.printf("- is starting a new route\n");
+		this.checkIn(vehicle);
 	}
 
 	@Override
@@ -43,14 +43,13 @@ public class Route implements RouteParts {
 
 	@Override
 	public void checkIn(Vehicle vehicle) {
-		System.out.printf("%s has checked in to route from %s to %s\n", vehicle.toString(), this.routeParts.get(0),
-				this.routeParts.get(this.routeParts.size() - 1));
+		System.out.printf("- is starting a new %s\n", this.toString());
 	}
 
 	@Override
 	public void checkOut(Vehicle vehicle) {
-		System.out.printf("%s has checked out from route from %s to %s\n", vehicle.toString(), this.routeParts.get(0),
-				this.routeParts.get(this.routeParts.size() - 1));
+		System.out.printf("- has finished the %s. Time spent on the route: %d\n", this.toString(),
+				this.vehicle.getTimeFromRouteStart());
 	}
 
 	@Override
@@ -85,6 +84,21 @@ public class Route implements RouteParts {
 
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Route from %s to %s, estimated time for route: %f.\n", this.routeParts.get(0).toString(),
+				this.routeParts.get(this.routeParts.size() - 1).toString(), this.calcEstimatedTime(this.vehicle));
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Route) {
+			return this.routeParts.equals(((Route) other).getRouteParts())
+					&& this.vehicle.equals(((Route) other).getVehicle());
+		}
+		return false;
 	}
 
 }
