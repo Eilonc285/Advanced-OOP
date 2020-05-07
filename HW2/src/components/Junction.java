@@ -77,10 +77,19 @@ public class Junction extends Point implements RouteParts {
 	 */
 	public double calcEstimatedTime(Object obj) {
 		if (obj instanceof Vehicle) {
-			return ((double) ((Junction) ((Vehicle) obj).getCurrentRoutePart()).enteringRoads
-					.indexOf(((Vehicle) obj).getLastRoad()) + 1);
-		} else
-			return 0;
+//			return ((double) ((Junction) ((Vehicle) obj).getCurrentRoutePart()).enteringRoads
+//					.indexOf(((Vehicle) obj).getLastRoad()) + 1);
+			for (int i = 0; i < ((Vehicle) obj).getCurrentRoute().getRouteParts().size(); i++) {
+				if (((Vehicle) obj).getCurrentRoute().getRouteParts().get(i).equals(this)) {
+					int enterRoadIndex = this.enteringRoads
+							.indexOf(((Vehicle) obj).getCurrentRoute().getRouteParts().get(i - 1));
+					return (double) (enterRoadIndex + 1);
+				}
+			}
+			return (double) 0;
+		} else {
+			return (double) 0;
+		}
 	}
 
 	/**
