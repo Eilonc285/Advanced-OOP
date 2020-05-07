@@ -69,7 +69,6 @@ public class Vehicle implements Timer, Utilities {
 		System.out.printf("%s has been created\n", this.toString());
 		this.currentRoute = new Route(road, this);
 		System.out.printf("is starting to move on road\n");
-//		move();
 	}
 
 	public int getId() {
@@ -120,7 +119,7 @@ public class Vehicle implements Timer, Utilities {
 				nextPart.checkIn(this);
 			}
 		} else {
-			if (this.currentRoutePart instanceof Road && this.timeOnCurrentPart != 0) {
+			if (this.currentRoutePart instanceof Road) {
 				System.out.println("is still driving");
 			} else {
 				if (this.currentRoutePart instanceof LightedJunction) {
@@ -134,6 +133,7 @@ public class Vehicle implements Timer, Utilities {
 	}
 
 	public void incrementDrivingTime() {
+		System.out.printf("%s\n", this.toString());
 		move();
 		this.timeFromRouteStart++;
 		this.timeOnCurrentPart++;

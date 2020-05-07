@@ -154,8 +154,18 @@ public class Driving implements Timer, Utilities {
 	public void drive(int numOfTurns) {
 		System.out.println("================= START DRIVING=================");
 		for (int i = 0; i < numOfTurns; i++) {
-			System.out.printf("***************TURN %d***************", i);
+			System.out.printf("***************TURN %d***************\n", i);
 			this.incrementDrivingTime();
+			for (int j = 0; j < this.allTimedElements.size(); j++) {
+				if (this.allTimedElements.get(j) instanceof TrafficLights) {
+					if (((TrafficLights) this.allTimedElements.get(j)).getWorkingTime()
+							% ((TrafficLights) this.allTimedElements.get(j)).getDelay() == 0) {
+						System.out.println("lights green light");
+					} else {
+						System.out.printf("%s\n-on delay\n", ((TrafficLights) this.allTimedElements.get(j)).toString());
+					}
+				}
+			}
 		}
 	}
 
