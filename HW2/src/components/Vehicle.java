@@ -21,6 +21,19 @@ public class Vehicle implements Timer, Utilities {
 		objectsCount = 0;
 	}
 
+	public Vehicle(Road road) {
+		Random rand = new Random();
+		this.id = ++Vehicle.objectsCount;
+		this.currentRoutePart = road;
+		this.lastRoad = road;
+		this.vehicleType = VehicleType.values()[rand.nextInt(VehicleType.values().length)];
+		this.timeFromRouteStart = 0;
+		this.timeOnCurrentPart = 0;
+		this.status = "waiting";
+		System.out.printf("\n%s has been created\n", this.toString());
+		this.currentRoute = new Route(this.currentRoutePart, this);
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -55,19 +68,6 @@ public class Vehicle implements Timer, Utilities {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public Vehicle(Road road) {
-		Random rand = new Random();
-		this.id = ++Vehicle.objectsCount;
-		this.currentRoutePart = road;
-		this.lastRoad = road;
-		this.vehicleType = VehicleType.values()[rand.nextInt(VehicleType.values().length)];
-		this.timeFromRouteStart = 0;
-		this.timeOnCurrentPart = 0;
-		this.status = "waiting";
-		System.out.printf("%s has been created\n", this.toString());
-		this.currentRoute = new Route(this.currentRoutePart, this);
 	}
 
 	public int getId() {
@@ -107,19 +107,25 @@ public class Vehicle implements Timer, Utilities {
 	}
 
 	public void move() {
-		if (this.currentRoutePart.canLeave(this)) {
+		if (this.currentRoutePart
+				.equals(this.currentRoute.getRouteParts().get(this.currentRoute.getRouteParts().size() - 1))
+				&& this.currentRoutePart.canLeave(this)) {
+			Route newRoute = ((Route) this.currentRoute.findNextPart(this));
+			this.currentRoutePart.checkOut(this);
+			this.currentRoute.checkOut(this);
+			this.currentRoute = newRoute;
+			this.currentRoute.checkIn(this);
+			this.currentRoutePart = this.currentRoute.getRouteParts().get(0);
+			this.currentRoutePart.checkIn(this);
+		} else if (this.currentRoutePart.canLeave(this)) {
 			RouteParts nextPart = this.currentRoute.findNextPart(this);
-			if (nextPart instanceof Route) {
-				this.currentRoute = (Route) nextPart;
-				this.currentRoutePart = ((Route) nextPart).getRouteParts().get(0);
-				this.currentRoutePart.checkIn(this);
-			} else {
-				this.currentRoutePart.checkOut(this);
-				nextPart.checkIn(this);
-			}
+			this.currentRoutePart.checkOut(this);
+			nextPart.checkIn(this);
 		} else {
 			if (this.currentRoutePart instanceof Road) {
-				System.out.println("is still driving");
+				double timeToArrive = ((Road) this.currentRoutePart).calcEstimatedTime(this) - this.timeOnCurrentPart;
+				System.out.printf("- is still moving on %s, time to arrive: %f\n",
+						((Road) this.currentRoutePart).toString(), timeToArrive);
 			} else {
 				if (this.currentRoutePart instanceof LightedJunction) {
 					if (((LightedJunction) this.currentRoutePart).getLights().isTrafficLightsOn()) {
@@ -132,7 +138,7 @@ public class Vehicle implements Timer, Utilities {
 	}
 
 	public void incrementDrivingTime() {
-		System.out.printf("%s\n", this.toString());
+		System.out.printf("\n%s\n", this.toString());
 		move();
 		this.timeFromRouteStart++;
 		this.timeOnCurrentPart++;

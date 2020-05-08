@@ -138,7 +138,6 @@ public class Road implements RouteParts, Utilities {
 
 	public void setGreenlight(boolean greenlight) {
 		this.greenlight = greenlight;
-		System.out.printf("%s:\n green light.\n", this.toString());
 	}
 
 	public void setLength(double length) {
@@ -166,8 +165,8 @@ public class Road implements RouteParts, Utilities {
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof Road) {
-			return this.startJunction.equals(((Road) other).getStartJunction())
-					&& this.endJunction.equals(((Road) other).getEndJunction());
+			return this.startJunction.getJunctionName().equals(((Road) other).getStartJunction().getJunctionName())
+					&& this.endJunction.getJunctionName().equals(((Road) other).getEndJunction().getJunctionName());
 		}
 		return false;
 	}

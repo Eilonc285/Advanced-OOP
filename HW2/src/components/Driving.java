@@ -35,10 +35,9 @@ public class Driving implements Timer, Utilities {
 		Vehicle createdVehicle;
 		for (int i = 0; i < numOfVehicles; i++) {
 			createdVehicle = new Vehicle(this.map.getRoads().get(rand.nextInt(this.map.getRoads().size())));
-			createdVehicle.getCurrentRoute().checkIn(createdVehicle);
 			this.vehicles.add(createdVehicle);
-//			createdVehicle.getCurrentRoute().checkIn(createdVehicle);
-//			createdVehicle.getLastRoad().checkIn(createdVehicle);
+			createdVehicle.getCurrentRoute().checkIn(createdVehicle);
+			createdVehicle.getLastRoad().checkIn(createdVehicle);
 		}
 		this.drivingTime = 0;
 		for (int i = 0; i < this.vehicles.size(); i++) {
@@ -165,7 +164,7 @@ public class Driving implements Timer, Utilities {
 				if (this.allTimedElements.get(j) instanceof TrafficLights) {
 					if (((TrafficLights) this.allTimedElements.get(j)).getWorkingTime()
 							% ((TrafficLights) this.allTimedElements.get(j)).getDelay() == 0) {
-						System.out.println("lights green light");
+						((TrafficLights) this.allTimedElements.get(j)).changeLights();
 					} else {
 						System.out.printf("%s\n-on delay\n", ((TrafficLights) this.allTimedElements.get(j)).toString());
 					}

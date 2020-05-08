@@ -77,8 +77,6 @@ public class Junction extends Point implements RouteParts {
 	 */
 	public double calcEstimatedTime(Object obj) {
 		if (obj instanceof Vehicle) {
-//			return ((double) ((Junction) ((Vehicle) obj).getCurrentRoutePart()).enteringRoads
-//					.indexOf(((Vehicle) obj).getLastRoad()) + 1);
 			for (int i = 0; i < ((Vehicle) obj).getCurrentRoute().getRouteParts().size(); i++) {
 				if (((Vehicle) obj).getCurrentRoute().getRouteParts().get(i).equals(this)) {
 					int enterRoadIndex = this.enteringRoads
@@ -137,7 +135,7 @@ public class Junction extends Point implements RouteParts {
 	public void checkIn(Vehicle vehicle) {
 		vehicle.setTimeOnCurrentPart(0);
 		vehicle.setCurrentRoutePart(this);
-		vehicle.setStatus("- Has arrived to" + toString());
+		vehicle.setStatus("- Has arrived to " + toString());
 		System.out.println(vehicle.getStatus());
 	}
 
@@ -212,12 +210,13 @@ public class Junction extends Point implements RouteParts {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Junction) {
-			Junction other = (Junction) obj;
-			if (other == null || !this.enteringRoads.equals(other.enteringRoads)
-					|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
-				return false;
-			}
-			return true;
+//			Junction other = (Junction) obj;
+//			if (other == null || !this.enteringRoads.equals(other.enteringRoads)
+//					|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
+//				return false;
+//			}
+//			return true;
+			return super.equals(obj) && this.junctionName.equals(((Junction) obj).getJunctionName());
 		}
 		return false;
 	}

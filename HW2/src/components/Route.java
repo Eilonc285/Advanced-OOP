@@ -54,7 +54,18 @@ public class Route implements RouteParts {
 
 	@Override
 	public RouteParts findNextPart(Vehicle vehicle) {
-		if (this.routeParts.indexOf(vehicle.getCurrentRoutePart()) != this.routeParts.size() - 1) {
+		int indx = -1;
+		for (int i = 0; i < this.routeParts.size(); i++) {
+			if (this.routeParts.get(i) instanceof Junction) {
+				if (((Junction) this.routeParts.get(i)).equals(vehicle.getCurrentRoutePart())) {
+					indx = i;
+					break;
+				}
+			}
+
+		}
+
+		if (indx != this.routeParts.size() - 1) {
 			return this.routeParts.get(this.routeParts.indexOf(vehicle.getCurrentRoutePart()) + 1);
 		} else {
 			if (((Junction) vehicle.getCurrentRoutePart()).getExitingRoads().size() > 0) {
@@ -88,7 +99,7 @@ public class Route implements RouteParts {
 
 	@Override
 	public String toString() {
-		return String.format("Route from %s to %s, estimated time for route: %f.\n", this.routeParts.get(0).toString(),
+		return String.format("Route from %s to %s, estimated time for route: %f.", this.routeParts.get(0).toString(),
 				this.routeParts.get(this.routeParts.size() - 1).toString(), this.calcEstimatedTime(this.vehicle));
 	}
 
