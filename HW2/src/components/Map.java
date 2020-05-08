@@ -16,10 +16,13 @@ public class Map implements Utilities {
 		this.lights = new ArrayList<TrafficLights>();
 		Random rand = new Random();
 		for (int i = 0; i < numOfJunctions; i++) {
+			Junction newJunc;
 			if (rand.nextBoolean()) {
-				this.junctions.add(new Junction());
+				newJunc = new Junction();
+				this.junctions.add(newJunc);
 			} else {
-				this.junctions.add(new LightedJunction());
+				newJunc = new LightedJunction();
+				this.junctions.add(newJunc);
 			}
 
 		}

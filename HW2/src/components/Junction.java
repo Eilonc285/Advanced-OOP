@@ -210,13 +210,12 @@ public class Junction extends Point implements RouteParts {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Junction) {
-//			Junction other = (Junction) obj;
-//			if (other == null || !this.enteringRoads.equals(other.enteringRoads)
-//					|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
-//				return false;
-//			}
-//			return true;
-			return super.equals(obj) && this.junctionName.equals(((Junction) obj).getJunctionName());
+			Junction other = (Junction) obj;
+			if (other == null || !this.enteringRoads.equals(other.enteringRoads)
+					|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
+				return false;
+			}
+			return true;
 		}
 		return false;
 	}

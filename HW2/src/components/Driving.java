@@ -32,9 +32,9 @@ public class Driving implements Timer, Utilities {
 		Random rand = new Random();
 		this.map = new Map(numOfJunctions);
 		System.out.println("================= CREATING VEHICLES =================");
-		Vehicle createdVehicle;
+//		Vehicle createdVehicle;
 		for (int i = 0; i < numOfVehicles; i++) {
-			createdVehicle = new Vehicle(this.map.getRoads().get(rand.nextInt(this.map.getRoads().size())));
+			Vehicle createdVehicle = new Vehicle(this.map.getRoads().get(rand.nextInt(this.map.getRoads().size())));
 			this.vehicles.add(createdVehicle);
 			createdVehicle.getCurrentRoute().checkIn(createdVehicle);
 			createdVehicle.getLastRoad().checkIn(createdVehicle);

@@ -54,19 +54,10 @@ public class Route implements RouteParts {
 
 	@Override
 	public RouteParts findNextPart(Vehicle vehicle) {
-		int indx = -1;
-		for (int i = 0; i < this.routeParts.size(); i++) {
-			if (this.routeParts.get(i) instanceof Junction) {
-				if (((Junction) this.routeParts.get(i)).equals(vehicle.getCurrentRoutePart())) {
-					indx = i;
-					break;
-				}
-			}
-
-		}
-
-		if (indx != this.routeParts.size() - 1) {
-			return this.routeParts.get(this.routeParts.indexOf(vehicle.getCurrentRoutePart()) + 1);
+//		System.out.printf("current %s last %s", vehicle.getCurrentRoutePart().toString(),
+//				this.routeParts.get(this.routeParts.size() - 1));
+		if (this.routeParts.get(this.routeParts.size() - 1).equals(vehicle.getCurrentRoutePart())) {
+			return vehicle.getCurrentRoutePart().findNextPart(vehicle);
 		} else {
 			if (((Junction) vehicle.getCurrentRoutePart()).getExitingRoads().size() > 0) {
 				return new Route(vehicle.getLastRoad(), vehicle);
