@@ -130,10 +130,11 @@ public class Vehicle implements Timer, Utilities {
 			} else {
 				if (this.currentRoutePart instanceof LightedJunction) {
 					if (((LightedJunction) this.currentRoutePart).getLights().isTrafficLightsOn()) {
-						System.out.println("waiting for green light");
+						System.out.printf("- is waiting at %s for green light\n", this.currentRoutePart.toString());
 					}
 				}
-				System.out.println("is waiting for previous cars");
+				System.out.printf("- is waiting at %s- there are previous cars on the same road.\n",
+						this.getCurrentRoutePart().toString());
 			}
 		}
 	}
