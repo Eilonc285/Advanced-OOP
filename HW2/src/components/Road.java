@@ -25,6 +25,7 @@ public class Road implements RouteParts, Utilities {
 	 */
 	public Road(Junction start, Junction end) {
 		Random rand = new Random();
+		this.enable = rand.nextBoolean();
 		this.waitingVehicles = new ArrayList<Vehicle>();
 		this.startJunction = start;
 		this.startJunction.getExitingRoads().add(this);
