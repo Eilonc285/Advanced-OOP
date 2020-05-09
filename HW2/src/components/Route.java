@@ -14,11 +14,14 @@ public class Route implements RouteParts {
 		this.routeParts.add(start);
 		for (int i = 0; i < 9; i++) {
 			if (this.routeParts.get(this.routeParts.size() - 1) instanceof Road) {
-				this.routeParts.add(((Road) this.vehicle.getCurrentRoutePart()).getEndJunction());
+				this.routeParts.add(((Road) this.routeParts.get(this.routeParts.size() - 1)).getEndJunction());
 			} else {
-				ArrayList<Road> exRoads = ((Junction) this.routeParts.get(this.routeParts.size() - 1))
-						.getExitingRoads();
-				this.routeParts.add(exRoads.get(rand.nextInt(exRoads.size())));
+				if (((Junction) this.routeParts.get(this.routeParts.size() - 1)).getExitingRoads().size() > 0) {
+					ArrayList<Road> exRoads = ((Junction) this.routeParts.get(this.routeParts.size() - 1))
+							.getExitingRoads();
+					this.routeParts.add(exRoads.get(rand.nextInt(exRoads.size())));
+				} else
+					break;
 			}
 		}
 //		this.checkIn(vehicle);
@@ -54,10 +57,12 @@ public class Route implements RouteParts {
 
 	@Override
 	public RouteParts findNextPart(Vehicle vehicle) {
-//		System.out.printf("current %s last %s", vehicle.getCurrentRoutePart().toString(),
-//				this.routeParts.get(this.routeParts.size() - 1));
-		if (this.routeParts.get(this.routeParts.size() - 1).equals(vehicle.getCurrentRoutePart())) {
-			return vehicle.getCurrentRoutePart().findNextPart(vehicle);
+//		System.out.printf("%s", vehicle.getCurrentRoutePart().getClass().toString());
+		if (!this.routeParts.get(this.routeParts.size() - 1).equals(vehicle.getCurrentRoutePart())) {
+//			return vehicle.getCurrentRoutePart().findNextPart(vehicle);
+			RouteParts vehicleCurrentPart = vehicle.getCurrentRoutePart();
+			int currentIndex = this.routeParts.indexOf(vehicleCurrentPart);
+			return this.routeParts.get(currentIndex + 1);
 		} else {
 			if (((Junction) vehicle.getCurrentRoutePart()).getExitingRoads().size() > 0) {
 				return new Route(vehicle.getLastRoad(), vehicle);

@@ -120,7 +120,8 @@ public class Vehicle implements Timer, Utilities {
 		} else if (this.currentRoutePart.canLeave(this)) {
 			RouteParts nextPart = this.currentRoute.findNextPart(this);
 			this.currentRoutePart.checkOut(this);
-			nextPart.checkIn(this);
+			this.currentRoutePart = nextPart;
+			this.currentRoutePart.checkIn(this);
 		} else {
 			if (this.currentRoutePart instanceof Road) {
 				double timeToArrive = ((Road) this.currentRoutePart).calcEstimatedTime(this) - this.timeOnCurrentPart;
