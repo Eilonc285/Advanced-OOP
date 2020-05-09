@@ -172,33 +172,76 @@ public class Junction extends Point implements RouteParts {
 		return null;
 	}
 
+	/**
+	 * Prints a message that the vehicle has to wait in this junction this turn.
+	 */
 	public void stayOnCurrentPart(Vehicle vehicle) {
+		if (this instanceof LightedJunction) {
+			System.out.printf("- is waiting at %s for green light\n", this.toString());
+		} else {
+			System.out.printf("- is waiting at %s- there are previous cars on the same road.\n", this.toString());
+		}
 	}
 
+	/**
+	 * Returns the amount of existing objects of this class.
+	 * 
+	 * @return: The object count.
+	 */
 	public static int getObjectCounts() {
 		return objectCounts;
 	}
 
+	/**
+	 * Sets the amount of existing objects of this class.
+	 * 
+	 * @param objectCounts: The amount to be set.
+	 */
 	public static void setObjectCounts(int objectCounts) {
 		Junction.objectCounts = objectCounts;
 	}
 
+	/**
+	 * Returns the ArrayList of the entering roads to this junction.
+	 * 
+	 * @return: The entering roads ArrayList.
+	 */
 	public ArrayList<Road> getEnteringRoads() {
 		return enteringRoads;
 	}
 
+	/**
+	 * Sets the ArrayList of entering roads of this junction.
+	 * 
+	 * @param enteringRoads: The ArrayList to be set.
+	 */
 	public void setEnteringRoads(ArrayList<Road> enteringRoads) {
 		this.enteringRoads = enteringRoads;
 	}
 
+	/**
+	 * Returns the ArrayList of the exiting roads from this junction.
+	 * 
+	 * @return: The exiting roads ArrayList.
+	 */
 	public ArrayList<Road> getExitingRoads() {
 		return exitingRoads;
 	}
 
+	/**
+	 * Sets the exiting roads ArrayList of this junction.
+	 * 
+	 * @param exitingRoads: The ArrayList to be set.
+	 */
 	public void setExitingRoads(ArrayList<Road> exitingRoads) {
 		this.exitingRoads = exitingRoads;
 	}
 
+	/**
+	 * Overridden method. Returns a string representation of this object.
+	 * 
+	 * @return: The string representation.
+	 */
 	@Override
 	public String toString() {
 		if (this instanceof LightedJunction) {
@@ -207,6 +250,12 @@ public class Junction extends Point implements RouteParts {
 		return String.format("Junction %s", this.junctionName);
 	}
 
+	/**
+	 * Overridden method. Returns a boolean of if this object equals the other given
+	 * object.
+	 * 
+	 * @return: The boolean of if they equal.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Junction) {
