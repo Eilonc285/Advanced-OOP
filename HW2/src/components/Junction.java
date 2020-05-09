@@ -119,7 +119,7 @@ public class Junction extends Point implements RouteParts {
 	public boolean checkAvailability(Vehicle vehicle) {
 		if (vehicle.getLastRoad().getEndJunction().getExitingRoads().isEmpty())
 			return false;
-		if (vehicle.getLastRoad().getWaitingVehicles().indexOf(vehicle) != 0)
+		if (vehicle.getLastRoad().getWaitingVehicles().indexOf(vehicle) != 0 && vehicle.getLastRoad().getWaitingVehicles().size() > 0)
 			return false;
 		else
 			return true;
