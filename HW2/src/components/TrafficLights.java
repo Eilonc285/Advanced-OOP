@@ -23,7 +23,7 @@ public abstract class TrafficLights implements Timer, Utilities {
 
 	public TrafficLights(ArrayList<Road> roads) {
 		Random rand = new Random();
-		this.roads = new ArrayList(roads);
+		this.roads = new ArrayList<Road>(roads);
 		this.id = TrafficLights.objectsCount;
 		this.workingTime = 0;
 		this.delay = rand.nextInt(this.maxDelay - this.minDelay + 1) + this.minDelay;
@@ -38,7 +38,7 @@ public abstract class TrafficLights implements Timer, Utilities {
 		for (int i = 0; i < this.roads.size(); i++) {
 			if (i == this.greenLightIndex) {
 				this.roads.get(i).setGreenlight(true);
-				System.out.printf("Entering road number %d has a green light\n", i);
+				System.out.printf("%s\n%s: green light\n", this.toString(), this.roads.get(i).toString());
 			} else {
 				this.roads.get(i).setGreenlight(false);
 			}

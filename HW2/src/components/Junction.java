@@ -77,10 +77,17 @@ public class Junction extends Point implements RouteParts {
 	 */
 	public double calcEstimatedTime(Object obj) {
 		if (obj instanceof Vehicle) {
-			return ((double) ((Junction) ((Vehicle) obj).getCurrentRoutePart()).enteringRoads
-					.indexOf(((Vehicle) obj).getLastRoad()) + 1);
-		} else
-			return 0;
+			for (int i = 0; i < ((Vehicle) obj).getCurrentRoute().getRouteParts().size(); i++) {
+				if (((Vehicle) obj).getCurrentRoute().getRouteParts().get(i).equals(this)) {
+					int enterRoadIndex = this.enteringRoads
+							.indexOf(((Vehicle) obj).getCurrentRoute().getRouteParts().get(i - 1));
+					return (double) (enterRoadIndex + 1);
+				}
+			}
+			return (double) 0;
+		} else {
+			return (double) 0;
+		}
 	}
 
 	/**
@@ -126,8 +133,9 @@ public class Junction extends Point implements RouteParts {
 	 */
 	// TODO: rewrite javadoc after implementation.
 	public void checkIn(Vehicle vehicle) {
+		vehicle.setTimeOnCurrentPart(0);
 		vehicle.setCurrentRoutePart(this);
-		vehicle.setStatus("- Has arrived to" + toString());
+		vehicle.setStatus("- Has arrived to " + toString());
 		System.out.println(vehicle.getStatus());
 	}
 
@@ -141,7 +149,8 @@ public class Junction extends Point implements RouteParts {
 			// vehicle.getCurrentRoute().getRouteParts()
 			vehicle.setStatus("- has left the" + toString());
 			System.out.println(vehicle.getStatus());
-		}
+		} else
+			stayOnCurrentPart(vehicle);
 	}
 
 	/**
@@ -152,10 +161,11 @@ public class Junction extends Point implements RouteParts {
 	 * @param vehicle: The given vehicle for which to find the next road segment.
 	 */
 	public RouteParts findNextPart(Vehicle vehicle) {
-		for(Road r:exitingRoads) {
-			if(r.isEnable()) {
-				for(VehicleType v:r.getVehicleTypes()) {
-					if(v.equals(vehicle.getVehicleType())) return r;
+		for (Road r : exitingRoads) {
+			if (r.isEnable()) {
+				for (VehicleType v : r.getVehicleTypes()) {
+					if (v.equals(vehicle.getVehicleType()))
+						return r;
 				}
 			}
 		}
@@ -191,16 +201,22 @@ public class Junction extends Point implements RouteParts {
 
 	@Override
 	public String toString() {
-		return String.format("Junction %s (%f , %f)", this.junctionName, this.getX(), this.getY());
+		if (this instanceof LightedJunction) {
+			return String.format("Junction %s (Lighted)", this.junctionName);
+		}
+		return String.format("Junction %s", this.junctionName);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		Junction other = (Junction) obj;
-		if (other == null || !this.enteringRoads.equals(other.enteringRoads)
-				|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
-			return false;
+		if (obj instanceof Junction) {
+			Junction other = (Junction) obj;
+			if (other == null || !this.enteringRoads.equals(other.enteringRoads)
+					|| !this.exitingRoads.equals(other.exitingRoads) || !this.junctionName.equals(other.junctionName)) {
+				return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 }

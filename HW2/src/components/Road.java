@@ -22,8 +22,14 @@ public class Road implements RouteParts, Utilities {
 		this.waitingVehicles = new ArrayList<Vehicle>();
 		this.startJunction = start;
 		this.startJunction.getExitingRoads().add(this);
+		if (this.startJunction instanceof LightedJunction) {
+			((LightedJunction) this.startJunction).getLights().getRoads().add(this);
+		}
 		this.endJunction = end;
 		this.endJunction.getEnteringRoads().add(this);
+		if (this.endJunction instanceof LightedJunction) {
+			((LightedJunction) this.endJunction).getLights().getRoads().add(this);
+		}
 		this.greenlight = false;
 		this.length = this.calcLength();
 		this.maxSpeed = VehicleType.values()[rand.nextInt(VehicleType.values().length)].getAverageSpeed();
@@ -35,7 +41,13 @@ public class Road implements RouteParts, Utilities {
 	}
 
 	public double calcEstimatedTime(Object obj) {
-		return length;
+		if (obj instanceof Vehicle) {
+			double dx = ((Vehicle) obj).getLastRoad().getStartJunction()
+					.calcDistance((((Vehicle) obj).getLastRoad().getEndJunction()));
+			double dv = Math.min(this.maxSpeed, ((Vehicle) obj).getVehicleType().getAverageSpeed());
+			return (double) Math.round(dx / dv);
+		}
+		return -1;
 	}
 
 	public double calcLength() {
@@ -44,19 +56,20 @@ public class Road implements RouteParts, Utilities {
 	}
 
 	public boolean canLeave(Vehicle vehicle) {
-		return this.calcEstimatedTime(this) <= vehicle.getTimeOnCurrentPart();
+		return this.calcEstimatedTime(vehicle) <= vehicle.getTimeOnCurrentPart();
 	}
 
 	public void checkIn(Vehicle vehicle) {
+		vehicle.setTimeOnCurrentPart(0);
 		this.waitingVehicles.add(vehicle);
-		System.out.printf("The vehicle %s has checked in to the road from %s to %s", vehicle.toString(),
-				this.startJunction.getJunctionName(), this.endJunction.getJunctionName());
+		System.out.printf("- is starting to move on %s, time to finish: %f\n", this.toString(),
+				this.calcEstimatedTime(vehicle));
 	}
 
 	public void checkOut(Vehicle vehicle) {
 		this.removeVehicleFromWaitingVehicles(vehicle);
-		System.out.printf("The vehicle %s has checked out of the road from %s to %s\n", vehicle.toString(),
-				this.startJunction.getJunctionName(), this.endJunction.getJunctionName());
+		System.out.printf("- has finished %s, time spent on road: %d\n", this.toString(),
+				vehicle.getTimeOnCurrentPart());
 	}
 
 	public RouteParts findNextPart(Vehicle vehicle) {
@@ -145,15 +158,15 @@ public class Road implements RouteParts, Utilities {
 
 	@Override
 	public String toString() {
-		return String.format("Road form Junction %s to Junction %s, length: %f, max speed %d",
-				this.startJunction.getJunctionName(), this.endJunction.getJunctionName(), this.length, this.maxSpeed);
+		return String.format("Road form %s to %s, length: %d, max speed %d", this.startJunction.toString(),
+				this.endJunction.toString(), (int) this.length, this.maxSpeed);
 	}
 
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof Road) {
-			return this.startJunction.equals(((Road) other).getStartJunction())
-					&& this.endJunction.equals(((Road) other).getEndJunction());
+			return this.startJunction.getJunctionName().equals(((Road) other).getStartJunction().getJunctionName())
+					&& this.endJunction.getJunctionName().equals(((Road) other).getEndJunction().getJunctionName());
 		}
 		return false;
 	}

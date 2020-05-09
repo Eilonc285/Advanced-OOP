@@ -16,21 +16,24 @@ public class Map implements Utilities {
 		this.lights = new ArrayList<TrafficLights>();
 		Random rand = new Random();
 		for (int i = 0; i < numOfJunctions; i++) {
+			Junction newJunc;
 			if (rand.nextBoolean()) {
-				this.junctions.add(new Junction());
+				newJunc = new Junction();
+				this.junctions.add(newJunc);
 			} else {
-				this.junctions.add(new LightedJunction());
+				newJunc = new LightedJunction();
+				this.junctions.add(newJunc);
 			}
 
 		}
 		this.SetAllRoads();
 		this.turnLightsOn();
+		System.out.println("================= GAME MAP HAS BEEN CREATED =================");
 	}
 
 	public void SetAllRoads() {
 		for (int i = this.junctions.size() - 1; i >= 0; i--) {
 			for (int j = 0; j < i; j++) {
-				// two roads between every two junctions for each direction.
 				this.roads.add(new Road(this.junctions.get(j), this.junctions.get(i)));
 				this.roads.add(new Road(this.junctions.get(i), this.junctions.get(j)));
 			}
@@ -38,10 +41,19 @@ public class Map implements Utilities {
 	}
 
 	public void turnLightsOn() {
+		System.out.println("================= TRAFFIC LIGHTS TURN ON =================");
 		for (int i = 0; i < this.junctions.size(); i++) {
 			Random rand = new Random();
 			if (this.junctions.get(i) instanceof LightedJunction) {
 				((LightedJunction) this.junctions.get(i)).getLights().setTrafficLightsOn(rand.nextBoolean());
+				if (((LightedJunction) this.junctions.get(i)).getLights().isTrafficLightsOn()) {
+					System.out.printf("%s turned ON, delay time: %d\n",
+							((LightedJunction) this.junctions.get(i)).getLights().toString(),
+							((LightedJunction) this.junctions.get(i)).getLights().getDelay());
+					int entRoad = rand.nextInt(this.junctions.get(i).getEnteringRoads().size());
+					((LightedJunction) this.junctions.get(i)).getLights().setGreenLightIndex(entRoad);
+					this.junctions.get(i).getEnteringRoads().get(entRoad).setGreenlight(true);
+				}
 			}
 		}
 	}

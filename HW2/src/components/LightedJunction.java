@@ -25,11 +25,11 @@ public class LightedJunction extends Junction {
 	}
 
 	public double calcEstimatedTime(Object obj) {
-		return 0;
+		return ((this.lights.getRoads().size() - 1) * this.lights.getDelay()) + 1;
 	}
 
 	public boolean canLeave(Vehicle vehicle) {
-		return false;
+		return vehicle.getLastRoad().isGreenlight();
 	}
 
 	public TrafficLights getLights() {
@@ -37,7 +37,16 @@ public class LightedJunction extends Junction {
 	}
 
 	public boolean isSequential() {
-		return !(this.lights instanceof RandomTrafficLights);
+		return this.lights instanceof SequentialTrafficLights;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("Junction %s (Lighted)", this.getJunctionName());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return super.equals(other);
+	}
 }
