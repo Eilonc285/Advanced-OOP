@@ -1,95 +1,58 @@
+/**
+ * 
+ */
 package utilities;
-
 import java.util.ArrayList;
 import java.util.Random;
-
 /**
- * An interface to provide number checking / producing and message printing.
- * 
- * @author Eilon
+ * @author Sophie Krimberg
  *
  */
 public interface Utilities {
-
-	/**
-	 * Checks if the given value is between the given minimum and maximum values.
-	 * 
-	 * @param val: The number that should be within the range.
-	 * @param min: The minimum of the valid range.
-	 * @param max: The maximum of the valid range.
-	 * @return: Boolean of if the value is within the range.
-	 */
-	default boolean checkValue(double val, double min, double max) {
-		return min <= val && val <= max;
+	public default void errorMessage(double wrongVal, String variable) {
+		
+		System.out.print("The value " + wrongVal + " is illegal for" +variable );
 	}
-
-	/**
-	 * Prints a message about switching a faulty input with a valid one.
-	 * 
-	 * @param wrongVal:   The faulty input value.
-	 * @param correctVal: The new valid value.
-	 * @param varName:    The containing variable name.
-	 */
-	default void correctingMessage(double wrongVal, double correctVal, String varName) {
-		System.out.printf("The value %f is illegal for%s, therefore has been replaced with %f", wrongVal, varName,
-				correctVal);
+	
+	public default void correctingMessage(double wrongVal, double correct, String variable) {
+		errorMessage(wrongVal, variable);
+		System.out.println(", therefore has been replaced with " + correct);
 	}
-
-	/**
-	 * Prints a message of an invalid input value.
-	 * 
-	 * @param wrongVal: The invalid value given.
-	 * @param varName:  The name of the containing variable.
-	 */
-	default void errorMessage(double wrongVal, String varName) {
-		// TODO: implement.
+	
+	public default void successMessage(String objName) {
+		System.out.println(objName + " has been created.");
 	}
-
-	/**
-	 * Produces a random boolean.
-	 * 
-	 * @return: The random boolean.
-	 */
-	default boolean getRandomBoolean() {
-		Random rand = new Random();
-		return rand.nextBoolean();
+	
+	public default double getRandomDouble(double minimum, double maximum){
+		return  Math.random()*((maximum-minimum)+1)-minimum;
+		
 	}
-
-	/**
-	 * Produces a random integer within the given range.
-	 * 
-	 * @param min: The lower limit of the range.
-	 * @param max: The upper limit of the range.
-	 * @return: The produced random value.
-	 */
-	default int getRandomInt(int min, int max) {
-		Random rand = new Random();
-		return (rand.nextInt(max) + min + 1);
+	
+	public default boolean getRandomBoolean() {
+		return new Random().nextBoolean();
 	}
-
-	/**
-	 * Produces and array of random integers within a range.
-	 * 
-	 * @param min:       The minimum limit of the range.
-	 * @param max:       The maximum limit of the range.
-	 * @param arraySize: The size of the produced array.
-	 * @return: The produced array of random integers.
-	 */
-	default ArrayList<Integer> getRandomIntArray(int min, int max, int arraySize) {
-		ArrayList<Integer> arr = new ArrayList<Integer>();
-		for (int i = 0; i < arraySize; i++) {
-			arr.add(this.getRandomInt(min, max));
+	
+	
+	public default int getRandomInt(int minimum, int maximum) {
+		return new Random().nextInt(maximum-minimum)+minimum;
+		
+	}
+	public default boolean checkValue(double val, double min, double max) {
+		if (val<min || val>max) 
+			return false;
+		else
+			return true;
+	}
+	
+	public default ArrayList<Integer> getRandomIntArray(int minimum, int maximum, int maxSize){
+		ArrayList<Integer> arr=new ArrayList<Integer>();
+		while (arr.size()<maxSize) {
+			Integer i=getRandomInt(minimum, maximum);
+			if (!arr.contains(i)) {
+				arr.add(i);
+			}
 		}
 		return arr;
-	}
-
-	/**
-	 * Prints a message of a successful creation of an object.
-	 * 
-	 * @param objName: The name of the created object.
-	 */
-	default void successMessage(String objName) {
-		System.out.printf("%s has been created", objName);
 	}
 
 }

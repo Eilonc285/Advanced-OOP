@@ -1,163 +1,269 @@
+/**
+ * 
+ */
 package components;
 
-import java.util.Random;
 
 import utilities.Timer;
 import utilities.Utilities;
 import utilities.VehicleType;
-
-public class Vehicle implements Timer, Utilities {
+/**
+ * @author Sophie Krimberg
+ *
+ */
+/**
+ * @author krsof
+ *
+ */
+public class Vehicle implements Utilities, Timer {
 	private int id;
 	private VehicleType vehicleType;
 	private Route currentRoute;
 	private RouteParts currentRoutePart;
 	private int timeFromRouteStart;
+	private static int objectsCount=1;
 	private int timeOnCurrentPart;
-	private static int objectsCount;
 	private Road lastRoad;
 	private String status;
+	
+	/**Random Constructor
+	 * @param currentLocation
+	 */
+	public Vehicle (Road currentLocation) {
 
-	static {
-		objectsCount = 0;
+		id=objectsCount++;
+		vehicleType=currentLocation.getVehicleTypes()[getRandomInt(0,currentLocation.getVehicleTypes().length-1)];
+		System.out.println();
+		successMessage(this.toString());
+		currentRoute=new Route(currentLocation, this); //creates a new route for the vehicle and checks it in
+		lastRoad=currentLocation;
+		status=null;
+		
 	}
-
-	public Vehicle(Road road) {
-		Random rand = new Random();
-		this.id = ++Vehicle.objectsCount;
-		this.currentRoutePart = road;
-		this.lastRoad = road;
-		this.vehicleType = VehicleType.values()[rand.nextInt(VehicleType.values().length)];
-		this.timeFromRouteStart = 0;
-		this.timeOnCurrentPart = 0;
-		this.status = "waiting";
-		System.out.printf("\n%s has been created\n", this.toString());
-		this.currentRoute = new Route(this.currentRoutePart, this);
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setVehicleType(VehicleType vehicleType) {
-		this.vehicleType = vehicleType;
-	}
-
-	public void setCurrentRoute(Route currentRoute) {
-		this.currentRoute = currentRoute;
-	}
-
-	public void setCurrentRoutePart(RouteParts currentRoutePart) {
-		this.currentRoutePart = currentRoutePart;
-	}
-
-	public void setTimeFromRouteStart(int timeFromRouteStart) {
-		this.timeFromRouteStart = timeFromRouteStart;
-	}
-
-	public void setTimeOnCurrentPart(int timeOnCurrentPart) {
-		this.timeOnCurrentPart = timeOnCurrentPart;
-	}
-
-	public static void setObjectsCount(int objectsCount) {
-		Vehicle.objectsCount = objectsCount;
-	}
-
-	public void setLastRoad(Road lastRoad) {
-		this.lastRoad = lastRoad;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
+	
+	
+	
+	
+	/**
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+
+
+	/**
+	 * @return the vehicleType
+	 */
 	public VehicleType getVehicleType() {
 		return vehicleType;
 	}
 
+
+
+
+	/**
+	 * @param vehicleType the vehicleType to set
+	 */
+	public void setVehicleType(VehicleType vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+
+
+
+	/**
+	 * @return the currentRoute
+	 */
 	public Route getCurrentRoute() {
 		return currentRoute;
 	}
 
+
+
+
+	/**
+	 * @param currentRoute the currentRoute to set
+	 */
+	public void setCurrentRoute(Route currentRoute) {
+		this.currentRoute = currentRoute;
+	}
+
+
+
+
+	/**
+	 * @return the currentRoutePart
+	 */
 	public RouteParts getCurrentRoutePart() {
 		return currentRoutePart;
 	}
 
+
+
+
+	/**
+	 * @param currentRoutePart the currentRoutePart to set
+	 */
+	public void setCurrentRoutePart(RouteParts currentRoutePart) {
+		this.currentRoutePart = currentRoutePart;
+	}
+
+
+
+
+	/**
+	 * @return the timeFromRouteStart
+	 */
 	public int getTimeFromRouteStart() {
 		return timeFromRouteStart;
 	}
 
+
+
+
+	/**
+	 * @param timeFromRouteStart the timeFromRouteStart to set
+	 */
+	public void setTimeFromRouteStart(int timeFromRouteStart) {
+		this.timeFromRouteStart = timeFromRouteStart;
+	}
+
+
+
+
+	/**
+	 * @return the timeOnCurrentPart
+	 */
 	public int getTimeOnCurrentPart() {
 		return timeOnCurrentPart;
 	}
 
-	public static int getObjectsCount() {
-		return objectsCount;
+
+
+
+	/**
+	 * @param timeOnCurrentPart the timeOnCurrentPart to set
+	 */
+	public void setTimeOnCurrentPart(int timeOnCurrentPart) {
+		this.timeOnCurrentPart = timeOnCurrentPart;
 	}
 
+
+
+
+	/**
+	 * @return the lastRoad
+	 */
 	public Road getLastRoad() {
 		return lastRoad;
 	}
 
+
+
+
+	/**
+	 * @param lastRoad the lastRoad to set
+	 */
+	public void setLastRoad(Road lastRoad) {
+		this.lastRoad = lastRoad;
+	}
+
+
+
+
+	/**
+	 * @return the status
+	 */
 	public String getStatus() {
 		return status;
 	}
 
+
+
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+
+
+	/**
+	 * @return the objectsCount
+	 */
+	public static int getObjectsCount() {
+		return objectsCount;
+	}
+
+
+
+
+	@Override
+	public void incrementDrivingTime() {
+		timeFromRouteStart++;
+		timeOnCurrentPart++;
+		move();
+	}
+	
+	/**controls the vehicle moving from one route part to the next one
+	 * 
+	 */
 	public void move() {
-		if (this.currentRoutePart
-				.equals(this.currentRoute.getRouteParts().get(this.currentRoute.getRouteParts().size() - 1))
-				&& this.currentRoutePart.canLeave(this)) {
-			Route newRoute = ((Route) this.currentRoute.findNextPart(this));
-			this.currentRoutePart.checkOut(this);
-			this.currentRoute.checkOut(this);
-			this.currentRoute = newRoute;
-			this.currentRoute.checkIn(this);
-			this.currentRoutePart = this.currentRoute.getRouteParts().get(0);
-			this.currentRoutePart.checkIn(this);
-		} else if (this.currentRoutePart.canLeave(this)) {
-			RouteParts nextPart = this.currentRoute.findNextPart(this);
-			this.currentRoutePart.checkOut(this);
-			this.currentRoutePart = nextPart;
-			this.currentRoutePart.checkIn(this);
-		} else {
-			if (this.currentRoutePart instanceof Road) {
-				double timeToArrive = ((Road) this.currentRoutePart).calcEstimatedTime(this) - this.timeOnCurrentPart;
-				System.out.printf("- is still moving on %s, time to arrive: %f\n",
-						((Road) this.currentRoutePart).toString(), timeToArrive);
-			} else {
-				if (this.currentRoutePart instanceof LightedJunction) {
-					if (((LightedJunction) this.currentRoutePart).getLights().isTrafficLightsOn()) {
-						System.out.println("waiting for green light");
-					}
-				}
-				System.out.println("is waiting for previous cars");
-			}
+		if (currentRoutePart.canLeave(this)) {
+			currentRoutePart.checkOut(this);
+			currentRoute.findNextPart(this).checkIn(this);
+		}
+		else {
+			currentRoutePart.stayOnCurrentPart(this);
 		}
 	}
-
-	public void incrementDrivingTime() {
-		System.out.printf("\n%s\n", this.toString());
-		move();
-		this.timeFromRouteStart++;
-		this.timeOnCurrentPart++;
-	}
-
+	
+	
 	@Override
 	public String toString() {
-		return String.format("Vehicle %d: %s, average speed: %d", this.id, this.vehicleType.toString(),
-				this.vehicleType.getAverageSpeed());
+		return new String("Vehicle "+id+": "+ getVehicleType().name()+", average speed: "+getVehicleType().getAverageSpeed());
 	}
-
+	
 	@Override
-	public boolean equals(Object other) {
-		if (other instanceof Vehicle) {
-			return this.id == ((Vehicle) other).getId() && this.vehicleType.equals(((Vehicle) other).getVehicleType())
-					&& this.currentRoutePart.equals(((Vehicle) other).getCurrentRoutePart());
-		}
-		return false;
+	public boolean equals(Object obj) {
+		if (obj == null) return false; 
+	    if (getClass() != obj.getClass()) return false; 
+	    if (! super.equals(obj)) return false;
+		Vehicle other=(Vehicle)obj;
+		if (this.currentRoute!=other.currentRoute||
+			this.currentRoutePart!=other.currentRoutePart||
+			this.id!=other.id||
+			this.lastRoad!=other.lastRoad||
+			this.status!=other.status||
+			this.timeFromRouteStart!=other.timeFromRouteStart||
+			this.timeOnCurrentPart!=other.timeOnCurrentPart||
+			this.vehicleType!=other.vehicleType)
+				return false;
+		return true;
 	}
 
+	/**
+	 * @param objectsCount the objectsCount to set
+	 */
+	public static void setObjectsCount(int objectsCount) {
+		Vehicle.objectsCount = objectsCount;
+	}
+	
+	
 }

@@ -1,174 +1,265 @@
 package components;
-
 import java.util.ArrayList;
-import java.util.Random;
 
-import utilities.Utilities;
 import utilities.VehicleType;
 
-public class Road implements RouteParts, Utilities {
-	private int[] allowedSpeedOptions;
-	private boolean enable;
-	private Junction startJunction;
-	private Junction endJunction;
-	private boolean greenlight;
-	private double length;
-	private int maxSpeed;
-	private VehicleType[] vehicleTypes;
+/**Represents a road 
+ * @author Sophie Krimberg
+ *
+ */
+public class Road implements RouteParts{
+	private final static int[] allowedSpeedOptions= {30,40,50,55,60,70,80,90};
+	Junction startJunction;
+	Junction endJunction;
 	private ArrayList<Vehicle> waitingVehicles;
-
+	private boolean greenLight;
+	private int maxSpeed;
+	VehicleType [] vehicleTypes;
+	double length;
+	boolean enable;
+	
+	/**Constructor
+	 * @param start
+	 * @param end
+	 */
 	public Road(Junction start, Junction end) {
-		Random rand = new Random();
-		this.waitingVehicles = new ArrayList<Vehicle>();
-		this.startJunction = start;
-		this.startJunction.getExitingRoads().add(this);
-		if (this.startJunction instanceof LightedJunction) {
-			((LightedJunction) this.startJunction).getLights().getRoads().add(this);
+		startJunction=start;
+		endJunction=end;
+		waitingVehicles=new ArrayList<Vehicle>();
+		greenLight=false;
+		maxSpeed=allowedSpeedOptions[getRandomInt(0,7)];
+		
+		int numOfTypes=getRandomInt(3,VehicleType.values().length);
+		
+		vehicleTypes=new VehicleType[numOfTypes];
+		VehicleType[] types=VehicleType.values();
+		ArrayList <Integer> arr=getRandomIntArray(0,6,numOfTypes);
+		
+		
+		for (int i=0;i<numOfTypes;i++) {
+			vehicleTypes[i]=types[arr.get(i)];
 		}
-		this.endJunction = end;
-		this.endJunction.getEnteringRoads().add(this);
-		if (this.endJunction instanceof LightedJunction) {
-			((LightedJunction) this.endJunction).getLights().getRoads().add(this);
-		}
-		this.greenlight = false;
-		this.length = this.calcLength();
-		this.maxSpeed = VehicleType.values()[rand.nextInt(VehicleType.values().length)].getAverageSpeed();
-		System.out.printf("%s has been created.\n", this.toString());
+		this.getStartJunction().getExitingRoads().add(this);
+		this.getEndJunction().getEnteringRoads().add(this);
+		
+		setLength();
+		enable=!(getRandomBoolean()&&getRandomBoolean()&&getRandomBoolean());
+		successMessage(this.toString());
 	}
-
-	public void addVehicleToWaitingVehicles(Vehicle vehicle) {
-		this.waitingVehicles.add(vehicle);
-	}
-
-	public double calcEstimatedTime(Object obj) {
-		if (obj instanceof Vehicle) {
-			double dx = ((Vehicle) obj).getLastRoad().getStartJunction()
-					.calcDistance((((Vehicle) obj).getLastRoad().getEndJunction()));
-			double dv = Math.min(this.maxSpeed, ((Vehicle) obj).getVehicleType().getAverageSpeed());
-			return (double) Math.round(dx / dv);
-		}
-		return -1;
-	}
-
-	public double calcLength() {
-		return Math.sqrt(Math.pow(this.startJunction.getX() - this.endJunction.getX(), 2)
-				+ Math.pow(this.startJunction.getY() - this.endJunction.getY(), 2));
-	}
-
-	public boolean canLeave(Vehicle vehicle) {
-		return this.calcEstimatedTime(vehicle) <= vehicle.getTimeOnCurrentPart();
-	}
-
-	public void checkIn(Vehicle vehicle) {
-		vehicle.setTimeOnCurrentPart(0);
-		this.waitingVehicles.add(vehicle);
-		System.out.printf("- is starting to move on %s, time to finish: %f\n", this.toString(),
-				this.calcEstimatedTime(vehicle));
-	}
-
-	public void checkOut(Vehicle vehicle) {
-		this.removeVehicleFromWaitingVehicles(vehicle);
-		System.out.printf("- has finished %s, time spent on road: %d\n", this.toString(),
-				vehicle.getTimeOnCurrentPart());
-	}
-
-	public RouteParts findNextPart(Vehicle vehicle) {
-		return endJunction;
-	}
-
-	public void removeVehicleFromWaitingVehicles(Vehicle vehicle) {
-		this.waitingVehicles.remove(vehicle);
-	}
-
-	public void stayOnCurrentPart(Vehicle vehicle) {
-		System.out.printf("%s stays in the current route part", vehicle.toString());
-	}
-
-	public int[] getAllowedSpeedOptions() {
-		return allowedSpeedOptions;
-	}
-
-	public boolean isEnable() {
-		return enable;
-	}
-
+	
+	
+	/**
+	 * @return the startJunction
+	 */
 	public Junction getStartJunction() {
 		return startJunction;
 	}
 
-	public Junction getEndJunction() {
-		return endJunction;
-	}
 
-	public boolean isGreenlight() {
-		return greenlight;
-	}
-
-	public double getLength() {
-		return length;
-	}
-
-	public int getMaxSpeed() {
-		return maxSpeed;
-	}
-
-	public VehicleType[] getVehicleTypes() {
-		return vehicleTypes;
-	}
-
-	public ArrayList<Vehicle> getWaitingVehicles() {
-		return waitingVehicles;
-	}
-
-	public void setAllowedSpeedOptions(int[] allowedSpeedOptions) {
-		this.allowedSpeedOptions = allowedSpeedOptions;
-	}
-
-	public void setEnable(boolean enable) {
-		this.enable = enable;
-	}
-
+	/**
+	 * @param startJunction the startJunction to set
+	 */
 	public void setStartJunction(Junction startJunction) {
 		this.startJunction = startJunction;
 	}
 
+
+	/**
+	 * @return the endJunction
+	 */
+	public Junction getEndJunction() {
+		return endJunction;
+	}
+
+
+	/**
+	 * @param endJunction the endJunction to set
+	 */
 	public void setEndJunction(Junction endJunction) {
 		this.endJunction = endJunction;
 	}
 
-	public void setGreenlight(boolean greenlight) {
-		this.greenlight = greenlight;
+
+	/**
+	 * @return the waitingVehicles
+	 */
+	public ArrayList<Vehicle> getWaitingVehicles() {
+		return waitingVehicles;
 	}
 
-	public void setLength(double length) {
-		this.length = length;
-	}
 
-	public void setMaxSpeed(int maxSpeed) {
-		this.maxSpeed = maxSpeed;
-	}
-
-	public void setVehicleTypes(VehicleType[] vehicleTypes) {
-		this.vehicleTypes = vehicleTypes;
-	}
-
+	/**
+	 * @param waitingVehicles the waitingVehicles to set
+	 */
 	public void setWaitingVehicles(ArrayList<Vehicle> waitingVehicles) {
 		this.waitingVehicles = waitingVehicles;
 	}
 
+
+	/**
+	 * @return the greenLight
+	 */
+	public boolean getGreenLight() {
+		return greenLight;
+	}
+
+
+	/**
+	 * @param greenLight the greenLight to set
+	 */
+	public void setGreenLight(boolean greenLight) {
+		this.greenLight = greenLight;
+	}
+
+
+	/**
+	 * @return the maxSpeed
+	 */
+	public int getMaxSpeed() {
+		return maxSpeed;
+	}
+
+
+	/**
+	 * @param maxSpeed the maxSpeed to set
+	 */
+	public void setMaxSpeed(int maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+
+	/**
+	 * @return the vehicleTypes
+	 */
+	public VehicleType[] getVehicleTypes() {
+		return vehicleTypes;
+	}
+
+
+	/**
+	 * @param vehicleTypes the vehicleTypes to set
+	 */
+	public void setVehicleTypes(VehicleType[] vehicleTypes) {
+		this.vehicleTypes = vehicleTypes;
+	}
+
+	public void addVehicleToWaitingVehicles(Vehicle vehicle) {
+		waitingVehicles.add(vehicle);
+	}
+	public void removeVehicleFromWaitingVehicles(Vehicle vehicle) {
+		waitingVehicles.remove(vehicle);
+	}
+	
+	/**
+	 * @return the length
+	 */
+	public double getLength() {
+		return length;
+	}
+
+
+	/**set length to the calculated value
+	 * 
+	 */
+	public void setLength() {
+		this.length = calcLength();
+	}
+
+
+	/**
+	 * @return the enable
+	 */
+	public boolean getEnabled() {
+		return enable;
+	}
+
+
+	/**
+	 * @param enable the enable to set
+	 */
+	public void setEnabled(boolean enable) {
+		this.enable = enable;
+	}
+
+
+	/**
+	 * @return the allowedspeedoptions
+	 */
+	public static int[] getAllowedspeedoptions() {
+		return allowedSpeedOptions;
+	}
+
+
+	public double calcLength() {
+		return startJunction.calcDistance(endJunction);
+	}
+
+
+	@Override
+	public double calcEstimatedTime(Object obj) {
+		Vehicle v=(Vehicle)obj;
+		int speed=Math.min(maxSpeed, v.getVehicleType().getAverageSpeed());
+		return (int)length/speed;
+	}
+
+	
+	@Override
+	public RouteParts findNextPart(Vehicle vehicle) {
+		return endJunction;
+	}
+	
+	@Override
+	public void checkIn(Vehicle vehicle) {
+		vehicle.setCurrentRoutePart(this);
+		vehicle.setTimeOnCurrentPart(0);
+		vehicle.setLastRoad(this);
+		System.out.println("- is starting to move on "+ this + ", time to finish: " + calcEstimatedTime(vehicle)+ ".");
+	}
+	@Override
+	public void stayOnCurrentPart(Vehicle vehicle) {
+		System.out.println("- " + vehicle.getStatus() + this + ", time to arrive: "+ (calcEstimatedTime(vehicle)-vehicle.getTimeOnCurrentPart()));
+	}
+
+	@Override
+	public void checkOut(Vehicle vehicle) {
+		System.out.println("- has finished "+ this+ ", time spent on the road: "+vehicle.getTimeOnCurrentPart()+".");
+		addVehicleToWaitingVehicles(vehicle);
+		
+	}
+
 	@Override
 	public String toString() {
-		return String.format("Road form %s to %s, length: %d, max speed %d", this.startJunction.toString(),
-				this.endJunction.toString(), (int) this.length, this.maxSpeed);
+		return new String("Road from "+getStartJunction()+" to "+getEndJunction()+ ", length: "+ (int)length+ ", max speed "+this.maxSpeed);
 	}
 
 	@Override
 	public boolean equals(Object other) {
-		if (other instanceof Road) {
-			return this.startJunction.getJunctionName().equals(((Road) other).getStartJunction().getJunctionName())
-					&& this.endJunction.getJunctionName().equals(((Road) other).getEndJunction().getJunctionName());
+		
+		if (other == null) return false; 
+	    if (getClass() != other.getClass()) return false; 
+	    if (! super.equals(other)) return false;
+	    Road otherRoad=(Road)other;
+	    if (this.enable!=otherRoad.enable || 
+	    	!this.endJunction.equals(otherRoad.endJunction) ||
+	    	this.length!=otherRoad.length ||
+	    	this.maxSpeed!=otherRoad.maxSpeed||
+	    	!this.startJunction.equals(otherRoad.startJunction)||
+	    	this.vehicleTypes!=otherRoad.vehicleTypes  //compare by reference
+	    	) return false;
+	    return true;
 		}
-		return false;
+
+
+	@Override
+	public boolean canLeave(Vehicle vehicle) {
+		if (calcEstimatedTime(vehicle)-vehicle.getTimeOnCurrentPart()>0){
+			vehicle.setStatus(new String("is still moving on "));
+			return false;
+		}
+		return true;
 	}
 
+
+	
+	
 }

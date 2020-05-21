@@ -1,30 +1,34 @@
+/**
+ * 
+ */
 package components;
-
 import java.util.ArrayList;
-import java.util.Random;
 
+/**Represents the traffic lights with random choice of road that receives a green light
+ * @author Sophie Krimberg
+ *
+ */
 public class RandomTrafficLights extends TrafficLights {
+	
+	/**Constructor
+	 * @param roads
+	 */
 	public RandomTrafficLights(ArrayList<Road> roads) {
 		super(roads);
 	}
 
-	public void changeIndex() {
-		if (this.getRoads().size() != 0) {
-			Random rand = new Random();
-			this.setGreenLightIndex(rand.nextInt(this.getRoads().size()));
-		}
-	}
-
 	@Override
-	public boolean equals(Object other) {
-		if (other instanceof RandomTrafficLights) {
-			return super.equals(other);
-		}
-		return false;
+	public void changeIndex() {
+		
+		this.setGreenLightIndex((getRandomInt(1,200))%this.getRoads().size());
+		
 	}
-
+	
 	@Override
 	public String toString() {
-		return String.format("Random Traffic lights %d", this.getId());
+		return new String("Random "+super.toString());
 	}
+	
+	
+
 }

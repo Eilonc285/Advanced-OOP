@@ -1,73 +1,121 @@
+/**
+ * 
+ */
 package components;
 
 import java.util.ArrayList;
-import java.util.Random;
-
 import utilities.Utilities;
 
+/**Represents the map 
+ * @author Sophie Krimberg
+ *
+ */
 public class Map implements Utilities {
 	private ArrayList<Junction> junctions;
 	private ArrayList<Road> roads;
 	private ArrayList<TrafficLights> lights;
-
-	public Map(int numOfJunctions) {
-		this.junctions = new ArrayList<Junction>();
-		this.roads = new ArrayList<Road>();
-		this.lights = new ArrayList<TrafficLights>();
-		Random rand = new Random();
-		for (int i = 0; i < numOfJunctions; i++) {
-			Junction newJunc;
-			if (rand.nextBoolean()) {
-				newJunc = new Junction();
-				this.junctions.add(newJunc);
-			} else {
-				newJunc = new LightedJunction();
-				this.junctions.add(newJunc);
+	
+	/**Constructor 
+	 * @param junctionsNum represents the quantity of junctions
+	 */
+	public Map(int junctionsNum) {
+		junctions=new ArrayList<Junction>();
+		roads=new ArrayList<Road>();
+		lights=new ArrayList<TrafficLights>();
+		System.out.println("\n================= CREATING JUNCTIONS=================");
+		//create lighted and non-lighted junctions
+		for (int i=0; i<junctionsNum; i++) {
+			if (getRandomBoolean()) {
+				junctions.add(new Junction());
 			}
-
-		}
-		this.SetAllRoads();
-		this.turnLightsOn();
-		System.out.println("================= GAME MAP HAS BEEN CREATED =================");
-	}
-
-	public void SetAllRoads() {
-		for (int i = this.junctions.size() - 1; i >= 0; i--) {
-			for (int j = 0; j < i; j++) {
-				this.roads.add(new Road(this.junctions.get(j), this.junctions.get(i)));
-				this.roads.add(new Road(this.junctions.get(i), this.junctions.get(j)));
+			else {
+				LightedJunction junc=new LightedJunction();
+				junctions.add(junc);
+				lights.add(junc.getLights());
 			}
 		}
+		
+		setAllRoads();
+		turnLightsOn();
+		System.out.println("\n================= GAME MAP HAS BEEN CREATED =================\n");
+	
+		
 	}
-
+	
+	/**turns on random traffic lights 
+	 * 
+	 */
 	public void turnLightsOn() {
-		System.out.println("================= TRAFFIC LIGHTS TURN ON =================");
-		for (int i = 0; i < this.junctions.size(); i++) {
-			Random rand = new Random();
-			if (this.junctions.get(i) instanceof LightedJunction) {
-				((LightedJunction) this.junctions.get(i)).getLights().setTrafficLightsOn(rand.nextBoolean());
-				if (((LightedJunction) this.junctions.get(i)).getLights().isTrafficLightsOn()) {
-					System.out.printf("%s turned ON, delay time: %d\n",
-							((LightedJunction) this.junctions.get(i)).getLights().toString(),
-							((LightedJunction) this.junctions.get(i)).getLights().getDelay());
-					int entRoad = rand.nextInt(this.junctions.get(i).getEnteringRoads().size());
-					((LightedJunction) this.junctions.get(i)).getLights().setGreenLightIndex(entRoad);
-					this.junctions.get(i).getEnteringRoads().get(entRoad).setGreenlight(true);
+		System.out.println("\n================= TRAFFIC LIGHTS TURN ON =================");
+
+		for (TrafficLights light: lights) {
+			light.setTrafficLightsOn(getRandomBoolean());
+		}
+	}
+	
+	/**creates roads between all the junctions on the map
+	 * 
+	 */
+	public void setAllRoads() {
+		System.out.println("\n================= CREATING ROADS=================");
+
+		for (int i=0; i<junctions.size();i++) {
+			for (int j=0; j<junctions.size();j++) {
+				if(i==j) {
+					
+					continue;
 				}
+				roads.add(new Road(junctions.get(i), junctions.get(j)));
+				
+					
 			}
 		}
 	}
-
+	
+//	
+	@Override
+	public String toString() {
+		return new String("Map: " +this.getJunctions().size()+" junctions, "+this.getRoads().size()+" roads." );
+	}
+	
+	/**
+	 * @return the junctions
+	 */
 	public ArrayList<Junction> getJunctions() {
 		return junctions;
 	}
 
+	/**
+	 * @return the roads
+	 */
 	public ArrayList<Road> getRoads() {
 		return roads;
 	}
 
+	/**
+	 * @return the lights
+	 */
 	public ArrayList<TrafficLights> getLights() {
 		return lights;
 	}
 
+	/**
+	 * @param junctions the junctions to set
+	 */
+	public void setJunctions(ArrayList<Junction> junctions) {
+		this.junctions = junctions;
+	}
+
+	/**
+	 * @param roads the roads to set
+	 */
+	public void setRoads(ArrayList<Road> roads) {
+		this.roads = roads;
+	}
+	/**
+	 * @param lights the lights to set
+	 */
+	public void setLights(ArrayList<TrafficLights> lights) {
+		this.lights = lights;
+	}
 }

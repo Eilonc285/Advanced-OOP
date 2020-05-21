@@ -1,23 +1,26 @@
+/**
+ * 
+ */
 package utilities;
 
 import components.Driving;
 
 /**
- * The main class that runs the program.
- * 
- * @author Eilon
+ * @author Sophie Krimberg
  *
  */
 public class GameDriver {
 
+	
+	
+	
 	/**
-	 * The main function that runs the program with 10 junctions and 20 vehicles.
-	 * 
-	 * @param args: main function arguments.
+	 * @param args
 	 */
 	public static void main(String[] args) {
-		Driving driving = new Driving(10, 20);
+		Driving driving=new Driving(10, 20);
 		driving.drive(20);
+
 	}
 
 }
