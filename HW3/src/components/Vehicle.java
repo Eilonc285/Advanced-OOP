@@ -177,12 +177,19 @@ public class Vehicle implements Utilities, Timer, Runnable {
 	 * 
 	 */
 	public void move() {
-		if (currentRoutePart.canLeave(this)) {
-			currentRoutePart.checkOut(this);
-			currentRoute.findNextPart(this).checkIn(this);
-		} else {
+		while (!currentRoutePart.canLeave(this)) {
 			currentRoutePart.stayOnCurrentPart(this);
+			synchronized (currentRoutePart) {
+				try {
+					currentRoutePart.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		currentRoutePart.checkOut(this);
+		currentRoute.findNextPart(this).checkIn(this);
+
 	}
 
 	@Override

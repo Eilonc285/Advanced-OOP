@@ -5,6 +5,7 @@ package components;
 
 import java.util.ArrayList;
 
+import utilities.GameDriver;
 import utilities.Timer;
 import utilities.Utilities;
 
@@ -146,6 +147,18 @@ public class Driving implements Utilities, Timer, Runnable {
 		}
 		for (Thread thread : threads) {
 			thread.start();
+		}
+		while (GameDriver.running) {
+			try {
+				Thread.sleep(GameDriver.iterationTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			for (Road road : map.getRoads()) {
+				synchronized (road) {
+					road.notifyAll();
+				}
+			}
 		}
 
 	}

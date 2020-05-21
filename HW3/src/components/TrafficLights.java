@@ -151,6 +151,9 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 			}
 			changeIndex();
 			this.getRoads().get(this.getGreenLightIndex()).setGreenLight(true);// set green light to the next road
+			synchronized (roads.get(0).getEndJunction()) {
+				roads.get(0).getEndJunction().notifyAll();
+			}
 			System.out.println("- " + this.getRoads().get(this.getGreenLightIndex()) + ": green light.");// print
 																											// message
 
@@ -243,7 +246,7 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 			}
 			if (System.currentTimeMillis() - delayTimer >= delay) {
 				delayTimer = System.currentTimeMillis();
-				changeIndex();
+				changeLights();
 			}
 		}
 	}

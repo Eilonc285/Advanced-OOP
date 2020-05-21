@@ -11,12 +11,12 @@ import utilities.VehicleType;
  *
  */
 public class Road implements RouteParts {
-	private final static int[] allowedSpeedOptions = { 30, 40, 50, 55, 60, 70, 80, 90 };
+	private final static float[] allowedSpeedOptions = { 3, 4, 5, 5.5f, 6, 7, 8, 9 };
 	Junction startJunction;
 	Junction endJunction;
 	private ArrayList<Vehicle> waitingVehicles;
 	private boolean greenLight;
-	private int maxSpeed;
+	private float maxSpeed;
 	VehicleType[] vehicleTypes;
 	double length;
 	boolean enable;
@@ -110,14 +110,14 @@ public class Road implements RouteParts {
 	/**
 	 * @return the maxSpeed
 	 */
-	public int getMaxSpeed() {
+	public float getMaxSpeed() {
 		return maxSpeed;
 	}
 
 	/**
 	 * @param maxSpeed the maxSpeed to set
 	 */
-	public void setMaxSpeed(int maxSpeed) {
+	public void setMaxSpeed(float maxSpeed) {
 		this.maxSpeed = maxSpeed;
 	}
 
@@ -175,7 +175,7 @@ public class Road implements RouteParts {
 	/**
 	 * @return the allowedspeedoptions
 	 */
-	public static int[] getAllowedspeedoptions() {
+	public static float[] getAllowedspeedoptions() {
 		return allowedSpeedOptions;
 	}
 
@@ -187,7 +187,7 @@ public class Road implements RouteParts {
 	public double calcEstimatedTime(Object obj) {
 		Vehicle v = (Vehicle) obj;
 		float speed = Math.min(maxSpeed, v.getVehicleType().getAverageSpeed());
-		return (int) length / speed;
+		return length / speed;
 	}
 
 	@Override
