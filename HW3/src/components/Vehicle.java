@@ -3,10 +3,11 @@
  */
 package components;
 
-
+import utilities.GameDriver;
 import utilities.Timer;
 import utilities.Utilities;
 import utilities.VehicleType;
+
 /**
  * @author Sophie Krimberg
  *
@@ -15,44 +16,40 @@ import utilities.VehicleType;
  * @author krsof
  *
  */
-public class Vehicle implements Utilities, Timer {
+public class Vehicle implements Utilities, Timer, Runnable {
 	private int id;
 	private VehicleType vehicleType;
 	private Route currentRoute;
 	private RouteParts currentRoutePart;
-	private int timeFromRouteStart;
-	private static int objectsCount=1;
-	private int timeOnCurrentPart;
+	private long timeFromRouteStart;
+	private static int objectsCount = 1;
+	private long timeOnCurrentPart;
 	private Road lastRoad;
 	private String status;
-	
-	/**Random Constructor
+
+	/**
+	 * Random Constructor
+	 * 
 	 * @param currentLocation
 	 */
-	public Vehicle (Road currentLocation) {
+	public Vehicle(Road currentLocation) {
 
-		id=objectsCount++;
-		vehicleType=currentLocation.getVehicleTypes()[getRandomInt(0,currentLocation.getVehicleTypes().length-1)];
+		id = objectsCount++;
+		vehicleType = currentLocation.getVehicleTypes()[getRandomInt(0, currentLocation.getVehicleTypes().length - 1)];
 		System.out.println();
 		successMessage(this.toString());
-		currentRoute=new Route(currentLocation, this); //creates a new route for the vehicle and checks it in
-		lastRoad=currentLocation;
-		status=null;
-		
+		currentRoute = new Route(currentLocation, this); // creates a new route for the vehicle and checks it in
+		lastRoad = currentLocation;
+		status = null;
+
 	}
-	
-	
-	
-	
+
 	/**
 	 * @return the id
 	 */
 	public int getId() {
 		return id;
 	}
-
-
-
 
 	/**
 	 * @param id the id to set
@@ -61,18 +58,12 @@ public class Vehicle implements Utilities, Timer {
 		this.id = id;
 	}
 
-
-
-
 	/**
 	 * @return the vehicleType
 	 */
 	public VehicleType getVehicleType() {
 		return vehicleType;
 	}
-
-
-
 
 	/**
 	 * @param vehicleType the vehicleType to set
@@ -81,18 +72,12 @@ public class Vehicle implements Utilities, Timer {
 		this.vehicleType = vehicleType;
 	}
 
-
-
-
 	/**
 	 * @return the currentRoute
 	 */
 	public Route getCurrentRoute() {
 		return currentRoute;
 	}
-
-
-
 
 	/**
 	 * @param currentRoute the currentRoute to set
@@ -101,18 +86,12 @@ public class Vehicle implements Utilities, Timer {
 		this.currentRoute = currentRoute;
 	}
 
-
-
-
 	/**
 	 * @return the currentRoutePart
 	 */
 	public RouteParts getCurrentRoutePart() {
 		return currentRoutePart;
 	}
-
-
-
 
 	/**
 	 * @param currentRoutePart the currentRoutePart to set
@@ -121,48 +100,35 @@ public class Vehicle implements Utilities, Timer {
 		this.currentRoutePart = currentRoutePart;
 	}
 
-
-
-
 	/**
 	 * @return the timeFromRouteStart
 	 */
-	public int getTimeFromRouteStart() {
+	public long getTimeFromRouteStart() {
 		return timeFromRouteStart;
 	}
-
-
-
 
 	/**
 	 * @param timeFromRouteStart the timeFromRouteStart to set
 	 */
-	public void setTimeFromRouteStart(int timeFromRouteStart) {
+	public void setTimeFromRouteStart(long timeFromRouteStart) {
 		this.timeFromRouteStart = timeFromRouteStart;
 	}
-
-
-
 
 	/**
 	 * @return the timeOnCurrentPart
 	 */
-	public int getTimeOnCurrentPart() {
-		return timeOnCurrentPart;
+	public long getTimeOnCurrentPart() {
+//		return timeOnCurrentPart;
+		return System.currentTimeMillis() - this.timeOnCurrentPart;
 	}
-
-
-
 
 	/**
 	 * @param timeOnCurrentPart the timeOnCurrentPart to set
 	 */
 	public void setTimeOnCurrentPart(int timeOnCurrentPart) {
-		this.timeOnCurrentPart = timeOnCurrentPart;
+//		this.timeOnCurrentPart = timeOnCurrentPart;
+		this.timeOnCurrentPart = System.currentTimeMillis();
 	}
-
-
-
 
 	/**
 	 * @return the lastRoad
@@ -171,18 +137,12 @@ public class Vehicle implements Utilities, Timer {
 		return lastRoad;
 	}
 
-
-
-
 	/**
 	 * @param lastRoad the lastRoad to set
 	 */
 	public void setLastRoad(Road lastRoad) {
 		this.lastRoad = lastRoad;
 	}
-
-
-
 
 	/**
 	 * @return the status
@@ -191,18 +151,12 @@ public class Vehicle implements Utilities, Timer {
 		return status;
 	}
 
-
-
-
 	/**
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
-
 
 	/**
 	 * @return the objectsCount
@@ -211,50 +165,46 @@ public class Vehicle implements Utilities, Timer {
 		return objectsCount;
 	}
 
-
-
-
 	@Override
 	public void incrementDrivingTime() {
 		timeFromRouteStart++;
 		timeOnCurrentPart++;
 		move();
 	}
-	
-	/**controls the vehicle moving from one route part to the next one
+
+	/**
+	 * controls the vehicle moving from one route part to the next one
 	 * 
 	 */
 	public void move() {
 		if (currentRoutePart.canLeave(this)) {
 			currentRoutePart.checkOut(this);
 			currentRoute.findNextPart(this).checkIn(this);
-		}
-		else {
+		} else {
 			currentRoutePart.stayOnCurrentPart(this);
 		}
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		return new String("Vehicle "+id+": "+ getVehicleType().name()+", average speed: "+getVehicleType().getAverageSpeed());
+		return new String("Vehicle " + id + ": " + getVehicleType().name() + ", average speed: "
+				+ getVehicleType().getAverageSpeed());
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) return false; 
-	    if (getClass() != obj.getClass()) return false; 
-	    if (! super.equals(obj)) return false;
-		Vehicle other=(Vehicle)obj;
-		if (this.currentRoute!=other.currentRoute||
-			this.currentRoutePart!=other.currentRoutePart||
-			this.id!=other.id||
-			this.lastRoad!=other.lastRoad||
-			this.status!=other.status||
-			this.timeFromRouteStart!=other.timeFromRouteStart||
-			this.timeOnCurrentPart!=other.timeOnCurrentPart||
-			this.vehicleType!=other.vehicleType)
-				return false;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		if (!super.equals(obj))
+			return false;
+		Vehicle other = (Vehicle) obj;
+		if (this.currentRoute != other.currentRoute || this.currentRoutePart != other.currentRoutePart
+				|| this.id != other.id || this.lastRoad != other.lastRoad || this.status != other.status
+				|| this.timeFromRouteStart != other.timeFromRouteStart
+				|| this.timeOnCurrentPart != other.timeOnCurrentPart || this.vehicleType != other.vehicleType)
+			return false;
 		return true;
 	}
 
@@ -264,6 +214,22 @@ public class Vehicle implements Utilities, Timer {
 	public static void setObjectsCount(int objectsCount) {
 		Vehicle.objectsCount = objectsCount;
 	}
-	
-	
+
+	/**
+	 * The method to be run by the thread
+	 */
+	@Override
+	public void run() {
+		while (GameDriver.running) {
+			try {
+				Thread.sleep(GameDriver.iterationTime);
+			} catch (InterruptedException e) {
+				System.out.println("Sleep failed");
+				e.printStackTrace();
+			}
+			move();
+		}
+
+	}
+
 }
