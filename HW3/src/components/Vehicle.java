@@ -227,9 +227,9 @@ public class Vehicle implements Utilities, Timer, Runnable {
 	 */
 	@Override
 	public void run() {
-		while (GameDriver.running) {
+		while (GameDriver.isRunning()) {
 			try {
-				Thread.sleep(GameDriver.iterationTime);
+				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {
 				System.out.println("Sleep failed");
 				e.printStackTrace();

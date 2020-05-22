@@ -4,6 +4,7 @@
 package utilities;
 
 import components.Driving;
+import gui.MainFrame;
 
 /**
  * @author Sophie Krimberg
@@ -11,15 +12,34 @@ import components.Driving;
  */
 public class GameDriver {
 
-	public static int iterationTime = 200;
-	public volatile static boolean running = true;
+	private static int iterationTime = 100;
+	private volatile static boolean running = true;
+	private static Driving driving;
+	private static MainFrame myFrame;
+
+	public static MainFrame getFrame() {
+		return myFrame;
+	}
+
+	public static int getIterationTime() {
+		return iterationTime;
+	}
+
+	public static boolean isRunning() {
+		return running;
+	}
+
+	public static Driving getDriving() {
+		return driving;
+	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Driving driving = new Driving(10, 20);
+		driving = new Driving(10, 20);
 //		driving.drive(20);
+		myFrame = new MainFrame();
 		new Thread(driving).start();
 
 	}

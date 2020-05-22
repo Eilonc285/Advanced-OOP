@@ -148,9 +148,9 @@ public class Driving implements Utilities, Timer, Runnable {
 		for (Thread thread : threads) {
 			thread.start();
 		}
-		while (GameDriver.running) {
+		while (GameDriver.isRunning()) {
 			try {
-				Thread.sleep(GameDriver.iterationTime);
+				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -159,6 +159,7 @@ public class Driving implements Utilities, Timer, Runnable {
 					road.notifyAll();
 				}
 			}
+
 		}
 
 	}

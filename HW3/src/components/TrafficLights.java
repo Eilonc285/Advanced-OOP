@@ -237,9 +237,9 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 	@Override
 	public void run() {
 		long delayTimer = System.currentTimeMillis();
-		while (GameDriver.running) {
+		while (GameDriver.isRunning()) {
 			try {
-				Thread.sleep(GameDriver.iterationTime);
+				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {
 				System.out.println("Sleep failed");
 				e.printStackTrace();
