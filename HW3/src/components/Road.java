@@ -2,6 +2,7 @@ package components;
 
 import java.util.ArrayList;
 
+import utilities.GameDriver;
 import utilities.VehicleType;
 
 /**
@@ -200,20 +201,23 @@ public class Road implements RouteParts {
 		vehicle.setCurrentRoutePart(this);
 		vehicle.setTimeOnCurrentPart(0);
 		vehicle.setLastRoad(this);
-		System.out
-				.println("- is starting to move on " + this + ", time to finish: " + calcEstimatedTime(vehicle) + ".");
+		if (GameDriver.isPConsole())
+			System.out.println(
+					"- is starting to move on " + this + ", time to finish: " + calcEstimatedTime(vehicle) + ".");
 	}
 
 	@Override
 	public void stayOnCurrentPart(Vehicle vehicle) {
-		System.out.println("- " + vehicle.getStatus() + this + ", time to arrive: "
-				+ (calcEstimatedTime(vehicle) - vehicle.getTimeOnCurrentPart()));
+		if (GameDriver.isPConsole())
+			System.out.println("- " + vehicle.getStatus() + this + ", time to arrive: "
+					+ (calcEstimatedTime(vehicle) - vehicle.getTimeOnCurrentPart()));
 	}
 
 	@Override
 	public void checkOut(Vehicle vehicle) {
-		System.out.println(
-				"- has finished " + this + ", time spent on the road: " + vehicle.getTimeOnCurrentPart() + ".");
+		if (GameDriver.isPConsole())
+			System.out.println(
+					"- has finished " + this + ", time spent on the road: " + vehicle.getTimeOnCurrentPart() + ".");
 		addVehicleToWaitingVehicles(vehicle);
 
 	}

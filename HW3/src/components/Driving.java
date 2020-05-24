@@ -35,7 +35,8 @@ public class Driving implements Utilities, Timer, Runnable {
 		drivingTime = 0;
 		map = new Map(junctionsNum);
 
-		System.out.println("\n================= CREATING VEHICLES =================");
+		if (GameDriver.isPConsole())
+			System.out.println("\n================= CREATING VEHICLES =================");
 
 		while (vehicles.size() < numOfVehicles) {
 			Road temp = map.getRoads().get(getRandomInt(0, map.getRoads().size()));// random road from the map
@@ -114,7 +115,8 @@ public class Driving implements Utilities, Timer, Runnable {
 	 * @param turns
 	 */
 	public void drive(int turns) {
-		System.out.println("\n================= START DRIVING=================");
+		if (GameDriver.isPConsole())
+			System.out.println("\n================= START DRIVING=================");
 
 		drivingTime = 0;
 		for (int i = 0; i < turns; i++) {
@@ -124,11 +126,14 @@ public class Driving implements Utilities, Timer, Runnable {
 
 	@Override
 	public void incrementDrivingTime() {
-		System.out.println("\n***************TURN " + drivingTime++ + "***************");
+		if (GameDriver.isPConsole())
+			System.out.println("\n***************TURN " + drivingTime++ + "***************");
 		for (Timer element : allTimedElements) {
-			System.out.println(element);
+			if (GameDriver.isPConsole())
+				System.out.println(element);
 			element.incrementDrivingTime();
-			System.out.println();
+			if (GameDriver.isPConsole())
+				System.out.println();
 		}
 
 	}
@@ -143,7 +148,8 @@ public class Driving implements Utilities, Timer, Runnable {
 	public void run() {
 		threads = new Thread[allTimedElements.size()];
 		for (int i = 0; i < allTimedElements.size(); i++) {
-			threads[i] = new Thread((Runnable) allTimedElements.get(i));
+			threads[i] = new Thread((Runnable) allTimedElements.get(i),
+					allTimedElements.get(i).getClass().toString() + " " + i);
 		}
 		for (Thread thread : threads) {
 			thread.start();

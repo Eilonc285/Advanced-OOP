@@ -36,7 +36,8 @@ public class Vehicle implements Utilities, Timer, Runnable {
 
 		id = objectsCount++;
 		vehicleType = currentLocation.getVehicleTypes()[getRandomInt(0, currentLocation.getVehicleTypes().length - 1)];
-		System.out.println();
+		if (GameDriver.isPConsole())
+			System.out.println();
 		successMessage(this.toString());
 		currentRoute = new Route(currentLocation, this); // creates a new route for the vehicle and checks it in
 		lastRoad = currentLocation;
@@ -231,7 +232,8 @@ public class Vehicle implements Utilities, Timer, Runnable {
 			try {
 				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {
-				System.out.println("Sleep failed");
+				if (GameDriver.isPConsole())
+					System.out.println("Sleep failed");
 				e.printStackTrace();
 			}
 			move();

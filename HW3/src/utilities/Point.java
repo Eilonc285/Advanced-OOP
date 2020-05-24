@@ -11,90 +11,91 @@ public abstract class Point implements Utilities {
 	private double x;
 	private double y;
 	private final int minVal = 0;
-	private final int maxX=800;
-	private final int maxY=600;
-	
-	/**Constructor
+	private final int maxX = 800;
+	private final int maxY = 600;
+
+	/**
+	 * Constructor
+	 * 
 	 * @param xVal
 	 * @param yVal
 	 */
 	public Point(double xVal, double yVal) {
-		
+
 		if (checkValue(xVal, minVal, maxX)) {
-			x=xVal;
+			x = xVal;
 		}
-		
+
 		else {
-			x=getRandomDouble(minVal, maxX);
-			correctingMessage(xVal,x,"X");
+			x = getRandomDouble(minVal, maxX);
+			correctingMessage(xVal, x, "X");
 		}
-		
+
 		if (checkValue(yVal, minVal, maxY)) {
-			y=yVal;
+			y = yVal;
+		} else {
+			y = getRandomDouble(minVal, maxY);
+			correctingMessage(yVal, y, "Y");
 		}
-		else {
-			y=getRandomDouble(minVal, maxY);
-			correctingMessage(yVal,y,"Y");
-		}
-		
-		
-	
-			
+
 	}
-	
-	/**Default constructor
+
+	/**
+	 * Default constructor
 	 * 
 	 */
 	public Point() {
-		x=getRandomDouble(minVal, maxX);
-		y=getRandomDouble(minVal, maxY);
-		
+		x = getRandomDouble(minVal, maxX);
+		y = getRandomDouble(minVal, maxY);
+
 	}
-	  	
+
 	/**
 	 * @param xVal
 	 * @return
 	 */
 	public boolean setX(double xVal) {
-		
-		if (checkValue(xVal,minVal, maxX)) {
-			x=xVal;
+
+		if (checkValue(xVal, minVal, maxX)) {
+			x = xVal;
 			return true;
 		}
-		
+
 		else {
 			errorMessage(xVal, "X");
-			System.out.println();
+			if (GameDriver.isPConsole())
+				System.out.println();
 			return false;
-			
+
 		}
 	}
-	
+
 	/**
 	 * @param yVal
 	 * @return
 	 */
 	public boolean setY(double yVal) {
-		
-		if (checkValue(yVal,minVal,maxY)) {
-			y=yVal;
+
+		if (checkValue(yVal, minVal, maxY)) {
+			y = yVal;
 			return true;
 		}
-		
+
 		else {
 			errorMessage(yVal, "Y");
-			System.out.println();
+			if (GameDriver.isPConsole())
+				System.out.println();
 			return false;
 		}
 	}
 
 	@Override
 	public String toString() {
-		
-		 return new String("Point (" + x + " , " + y + ")");
-		
+
+		return new String("Point (" + x + " , " + y + ")");
+
 	}
-	
+
 //	
 //	public boolean equals(Point other) {
 //		if (this.x==other.x && this.y==other.y) {
@@ -103,15 +104,14 @@ public abstract class Point implements Utilities {
 //		else return false;
 //	}
 
-	
-
-	
-	/**compares coordinates only 
+	/**
+	 * compares coordinates only
+	 * 
 	 * @param other
 	 * @return
 	 */
 	public boolean equals(Point other) {
-		if (this.x!=other.x || this.y!=other.y) 
+		if (this.x != other.x || this.y != other.y)
 			return false;
 		return true;
 	}
@@ -130,8 +130,8 @@ public abstract class Point implements Utilities {
 		return y;
 	}
 
-	public double calcDistance(Point other){
-		return Math.sqrt(Math.pow(other.getX()-this.getX(),2)+Math.pow(other.getY()-this.getY(),2));
+	public double calcDistance(Point other) {
+		return Math.sqrt(Math.pow(other.getX() - this.getX(), 2) + Math.pow(other.getY() - this.getY(), 2));
 	}
 
 	/**
@@ -154,5 +154,5 @@ public abstract class Point implements Utilities {
 	public int getMaxY() {
 		return maxY;
 	}
-	
+
 }

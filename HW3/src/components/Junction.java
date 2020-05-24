@@ -5,6 +5,7 @@ package components;
 
 import java.util.ArrayList;
 
+import utilities.GameDriver;
 import utilities.VehicleType;
 
 /**
@@ -176,7 +177,8 @@ public class Junction extends utilities.Point implements RouteParts {
 	@Override
 	public void checkIn(Vehicle vehicle) {
 		vehicle.setTimeOnCurrentPart(0);
-		System.out.println("- has arrived to " + this);
+		if (GameDriver.isPConsole())
+			System.out.println("- has arrived to " + this);
 		vehicle.setCurrentRoutePart(this);
 		vehicle.getCurrentRoute().findNextPart(vehicle);// change route if current one ended
 		// TODO: check if to set route
@@ -185,13 +187,15 @@ public class Junction extends utilities.Point implements RouteParts {
 
 	@Override
 	public void checkOut(Vehicle vehicle) {
-		System.out.println("- has left the " + this + ".");
+		if (GameDriver.isPConsole())
+			System.out.println("- has left the " + this + ".");
 		vehicle.getLastRoad().removeVehicleFromWaitingVehicles(vehicle);
 	}
 
 	@Override
 	public void stayOnCurrentPart(Vehicle vehicle) {
-		System.out.println("- is waiting at " + this + vehicle.getStatus() + ".");
+		if (GameDriver.isPConsole())
+			System.out.println("- is waiting at " + this + vehicle.getStatus() + ".");
 
 	}
 

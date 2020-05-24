@@ -54,12 +54,14 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 	public void setTrafficLightsOn(boolean on) {
 		if (on) {
 			if (roads.size() < 1) {
-				System.out.println(this + "Lights can not be turned on at junction with no entering roads");
+				if (GameDriver.isPConsole())
+					System.out.println(this + "Lights can not be turned on at junction with no entering roads");
 				return;
 			}
 			trafficLightsOn = true;
 			delay = getRandomInt(minDelay, maxDelay) * 100;
-			System.out.println(this + " turned ON, delay time: " + delay + " miliseconds");
+			if (GameDriver.isPConsole())
+				System.out.println(this + " turned ON, delay time: " + delay + " miliseconds");
 			changeLights();
 		} else {
 			trafficLightsOn = false;
@@ -133,7 +135,8 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 			if (workingTime % delay == 0) {
 				changeLights();
 			} else {
-				System.out.println("- on delay");
+				if (GameDriver.isPConsole())
+					System.out.println("- on delay");
 			}
 		}
 	}
@@ -144,7 +147,8 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 	 */
 	public void changeLights() {
 		if (!trafficLightsOn) {
-			System.out.println("- Traffic lights are off and can't be changed");
+			if (GameDriver.isPConsole())
+				System.out.println("- Traffic lights are off and can't be changed");
 		} else {
 			for (Road road : roads) {
 				road.setGreenLight(false);
@@ -154,8 +158,9 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 			synchronized (roads.get(0).getEndJunction()) {
 				roads.get(0).getEndJunction().notifyAll();
 			}
-			System.out.println("- " + this.getRoads().get(this.getGreenLightIndex()) + ": green light.");// print
-																											// message
+			if (GameDriver.isPConsole())
+				System.out.println("- " + this.getRoads().get(this.getGreenLightIndex()) + ": green light.");// print
+			// message
 
 		}
 	}
@@ -241,7 +246,8 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 			try {
 				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {
-				System.out.println("Sleep failed");
+				if (GameDriver.isPConsole())
+					System.out.println("Sleep failed");
 				e.printStackTrace();
 			}
 			if (System.currentTimeMillis() - delayTimer >= delay) {
