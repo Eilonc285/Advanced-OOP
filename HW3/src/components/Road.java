@@ -253,4 +253,15 @@ public class Road implements RouteParts {
 		return true;
 	}
 
+	public double[] getVehicleLocation(Vehicle vic) {
+		if (vic.getCurrentRoutePart().equals(this)) {
+			double posRatio = vic.getTimeOnCurrentPart() / calcEstimatedTime(vic);
+			double xDiff = endJunction.getX() - startJunction.getX();
+			double yDiff = endJunction.getY() - startJunction.getY();
+			return new double[] { startJunction.getX() + xDiff * posRatio, startJunction.getY() + yDiff * posRatio };
+		} else {
+			return null;
+		}
+	}
+
 }

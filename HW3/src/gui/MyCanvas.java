@@ -38,7 +38,13 @@ public class MyCanvas extends Canvas {
 			g.drawLine((int) roads.get(i).getStartJunction().getX(), (int) roads.get(i).getStartJunction().getY(),
 					(int) roads.get(i).getEndJunction().getX(), (int) roads.get(i).getEndJunction().getY());
 		}
-
+		for (int i = 0; i < vehicles.size(); i++) {
+			Vehicle vic = vehicles.get(i);
+			if (vic.getCurrentRoutePart() instanceof Road) {
+//				double[] pos = vic.getCurrentRoutePart().
+//						drawRotetedVehicle(g, , y1, x2, y2, d, h);
+			}
+		}
 	}
 
 	public void setCarColor(Color c) {
@@ -91,12 +97,12 @@ public class MyCanvas extends Canvas {
 	}
 
 	private void drawRotetedTriangle(Graphics g, double x1, double y1, double x2, double y2, double d, double h) {
-		double m1 = ((double) y2 - (double) y1) / ((double) x2 - (double) x1);
+		double m1 = (y2 - y1) / (x2 - x1);
 		double beta = Math.atan(m1);
-		double alpha = Math.atan(((double) h / 2) / (double) d);
+		double alpha = Math.atan((h / 2) / d);
 		double theta1 = beta + alpha;
 		double theta2 = beta - alpha;
-		double l = Math.sqrt(Math.pow((double) d, 2) + Math.pow((double) h / 2, 2));
+		double l = Math.sqrt(Math.pow(d, 2) + Math.pow(h / 2, 2));
 		double leftY = Math.sin(theta1) * l;
 		double leftX = Math.cos(theta1) * l;
 		double rightY = Math.sin(theta2) * l;
