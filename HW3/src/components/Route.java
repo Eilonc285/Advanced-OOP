@@ -129,7 +129,7 @@ public class Route implements RouteParts {
 			return vehicle.getCurrentRoute().findNextPart(vehicle);
 		}
 
-		// else
+		// else.
 		return routeParts.get(routeParts.indexOf(vehicle.getCurrentRoutePart()) + 1);
 
 	}
