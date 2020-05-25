@@ -107,4 +107,9 @@ public class MainFrame extends JFrame {
 		JOptionPane.showMessageDialog(this, "Home Work 3\nGUI @ Threads");
 	}
 
+	public void refresh() {
+		canvas.repaint();
+		repaint();
+	}
+
 }

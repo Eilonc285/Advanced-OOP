@@ -165,9 +165,8 @@ public class Driving implements Utilities, Timer, Runnable {
 					road.notifyAll();
 				}
 			}
-
+			GameDriver.getFrame().refresh();
 		}
-
 	}
 
 }
