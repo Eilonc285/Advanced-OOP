@@ -4,10 +4,16 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Nir Barel, Eilon Cohen
+ *
+ */
 public class ToolBar extends JPanel {
 
 	private JButton create = new JButton("Create road system");
@@ -15,8 +21,16 @@ public class ToolBar extends JPanel {
 	private JButton stop = new JButton("Stop");
 	private JButton resume = new JButton("Resume");
 	private JButton info = new JButton("Info");
+	private HashMap<String, JButton> buttons = new HashMap<String, JButton>();
 
 	public ToolBar() {
+
+		buttons.put("create", create);
+		buttons.put("start", start);
+		buttons.put("stop", stop);
+		buttons.put("resume", resume);
+		buttons.put("info", info);
+
 		Dimension dim = getPreferredSize();
 		dim.setSize(800, 30);
 		setPreferredSize(dim);
@@ -57,4 +71,9 @@ public class ToolBar extends JPanel {
 		add(info, gc);
 
 	}
+
+	public HashMap<String, JButton> getButtons() {
+		return buttons;
+	}
+
 }

@@ -12,7 +12,7 @@ import utilities.Utilities;
 /**
  * Traffic control game
  * 
- * @author Sophie Krimberg
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
 public class Driving implements Utilities, Timer, Runnable {
@@ -155,6 +155,15 @@ public class Driving implements Utilities, Timer, Runnable {
 			thread.start();
 		}
 		while (GameDriver.isRunning()) {
+			while (GameDriver.getPause()) {
+				synchronized (GameDriver.class) {
+					try {
+						GameDriver.class.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 			try {
 				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {

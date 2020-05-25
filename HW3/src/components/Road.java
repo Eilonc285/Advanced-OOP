@@ -8,7 +8,7 @@ import utilities.VehicleType;
 /**
  * Represents a road
  * 
- * @author Sophie Krimberg
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
 public class Road implements RouteParts {

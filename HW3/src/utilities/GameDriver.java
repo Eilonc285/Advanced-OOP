@@ -7,7 +7,7 @@ import components.Driving;
 import gui.MainFrame;
 
 /**
- * @author Sophie Krimberg
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
 public class GameDriver {
@@ -17,6 +17,15 @@ public class GameDriver {
 	private static Driving driving;
 	private static MainFrame myFrame;
 	private static boolean pConsole = false;
+	private static boolean pause = false;
+
+	public static boolean getPause() {
+		return pause;
+	}
+
+	public static void setPause(boolean b) {
+		pause = b;
+	}
 
 	public static MainFrame getFrame() {
 		return myFrame;

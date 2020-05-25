@@ -6,6 +6,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+/**
+ * 
+ * @author Nir Barel, Eilon Cohen
+ *
+ */
 public class MenuBar extends JMenuBar {
 
 	private JMenu file = new JMenu("File");

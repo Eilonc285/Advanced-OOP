@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Random;
 
 import components.Junction;
 import components.LightedJunction;
@@ -13,9 +14,15 @@ import components.Road;
 import components.Vehicle;
 import utilities.GameDriver;
 
+/**
+ * 
+ * @author Nir Barel, Eilon Cohen
+ *
+ */
 public class MyCanvas extends Canvas {
 
-	private Color carColor;
+	private Color carColor = Color.BLUE;
+	private boolean randomCarColor = false;
 	private ArrayList<Junction> junctions;
 	private ArrayList<Road> roads;
 	private ArrayList<Vehicle> vehicles;
@@ -40,11 +47,21 @@ public class MyCanvas extends Canvas {
 		}
 		for (int i = 0; i < vehicles.size(); i++) {
 			Vehicle vic = vehicles.get(i);
+			if (randomCarColor) {
+				g.setColor(vic.getCarColor());
+			} else {
+				g.setColor(carColor);
+			}
 			if (vic.getCurrentRoutePart() instanceof Road) {
 				double[] pos = ((Road) vic.getCurrentRoutePart()).getVehicleLocation(vic);
 				drawRotetedVehicle(g, (int) pos[0], (int) pos[1],
 						(int) ((Road) vic.getLastRoad()).getEndJunction().getX(),
 						(int) ((Road) vic.getLastRoad()).getEndJunction().getY(), 10, 4);
+			} else {
+				drawRotetedVehicle(g, (int) ((Junction) vic.getCurrentRoutePart()).getX(),
+						(int) ((Junction) vic.getCurrentRoutePart()).getY() - 12,
+						(int) ((Junction) vic.getCurrentRoutePart()).getX(),
+						(int) ((Junction) vic.getCurrentRoutePart()).getY() + 10, 8, 4);
 			}
 		}
 	}
@@ -129,6 +146,40 @@ public class MyCanvas extends Canvas {
 		g.setColor(Color.GREEN);
 		g.fillPolygon(p);
 
+	}
+
+	private Color getRandomColor() {
+		Random rand = new Random();
+		switch (rand.nextInt(8)) {
+		case 0:
+			return Color.BLACK;
+		case 1:
+			return Color.BLUE;
+		case 2:
+			return Color.CYAN;
+		case 3:
+			return Color.GREEN;
+		case 4:
+			return Color.MAGENTA;
+		case 5:
+			return Color.ORANGE;
+		case 6:
+			return Color.RED;
+		case 7:
+			return Color.YELLOW;
+		default:
+			return Color.BLACK;
+		}
+	}
+
+	public void setRandomCarColor(boolean b) {
+		randomCarColor = b;
+	}
+
+	public void randomizeCarColors() {
+		for (int i = 0; i < vehicles.size(); i++) {
+			vehicles.get(i).setCarColor(getRandomColor());
+		}
 	}
 
 }

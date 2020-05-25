@@ -11,7 +11,7 @@ import utilities.VehicleType;
 /**
  * Represents junction with no traffic lights
  * 
- * @author Sophie Krimberg
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
 public class Junction extends utilities.Point implements RouteParts {

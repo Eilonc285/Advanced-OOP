@@ -12,7 +12,7 @@ import utilities.Utilities;
 /**
  * Represents traffic lights
  * 
- * @author Sophie Krimberg
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
 public abstract class TrafficLights implements Timer, Utilities, Runnable {
@@ -243,6 +243,15 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 	public void run() {
 		long delayTimer = System.currentTimeMillis();
 		while (GameDriver.isRunning()) {
+			while (GameDriver.getPause()) {
+				synchronized (GameDriver.class) {
+					try {
+						GameDriver.class.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 			try {
 				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {

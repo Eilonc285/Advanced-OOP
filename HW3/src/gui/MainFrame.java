@@ -5,12 +5,19 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import utilities.GameDriver;
+
+/**
+ * 
+ * @author Nir Barel, Eilon Cohen
+ *
+ */
 public class MainFrame extends JFrame {
 
 	private MenuBar menuBar = new MenuBar();
@@ -31,74 +38,103 @@ public class MainFrame extends JFrame {
 
 		setVisible(true);
 
-		HashMap<String, JMenuItem> hash = menuBar.getButtons();
+		HashMap<String, JMenuItem> menuButtons = menuBar.getButtons();
+		HashMap<String, JButton> toolButtons = toolBar.getButtons();
 
-		hash.get("exit").addActionListener(new ActionListener() {
+		menuButtons.get("exit").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		hash.get("blueBack").addActionListener(new ActionListener() {
+		menuButtons.get("blueBack").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				canvas.setBackground(Color.BLUE);
 				toolBar.setBackground(Color.BLUE);
 			}
 		});
-		hash.get("noneBack").addActionListener(new ActionListener() {
+		menuButtons.get("noneBack").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				canvas.setBackground(null);
 				toolBar.setBackground(null);
 			}
 		});
-		hash.get("blueVic").addActionListener(new ActionListener() {
+		menuButtons.get("blueVic").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				canvas.setRandomCarColor(false);
 				canvas.setCarColor(Color.BLUE);
 				canvas.repaint();
 			}
 		});
-		hash.get("magentaVic").addActionListener(new ActionListener() {
+		menuButtons.get("magentaVic").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				canvas.setRandomCarColor(false);
 				canvas.setCarColor(Color.MAGENTA);
 				canvas.repaint();
 			}
 		});
-		hash.get("orangeVic").addActionListener(new ActionListener() {
+		menuButtons.get("orangeVic").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				canvas.setRandomCarColor(false);
 				canvas.setCarColor(Color.ORANGE);
 				canvas.repaint();
 			}
 		});
-		hash.get("randomVic").addActionListener(new ActionListener() {
+		menuButtons.get("randomVic").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Random rand = new Random();
-				switch (rand.nextInt(3)) {
-				case 0:
-					canvas.setCarColor(Color.BLUE);
-					break;
-				case 1:
-					canvas.setCarColor(Color.MAGENTA);
-					break;
-				case 2:
-					canvas.setCarColor(Color.ORANGE);
-					break;
-				default:
-					canvas.setCarColor(Color.BLUE);
-					break;
-				}
+				canvas.randomizeCarColors();
+				canvas.setRandomCarColor(true);
 				canvas.repaint();
 			}
 		});
-		hash.get("help").addActionListener(new ActionListener() {
+		menuButtons.get("help").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				runDialog();
+			}
+		});
+
+		toolButtons.get("create").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+
+		toolButtons.get("start").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+
+		toolButtons.get("stop").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GameDriver.setPause(true);
+			}
+		});
+
+		toolButtons.get("resume").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GameDriver.setPause(false);
+				synchronized (GameDriver.class) {
+					GameDriver.class.notifyAll();
+				}
+			}
+		});
+
+		toolButtons.get("info").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 			}
 		});
 	}

@@ -3,13 +3,15 @@
  */
 package components;
 
+import java.awt.Color;
+
 import utilities.GameDriver;
 import utilities.Timer;
 import utilities.Utilities;
 import utilities.VehicleType;
 
 /**
- * @author Sophie Krimberg
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
 /**
@@ -26,6 +28,7 @@ public class Vehicle implements Utilities, Timer, Runnable {
 	private long timeOnCurrentPart;
 	private Road lastRoad;
 	private String status;
+	private Color carColor = Color.BLACK;
 
 	/**
 	 * Random Constructor
@@ -229,6 +232,15 @@ public class Vehicle implements Utilities, Timer, Runnable {
 	@Override
 	public void run() {
 		while (GameDriver.isRunning()) {
+			while (GameDriver.getPause()) {
+				synchronized (GameDriver.class) {
+					try {
+						GameDriver.class.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 			try {
 				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {
@@ -239,6 +251,14 @@ public class Vehicle implements Utilities, Timer, Runnable {
 			move();
 		}
 
+	}
+
+	public void setCarColor(Color c) {
+		carColor = c;
+	}
+
+	public Color getCarColor() {
+		return carColor;
 	}
 
 }
