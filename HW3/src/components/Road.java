@@ -260,6 +260,9 @@ public class Road implements RouteParts {
 	public double[] getVehicleLocation(Vehicle vic) {
 		if (vic.getCurrentRoutePart().equals(this)) {
 			double posRatio = vic.getTimeOnCurrentPart() / calcEstimatedTime(vic);
+			if (posRatio > 1) {
+				posRatio = 1;
+			}
 			double xDiff = endJunction.getX() - startJunction.getX();
 			double yDiff = endJunction.getY() - startJunction.getY();
 			return new double[] { startJunction.getX() + xDiff * posRatio, startJunction.getY() + yDiff * posRatio };

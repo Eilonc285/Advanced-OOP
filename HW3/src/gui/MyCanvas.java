@@ -41,8 +41,10 @@ public class MyCanvas extends Canvas {
 		for (int i = 0; i < vehicles.size(); i++) {
 			Vehicle vic = vehicles.get(i);
 			if (vic.getCurrentRoutePart() instanceof Road) {
-//				double[] pos = vic.getCurrentRoutePart().
-//						drawRotetedVehicle(g, , y1, x2, y2, d, h);
+				double[] pos = ((Road) vic.getCurrentRoutePart()).getVehicleLocation(vic);
+				drawRotetedVehicle(g, (int) pos[0], (int) pos[1],
+						(int) ((Road) vic.getLastRoad()).getEndJunction().getX(),
+						(int) ((Road) vic.getLastRoad()).getEndJunction().getY(), 10, 4);
 			}
 		}
 	}
@@ -108,18 +110,14 @@ public class MyCanvas extends Canvas {
 		double rightY = Math.sin(theta2) * l;
 		double rightX = Math.cos(theta2) * l;
 
-		int xSign;
-		int ySign;
+		int xSign = 1;
+		int ySign = 1;
 
 		if (x2 > x1) {
 			xSign = 1;
-		} else {
-			xSign = -1;
-		}
-
-		if (y2 > y1) {
 			ySign = 1;
 		} else {
+			xSign = -1;
 			ySign = -1;
 		}
 
