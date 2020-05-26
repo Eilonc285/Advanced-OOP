@@ -183,11 +183,21 @@ public class Vehicle implements Utilities, Timer, Runnable {
 	public void move() {
 		while (!currentRoutePart.canLeave(this)) {
 			currentRoutePart.stayOnCurrentPart(this);
-			synchronized (currentRoutePart) {
-				try {
-					currentRoutePart.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			if (currentRoutePart instanceof LightedJunction) {
+				synchronized (((LightedJunction) currentRoutePart).getLights()) {
+					try {
+						((LightedJunction) currentRoutePart).getLights().wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			} else {
+				synchronized (currentRoutePart) {
+					try {
+						currentRoutePart.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

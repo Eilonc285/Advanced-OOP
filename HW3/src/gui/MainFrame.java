@@ -2,14 +2,19 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import utilities.GameDriver;
 
@@ -23,6 +28,8 @@ public class MainFrame extends JFrame {
 	private MenuBar menuBar = new MenuBar();
 	private ToolBar toolBar = new ToolBar();
 	private MyCanvas canvas = new MyCanvas();
+	private int numOfVehicles = 0;
+	private int numOfJunctions = 0;
 
 	public MainFrame() {
 		super("Road system");
@@ -103,7 +110,7 @@ public class MainFrame extends JFrame {
 		toolButtons.get("create").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				makeDialog();
 			}
 		});
 
@@ -146,6 +153,68 @@ public class MainFrame extends JFrame {
 	public void refresh() {
 		canvas.repaint();
 		repaint();
+	}
+
+	private void makeDialog() {
+
+		ChangeListener vicListener = new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider theSlider = (JSlider) e.getSource();
+				if (!theSlider.getValueIsAdjusting()) {
+					numOfVehicles = new Integer(theSlider.getValue());
+				}
+			}
+		};
+
+		ChangeListener juncListener = new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider theSlider = (JSlider) e.getSource();
+				if (!theSlider.getValueIsAdjusting()) {
+					numOfJunctions = new Integer(theSlider.getValue());
+				}
+			}
+		};
+
+		JOptionPane optionPane = new JOptionPane();
+		JSlider vicSlider = getSlider(optionPane, 0, 50, 5, vicListener);
+		JSlider juncSlider = getSlider(optionPane, 3, 20, 1, juncListener);
+		optionPane.add(vicSlider);
+		optionPane.add(juncSlider);
+		optionPane.setMessage(new Object[] { "Number of junctions", juncSlider, "Number of vehicles", vicSlider });
+		optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+		Dimension dim = optionPane.getSize();
+		dim.setSize(600, 300);
+		optionPane.setSize(dim);
+		optionPane.setPreferredSize(dim);
+		JDialog dialog = optionPane.createDialog(this, "My Slider");
+		dialog.setVisible(true);
+	}
+
+	private JSlider getSlider(final JOptionPane optionPane, int min, int max, int tick, ChangeListener cl) {
+		JSlider slider = new JSlider(min, max);
+		slider.setMajorTickSpacing(tick);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+//		ChangeListener changeListener = new ChangeListener() {
+//			public void stateChanged(ChangeEvent changeEvent) {
+//				JSlider theSlider = (JSlider) changeEvent.getSource();
+//				if (!theSlider.getValueIsAdjusting()) {
+//					optionPane.setInputValue(new Integer(theSlider.getValue()));
+//				}
+//			}
+//		};
+		slider.addChangeListener(cl);
+		return slider;
+	}
+
+	public int getNumOfVehicles() {
+		return numOfVehicles;
+	}
+
+	public int getNumOfJunctions() {
+		return numOfJunctions;
 	}
 
 }

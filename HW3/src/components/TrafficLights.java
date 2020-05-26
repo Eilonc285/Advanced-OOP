@@ -262,6 +262,9 @@ public abstract class TrafficLights implements Timer, Utilities, Runnable {
 			if (System.currentTimeMillis() - delayTimer >= delay) {
 				delayTimer = System.currentTimeMillis();
 				changeLights();
+				synchronized (this) {
+					notifyAll();
+				}
 			}
 		}
 	}

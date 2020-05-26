@@ -122,9 +122,11 @@ public class Route implements RouteParts {
 			// if there are no any exiting road from current point
 			if (vehicle.getCurrentRoutePart().findNextPart(vehicle) == null) {
 
-				new Route(this.getFirstPart(), vehicle);// Receive new route from the first point of the old route
+				vehicle.setCurrentRoute(new Route(this.getFirstPart(), vehicle));// Receive new route from the first
+																					// point of the old route
 			} else {
-				new Route(vehicle.getLastRoad(), vehicle);// Receive new route from the last point fo the old route
+				vehicle.setCurrentRoute(new Route(vehicle.getLastRoad(), vehicle));// Receive new route from the last
+																					// point of the old route
 			}
 			return vehicle.getCurrentRoute().findNextPart(vehicle);
 		}

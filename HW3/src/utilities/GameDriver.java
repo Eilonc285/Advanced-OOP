@@ -3,6 +3,9 @@
  */
 package utilities;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import components.Driving;
 import gui.MainFrame;
 
@@ -10,14 +13,14 @@ import gui.MainFrame;
  * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
-public class GameDriver {
+public class GameDriver implements ActionListener {
 
 	private static final int iterationTime = 100;
 	private volatile static boolean running = true;
 	private static Driving driving;
 	private static MainFrame myFrame;
-	private static boolean pConsole = false;
-	private static boolean pause = false;
+	private static boolean pConsole = true;
+	private static boolean pause = true;
 
 	public static boolean getPause() {
 		return pause;
@@ -51,10 +54,16 @@ public class GameDriver {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		driving = new Driving(10, 20);
-//		driving.drive(20);
 		myFrame = new MainFrame();
+		driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles());
+//		driving.drive(20);
+
 		new Thread(driving).start();
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
 	}
 

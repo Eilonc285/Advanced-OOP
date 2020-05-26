@@ -159,9 +159,10 @@ public class Junction extends utilities.Point implements RouteParts {
 		for (Road road : exitingRoads) {
 			if (road.getEnabled()) {
 				for (VehicleType t : road.getVehicleTypes()) {
-					if (t.equals(vehicle.getVehicleType()))
+					if (t.equals(vehicle.getVehicleType())) {
 						roads.add(road);
-					break;
+						break;
+					}
 				}
 			}
 		}
