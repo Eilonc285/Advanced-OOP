@@ -28,8 +28,9 @@ public class MainFrame extends JFrame {
 	private MenuBar menuBar = new MenuBar();
 	private ToolBar toolBar = new ToolBar();
 	private MyCanvas canvas = new MyCanvas();
-	private int numOfVehicles = 0;
-	private int numOfJunctions = 0;
+	private int numOfVehicles = 25;
+	private int numOfJunctions = 11;
+	private ActionListener startListener;
 
 	public MainFrame() {
 		super("Road system");
@@ -114,13 +115,6 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		toolButtons.get("start").addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-			}
-		});
-
 		toolButtons.get("stop").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -161,9 +155,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				JSlider theSlider = (JSlider) e.getSource();
-				if (!theSlider.getValueIsAdjusting()) {
-					numOfVehicles = new Integer(theSlider.getValue());
-				}
+				numOfVehicles = new Integer(theSlider.getValue());
 			}
 		};
 
@@ -171,9 +163,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				JSlider theSlider = (JSlider) e.getSource();
-				if (!theSlider.getValueIsAdjusting()) {
-					numOfJunctions = new Integer(theSlider.getValue());
-				}
+				numOfJunctions = new Integer(theSlider.getValue());
 			}
 		};
 
@@ -215,6 +205,11 @@ public class MainFrame extends JFrame {
 
 	public int getNumOfJunctions() {
 		return numOfJunctions;
+	}
+
+	public void setStartListener(ActionListener listener) {
+		startListener = listener;
+		toolBar.getButtons().get("start").addActionListener(startListener);
 	}
 
 }

@@ -23,46 +23,61 @@ public class MyCanvas extends Canvas {
 
 	private Color carColor = Color.BLUE;
 	private boolean randomCarColor = false;
-	private ArrayList<Junction> junctions;
-	private ArrayList<Road> roads;
-	private ArrayList<Vehicle> vehicles;
+	private ArrayList<Junction> junctions = new ArrayList<Junction>();
+	private ArrayList<Road> roads = new ArrayList<Road>();
+	private ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
+	private boolean flag = false;
 
 	public MyCanvas() {
 		Dimension dim = getPreferredSize();
 		dim.setSize(800, 600);
 		setPreferredSize(dim);
-		junctions = GameDriver.getDriving().getMap().getJunctions();
-		roads = GameDriver.getDriving().getMap().getRoads();
-		vehicles = GameDriver.getDriving().getVehicles();
+//		junctions = GameDriver.getDriving().getMap().getJunctions();
+//		roads = GameDriver.getDriving().getMap().getRoads();
+//		vehicles = GameDriver.getDriving().getVehicles();
 	}
 
 	public void paint(Graphics g) {
-		for (int i = 0; i < junctions.size(); i++) {
-			paintJunction(g, junctions.get(i));
-		}
-		g.setColor(Color.BLACK);
-		for (int i = 0; i < roads.size(); i++) {
-			g.drawLine((int) roads.get(i).getStartJunction().getX(), (int) roads.get(i).getStartJunction().getY(),
-					(int) roads.get(i).getEndJunction().getX(), (int) roads.get(i).getEndJunction().getY());
-		}
-		for (int i = 0; i < vehicles.size(); i++) {
-			Vehicle vic = vehicles.get(i);
-			if (randomCarColor) {
-				g.setColor(vic.getCarColor());
-			} else {
-				g.setColor(carColor);
+		if (flag) {
+
+			if (GameDriver.getDriving().getMap().getJunctions() != null) {
+				junctions = GameDriver.getDriving().getMap().getJunctions();
 			}
-			if (vic.getCurrentRoutePart() instanceof Road) {
-				double[] pos = ((Road) vic.getCurrentRoutePart()).getVehicleLocation(vic);
-				drawRotetedVehicle(g, (int) pos[0], (int) pos[1],
-						(int) ((Road) vic.getLastRoad()).getEndJunction().getX(),
-						(int) ((Road) vic.getLastRoad()).getEndJunction().getY(), 10, 4);
-			} else {
-				drawRotetedVehicle(g, (int) ((Junction) vic.getCurrentRoutePart()).getX(),
-						(int) ((Junction) vic.getCurrentRoutePart()).getY() - 12,
-						(int) ((Junction) vic.getCurrentRoutePart()).getX(),
-						(int) ((Junction) vic.getCurrentRoutePart()).getY() + 10, 8, 4);
+			if (GameDriver.getDriving().getMap().getRoads() != null) {
+				roads = GameDriver.getDriving().getMap().getRoads();
 			}
+			if (GameDriver.getDriving().getVehicles() != null) {
+				vehicles = GameDriver.getDriving().getVehicles();
+			}
+			for (int i = 0; i < junctions.size(); i++) {
+				paintJunction(g, junctions.get(i));
+			}
+			g.setColor(Color.BLACK);
+			for (int i = 0; i < roads.size(); i++) {
+				g.drawLine((int) roads.get(i).getStartJunction().getX(), (int) roads.get(i).getStartJunction().getY(),
+						(int) roads.get(i).getEndJunction().getX(), (int) roads.get(i).getEndJunction().getY());
+			}
+			for (int i = 0; i < vehicles.size(); i++) {
+				Vehicle vic = vehicles.get(i);
+				if (randomCarColor) {
+					g.setColor(vic.getCarColor());
+				} else {
+					g.setColor(carColor);
+				}
+				if (vic.getCurrentRoutePart() instanceof Road) {
+					double[] pos = ((Road) vic.getCurrentRoutePart()).getVehicleLocation(vic);
+					drawRotetedVehicle(g, (int) pos[0], (int) pos[1],
+							(int) ((Road) vic.getLastRoad()).getEndJunction().getX(),
+							(int) ((Road) vic.getLastRoad()).getEndJunction().getY(), 10, 4);
+				} else {
+					drawRotetedVehicle(g, (int) ((Junction) vic.getCurrentRoutePart()).getX(),
+							(int) ((Junction) vic.getCurrentRoutePart()).getY() - 12,
+							(int) ((Junction) vic.getCurrentRoutePart()).getX(),
+							(int) ((Junction) vic.getCurrentRoutePart()).getY() + 10, 8, 4);
+				}
+			}
+		} else {
+			flag = true;
 		}
 	}
 

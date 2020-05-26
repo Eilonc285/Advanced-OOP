@@ -13,7 +13,7 @@ import gui.MainFrame;
  * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
-public class GameDriver implements ActionListener {
+public class GameDriver {
 
 	private static final int iterationTime = 100;
 	private volatile static boolean running = true;
@@ -55,15 +55,19 @@ public class GameDriver implements ActionListener {
 	 */
 	public static void main(String[] args) {
 		myFrame = new MainFrame();
-		driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles());
+		myFrame.setStartListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles());
+				pause = false;
+				new Thread(driving).start();
+			}
+		});
+//		driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles());
 //		driving.drive(20);
 
-		new Thread(driving).start();
-
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
+//		new Thread(driving).start();
 
 	}
 
