@@ -19,7 +19,7 @@ public class GameDriver {
 	private volatile static boolean running = true;
 	private static Driving driving;
 	private static MainFrame myFrame;
-	private static boolean pConsole = true;
+	private static boolean pConsole = false;
 	private static boolean pause = true;
 
 	public static boolean getPause() {

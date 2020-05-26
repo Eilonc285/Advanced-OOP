@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -13,9 +14,12 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
+import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import components.Road;
+import components.Vehicle;
 import utilities.GameDriver;
 
 /**
@@ -30,7 +34,7 @@ public class MainFrame extends JFrame {
 	private MyCanvas canvas = new MyCanvas();
 	private int numOfVehicles = 25;
 	private int numOfJunctions = 11;
-	private ActionListener startListener;
+	private JTable table;
 
 	public MainFrame() {
 		super("Road system");
@@ -135,7 +139,24 @@ public class MainFrame extends JFrame {
 		toolButtons.get("info").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				String[] columns = { "Vehicle #", "Type", "Location", "Time on loc", "Speed" };
+				String[][] data = new String[5][];
+				ArrayList<Vehicle> vehicles = GameDriver.getDriving().getVehicles();
+				for (int i = 0; i < vehicles.size(); i++) {
+					data[0][i] = Integer.toString(i);
+					data[1][i] = vehicles.get(i).getVehicleType().toString();
+					data[2][i] = vehicles.get(i).getCurrentRoutePart().toString();
+					data[3][i] = Long.toString(vehicles.get(i).getTimeOnCurrentPart());
+					double roadSpeed;
+					if (vehicles.get(i).getCurrentRoutePart() instanceof Road) {
+						roadSpeed = ((Road) vehicles.get(i).getCurrentRoutePart()).getMaxSpeed();
+					} else {
+						roadSpeed = 0;
+					}
+					double speed = Math.min(vehicles.get(i).getVehicleType().getAverageSpeed(), roadSpeed);
+					data[4][i] = Double.toString(speed);
+				}
+				table = new JTable(data, (Object[]) columns);
 			}
 		});
 	}
@@ -187,14 +208,6 @@ public class MainFrame extends JFrame {
 		slider.setMajorTickSpacing(tick);
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
-//		ChangeListener changeListener = new ChangeListener() {
-//			public void stateChanged(ChangeEvent changeEvent) {
-//				JSlider theSlider = (JSlider) changeEvent.getSource();
-//				if (!theSlider.getValueIsAdjusting()) {
-//					optionPane.setInputValue(new Integer(theSlider.getValue()));
-//				}
-//			}
-//		};
 		slider.addChangeListener(cl);
 		return slider;
 	}
@@ -208,8 +221,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void setStartListener(ActionListener listener) {
-		startListener = listener;
-		toolBar.getButtons().get("start").addActionListener(startListener);
+		toolBar.getButtons().get("start").addActionListener(listener);
 	}
 
 }
