@@ -141,14 +141,15 @@ public class MainFrame extends JFrame {
 		toolButtons.get("info").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String[] columns = { "Vehicle #", "Type", "Location", "Time on loc", "Speed" };
-				String[][] data = new String[5][];
 				ArrayList<Vehicle> vehicles = GameDriver.getDriving().getVehicles();
+				String[] columns = { "Vehicle #", "Type", "Location", "Time on loc", "Speed" };
+				String[][] data = new String[vehicles.size()][5];
+
 				for (int i = 0; i < vehicles.size(); i++) {
-					data[0][i] = Integer.toString(i);
-					data[1][i] = vehicles.get(i).getVehicleType().toString();
-					data[2][i] = vehicles.get(i).getCurrentRoutePart().toString();
-					data[3][i] = Long.toString(vehicles.get(i).getTimeOnCurrentPart());
+					data[i][0] = Integer.toString(vehicles.get(i).getId());
+					data[i][1] = vehicles.get(i).getVehicleType().toString();
+					data[i][2] = vehicles.get(i).getCurrentRoutePart().toString();
+					data[i][3] = Long.toString(vehicles.get(i).getTimeOnCurrentPart());
 					double roadSpeed;
 					if (vehicles.get(i).getCurrentRoutePart() instanceof Road) {
 						roadSpeed = ((Road) vehicles.get(i).getCurrentRoutePart()).getMaxSpeed();
@@ -156,12 +157,10 @@ public class MainFrame extends JFrame {
 						roadSpeed = 0;
 					}
 					double speed = Math.min(vehicles.get(i).getVehicleType().getAverageSpeed(), roadSpeed);
-					data[4][i] = Double.toString(speed);
+					data[i][4] = Double.toString(speed);
 				}
-				table = new JTable(data, (Object[]) columns);
-//				add(comp)
-				JLayeredPane p = new JLayeredPane();
-//				p.add
+				table = new JTable(data, columns);
+				makeInfo();
 			}
 		});
 	}
@@ -173,6 +172,15 @@ public class MainFrame extends JFrame {
 	public void refresh() {
 		canvas.repaint();
 		repaint();
+	}
+
+	private void makeInfo() {
+		JOptionPane optionPane = new JOptionPane();
+		optionPane.setMessage(new Object[] { table });
+		optionPane.setPreferredSize(new Dimension(500, 500));
+		JDialog dialog = optionPane.createDialog(this, "My Table");
+		dialog.setResizable(true);
+		dialog.setVisible(true);
 	}
 
 	private void makeDialog() {
@@ -196,8 +204,8 @@ public class MainFrame extends JFrame {
 		JOptionPane optionPane = new JOptionPane();
 		JSlider vicSlider = getSlider(optionPane, 0, 50, 5, vicListener);
 		JSlider juncSlider = getSlider(optionPane, 3, 20, 1, juncListener);
-		optionPane.add(vicSlider);
-		optionPane.add(juncSlider);
+//		optionPane.add(vicSlider);
+//		optionPane.add(juncSlider);
 		optionPane.setMessage(new Object[] { "Number of junctions", juncSlider, "Number of vehicles", vicSlider });
 		optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
 		Dimension dim = optionPane.getSize();
