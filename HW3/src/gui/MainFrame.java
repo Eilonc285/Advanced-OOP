@@ -11,6 +11,7 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
@@ -31,6 +32,7 @@ public class MainFrame extends JFrame {
 
 	private MenuBar menuBar = new MenuBar();
 	private ToolBar toolBar = new ToolBar();
+	private JLayeredPane layeredPane = new JLayeredPane();
 	private MyCanvas canvas = new MyCanvas();
 	private int numOfVehicles = 25;
 	private int numOfJunctions = 11;
@@ -157,6 +159,9 @@ public class MainFrame extends JFrame {
 					data[4][i] = Double.toString(speed);
 				}
 				table = new JTable(data, (Object[]) columns);
+//				add(comp)
+				JLayeredPane p = new JLayeredPane();
+//				p.add
 			}
 		});
 	}
