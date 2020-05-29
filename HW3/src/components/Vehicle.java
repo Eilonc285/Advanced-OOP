@@ -271,4 +271,7 @@ public class Vehicle implements Utilities, Timer, Runnable {
 		return carColor;
 	}
 
+	public static void resetVehicleCount() {
+		Vehicle.objectsCount = 0;
+	}
 }

@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import components.Driving;
+import components.Vehicle;
 import gui.MainFrame;
 
 /**
@@ -61,14 +62,9 @@ public class GameDriver {
 			public void actionPerformed(ActionEvent e) {
 				driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles());
 				pause = false;
+				Vehicle.resetVehicleCount();
 				new Thread(driving).start();
 			}
 		});
-//		driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles());
-//		driving.drive(20);
-
-//		new Thread(driving).start();
-
 	}
-
 }

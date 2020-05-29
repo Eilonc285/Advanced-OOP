@@ -14,11 +14,13 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import components.Junction;
 import components.Road;
 import components.Vehicle;
 import utilities.GameDriver;
@@ -141,26 +143,32 @@ public class MainFrame extends JFrame {
 		toolButtons.get("info").addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Vehicle> vehicles = GameDriver.getDriving().getVehicles();
-				String[] columns = { "Vehicle #", "Type", "Location", "Time on loc", "Speed" };
-				String[][] data = new String[vehicles.size()][5];
+				if (GameDriver.getDriving() != null) {
+					ArrayList<Vehicle> vehicles = GameDriver.getDriving().getVehicles();
+					String[] columns = { "Vehicle #", "Type", "Location", "Time on loc", "Speed" };
+					String[][] data = new String[vehicles.size()][5];
 
-				for (int i = 0; i < vehicles.size(); i++) {
-					data[i][0] = Integer.toString(vehicles.get(i).getId());
-					data[i][1] = vehicles.get(i).getVehicleType().toString();
-					data[i][2] = vehicles.get(i).getCurrentRoutePart().toString();
-					data[i][3] = Long.toString(vehicles.get(i).getTimeOnCurrentPart());
-					double roadSpeed;
-					if (vehicles.get(i).getCurrentRoutePart() instanceof Road) {
-						roadSpeed = ((Road) vehicles.get(i).getCurrentRoutePart()).getMaxSpeed();
-					} else {
-						roadSpeed = 0;
+					for (int i = 0; i < vehicles.size(); i++) {
+						data[i][0] = Integer.toString(vehicles.get(i).getId());
+						data[i][1] = vehicles.get(i).getVehicleType().toString();
+						data[i][2] = (vehicles.get(i).getCurrentRoutePart() instanceof Junction)
+								? vehicles.get(i).getCurrentRoutePart().toString()
+								: "From " + vehicles.get(i).getLastRoad().getStartJunction().toString() + " to "
+										+ vehicles.get(i).getLastRoad().getEndJunction().toString();
+						data[i][3] = Long.toString(vehicles.get(i).getTimeOnCurrentPart());
+						double roadSpeed;
+						if (vehicles.get(i).getCurrentRoutePart() instanceof Road) {
+							roadSpeed = ((Road) vehicles.get(i).getCurrentRoutePart()).getMaxSpeed();
+						} else {
+							roadSpeed = 0;
+						}
+						double speed = Math.min(vehicles.get(i).getVehicleType().getAverageSpeed(), roadSpeed);
+						data[i][4] = Double.toString(speed);
 					}
-					double speed = Math.min(vehicles.get(i).getVehicleType().getAverageSpeed(), roadSpeed);
-					data[i][4] = Double.toString(speed);
+					table = new JTable(data, columns);
+					table.getColumnModel().getColumn(2).setMinWidth(300);
+					makeInfo();
 				}
-				table = new JTable(data, columns);
-				makeInfo();
 			}
 		});
 	}
@@ -176,9 +184,9 @@ public class MainFrame extends JFrame {
 
 	private void makeInfo() {
 		JOptionPane optionPane = new JOptionPane();
-		optionPane.setMessage(new Object[] { table });
+		optionPane.setMessage(new Object[] { new JScrollPane(table) });
 		optionPane.setPreferredSize(new Dimension(500, 500));
-		JDialog dialog = optionPane.createDialog(this, "My Table");
+		JDialog dialog = optionPane.createDialog(this, "Vehicles info");
 		dialog.setResizable(true);
 		dialog.setVisible(true);
 	}
