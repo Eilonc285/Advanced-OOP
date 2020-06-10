@@ -3,17 +3,23 @@
  */
 package components;
 
-import java.awt.Color;
-import java.awt.Graphics;
 
-/**
- * @author krsof
+/**Represents a Junction with traffic lights
+ * @author Sophie Krimberg
  *
  */
 public class LightedJunction extends Junction {
 	
 	TrafficLights lights;
 	
+	
+	/**Constructor
+	 * @param name junction name
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @param sequential represents the type of traffic lights: random or sequential
+	 * @param lightsOn represents the state of traffic lights: turned on/off 
+	 */
 	public LightedJunction(String name, double x, double y,boolean sequential, boolean lightsOn) {
 		super(name, x,y);
 		
@@ -29,6 +35,9 @@ public class LightedJunction extends Junction {
 		successMessage(String.format("Junction %s  (%.2f , %.2f), Lighted", getJunctionName(), getX(),getY()));
 	}
 	
+	/**Random Constructor
+	 * creates random traffic lights for the junction. 
+	 */
 	public LightedJunction() {
 		super();
 		
@@ -43,14 +52,20 @@ public class LightedJunction extends Junction {
 		successMessage(String.format("Junction %s (%.2f , %.2f), Lighted", getJunctionName(), getX(),getY()));
 	}
 	
+	/**
+	 * @return the lights
+	 */
 	public TrafficLights getLights() {
 		return lights;
 	}
-	
+
+	/**
+	 * @param lights the lights to set
+	 */
 	public void setLights(TrafficLights lights) {
-		this.lights=lights;
+		this.lights = lights;
 	}
-	
+
 	@Override
 	public double calcEstimatedTime(Object obj) {
 		if (!lights.getTrafficLightsOn())
@@ -62,6 +77,7 @@ public class LightedJunction extends Junction {
 		
 		return new String(super.toString()+ " (Lighted)");
 	}
+	
 	@Override
 	public boolean equals(Object other) {
 		if (other == null) return false; 
@@ -71,6 +87,7 @@ public class LightedJunction extends Junction {
 	    return true;
 	}
 	
+	@Override
 	public boolean canLeave(Vehicle vehicle) {
 		if (!lights.getTrafficLightsOn()) {
 			return super.canLeave(vehicle);
@@ -84,14 +101,4 @@ public class LightedJunction extends Junction {
 		}
 		return true;
 	}
-	
-	
-	public void drawJunction(Graphics g, int delta){
-		if (this.lights.getTrafficLightsOn())
-			g.setColor(Color.red);
-		else
-			g.setColor(Color.green);
-		g.fillOval((int)getX(),(int) getY(), 2*delta, 2*delta);
-    }
-	
 }

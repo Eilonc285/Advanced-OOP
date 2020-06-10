@@ -5,146 +5,199 @@ package components;
 
 import java.util.ArrayList;
 
+import utilities.GameDriver;
 import utilities.Timer;
 import utilities.Utilities;
 
 /**
- * @author krsof
+ * Represents traffic lights
+ * 
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
-public abstract class TrafficLights  implements Timer, Utilities, Runnable{
+public abstract class TrafficLights implements Timer, Utilities, Runnable {
 	private int id;
-	private final int maxDelay=6;
-	private final int minDelay=2;
+	private final int maxDelay = 6;
+	private final int minDelay = 2;
 	private boolean trafficLightsOn;
 	private int greenLightIndex;
 	private int delay;
 	private int workingTime;
-	private ArrayList<Road> roads; 
-	private static int objectsCount=1;
-	private boolean threadSuspend = false;
-	private boolean stop = false;
-	
+	private ArrayList<Road> roads;
+	private static int objectsCount = 1;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param roads
+	 */
 	public TrafficLights(ArrayList<Road> roads) {
-		id=objectsCount++;
-		trafficLightsOn=false;
-		greenLightIndex=-1;
-		delay=0;
-		workingTime=0;
-		this.roads=roads;
-		
+		id = objectsCount++;
+		trafficLightsOn = false;
+		greenLightIndex = -1;
+		delay = 0;
+		workingTime = 0;
+		this.roads = roads;
+
 	}
-	
+
+	/**
+	 * @return the trafficLightsOn
+	 */
 	public boolean getTrafficLightsOn() {
 		return trafficLightsOn;
 	}
-	
+
+	/**
+	 * @param on
+	 */
 	public void setTrafficLightsOn(boolean on) {
 		if (on) {
-			if (roads.size()<1) {
-				System.out.println(this + "Lights can not be turned on at junction with no entering roads");
+			if (roads.size() < 1) {
+				if (GameDriver.isPConsole())
+					System.out.println(this + "Lights can not be turned on at junction with no entering roads");
 				return;
 			}
-			trafficLightsOn=true;
-			delay=getRandomInt(minDelay,maxDelay);
-			System.out.println(this+ " turned ON, delay time: "+ delay);
+			trafficLightsOn = true;
+			delay = getRandomInt(minDelay, maxDelay) * 100;
+			if (GameDriver.isPConsole())
+				System.out.println(this + " turned ON, delay time: " + delay + " miliseconds");
 			changeLights();
-		}
-		else {
-			trafficLightsOn=false;
-			delay=0;
-			for(Road road: roads) {
+		} else {
+			trafficLightsOn = false;
+			delay = 0;
+			for (Road road : roads) {
 				road.setGreenLight(false);
 			}
 		}
 	}
-	
-	public synchronized int getGreenLightIndex() {
+
+	/**
+	 * @return
+	 */
+	public int getGreenLightIndex() {
 		return greenLightIndex;
 	}
-	
-	public synchronized void setGreenLightIndex(int index) {
-		greenLightIndex=index;
+
+	/**
+	 * @param index
+	 */
+	public void setGreenLightIndex(int index) {
+		greenLightIndex = index;
 	}
-	
-	public synchronized int getDelay() {
+
+	/**
+	 * @return
+	 */
+	public int getDelay() {
 		return delay;
 	}
-	
-	public synchronized void setDelay (int delay) {
-		this.delay=delay;
+
+	/**
+	 * @param delay
+	 */
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
-	
+
+	/**
+	 * @param time
+	 */
 	public void setWorkingTime(int time) {
-		workingTime=time;
+		workingTime = time;
 	}
-	
+
+	/**
+	 * @return
+	 */
 	public int getWorkingTime() {
 		return workingTime;
 	}
-	
-	public ArrayList<Road> getRoads(){
+
+	/**
+	 * @return
+	 */
+	public ArrayList<Road> getRoads() {
 		return roads;
 	}
-	
+
+	/**
+	 * @param roads
+	 */
 	public void setRoads(ArrayList<Road> roads) {
-		this.roads=roads;
+		this.roads = roads;
 	}
-	
+
+	@Override
 	public void incrementDrivingTime() {
 		if (trafficLightsOn) {
 			workingTime++;
-			if (workingTime%delay==0) {
+			if (workingTime % delay == 0) {
 				changeLights();
+			} else {
+				if (GameDriver.isPConsole())
+					System.out.println("- on delay");
 			}
 		}
 	}
-	
-	public synchronized void changeLights() {
+
+	/**
+	 * gives a green light to another road
+	 * 
+	 */
+	public void changeLights() {
 		if (!trafficLightsOn) {
-			System.out.println("- Traffic lights are off and can't be changed");
-		}
-		else {
-			for (Road road:roads) {
-					road.setGreenLight(false);
+			if (GameDriver.isPConsole())
+				System.out.println("- Traffic lights are off and can't be changed");
+		} else {
+			for (Road road : roads) {
+				road.setGreenLight(false);
 			}
 			changeIndex();
-			this.getRoads().get(this.getGreenLightIndex()).setGreenLight(true);//set green light to the next road
-			System.out.println("- "+ this.getRoads().get(this.getGreenLightIndex())+": green light.");//print message
-			
+			this.getRoads().get(this.getGreenLightIndex()).setGreenLight(true);// set green light to the next road
+			synchronized (roads.get(0).getEndJunction()) {
+				roads.get(0).getEndJunction().notifyAll();
+			}
+			if (GameDriver.isPConsole())
+				System.out.println("- " + this.getRoads().get(this.getGreenLightIndex()) + ": green light.");// print
+			// message
+
 		}
 	}
-	
+
+	/**
+	 * update the index of the next road that supposed to receive green light
+	 * 
+	 */
 	public abstract void changeIndex();
-	
+
+	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) return false; 
-	    if (getClass() != obj.getClass()) return false; 
-	    if (! super.equals(obj)) return false;
-	    TrafficLights other=(TrafficLights)obj;
-	    if (this.delay!=other.delay||
-	    	this.greenLightIndex!=other.greenLightIndex||
-	    	this.roads!=other.roads||
-	    	this.trafficLightsOn!=other.trafficLightsOn||
-	    	this.workingTime!=other.workingTime
-	    		
-	    	) return false;
-	    return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		if (!super.equals(obj))
+			return false;
+		TrafficLights other = (TrafficLights) obj;
+		if (this.delay != other.delay || this.greenLightIndex != other.greenLightIndex || this.roads != other.roads
+				|| this.trafficLightsOn != other.trafficLightsOn || this.workingTime != other.workingTime
+
+		)
+			return false;
+		return true;
+
 	}
-	
-	
+
+	@Override
 	public String toString() {
-//		String status;
-//		if (getTrafficLightsOn())
-//			status= new String("ON");
-//		else status=new String("OFF");
-		return new String("traffic lights "+ id);
+		return new String("traffic lights " + id);
 	}
 
 	/**
 	 * @return the id
 	 */
-	public int getID() {
+	public int getId() {
 		return id;
 	}
 
@@ -182,51 +235,37 @@ public abstract class TrafficLights  implements Timer, Utilities, Runnable{
 	public int getMinDelay() {
 		return minDelay;
 	}
-	
-	
+
+	/**
+	 * The method to be run by the thread
+	 */
 	@Override
 	public void run() {
-		if (!trafficLightsOn) return;
-		
-		while(true) {
-			if (stop) return;
-			try {
-				Thread.sleep(600);
-				synchronized(this) {
-	                while (threadSuspend)
-	                	wait();
+		long delayTimer = System.currentTimeMillis();
+		while (GameDriver.isRunning()) {
+			while (GameDriver.getPause()) {
+				synchronized (GameDriver.class) {
+					try {
+						GameDriver.class.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
-			if (stop) return;
-			changeLights();
 			try {
-				Thread.sleep(100*delay);
+				Thread.sleep(GameDriver.getIterationTime());
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				if (GameDriver.isPConsole())
+					System.out.println("Sleep failed");
 				e.printStackTrace();
 			}
-			//workingTime++;
-		}	
+			if (System.currentTimeMillis() - delayTimer >= delay) {
+				delayTimer = System.currentTimeMillis();
+				changeLights();
+				synchronized (this) {
+					notifyAll();
+				}
+			}
+		}
 	}
-	
-	@Override
-	public void setSuspend() {
-		threadSuspend = true;
-	}
-	
-	@Override
-	public synchronized void setResume() {
-		threadSuspend = false;
-		notify();
-	}
-	
-	@Override
-	public void setStop() {
-		stop = true;
-	}
-	
 }
-
-

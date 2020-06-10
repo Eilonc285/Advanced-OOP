@@ -5,46 +5,54 @@ package components;
 
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
-
+import utilities.GameDriver;
 import utilities.Timer;
 import utilities.Utilities;
 
 /**
- * @author krsof
+ * Traffic control game
+ * 
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
-public class Driving implements Utilities, Timer, Runnable{
+public class Driving implements Utilities, Timer, Runnable {
 	private Map map;
 	private ArrayList<Vehicle> vehicles;
 	private int drivingTime;
 	private ArrayList<Timer> allTimedElements;
-	private JPanel panel;
-	private boolean threadSuspend = false;
-	private boolean stop = false;
-	
+	private Thread[] threads;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param junctionsNum  quantity of junctions
+	 * @param numOfVehicles quantity of vehicles
+	 */
 	public Driving(int junctionsNum, int numOfVehicles) {
-		vehicles=new ArrayList<Vehicle>();
-		allTimedElements=new ArrayList<Timer>();
-		drivingTime=0;
-		map=new Map(junctionsNum);
-		System.out.println("\n================= CREATING VEHICLES =================");
-		while(vehicles.size()<numOfVehicles) {
-			Road temp=map.getRoads().get(getRandomInt(0,map.getRoads().size()));//random road from the map
-			if( temp.getEnabled())
+
+		vehicles = new ArrayList<Vehicle>();
+		allTimedElements = new ArrayList<Timer>();
+		drivingTime = 0;
+		map = new Map(junctionsNum);
+
+		if (GameDriver.isPConsole())
+			System.out.println("\n================= CREATING VEHICLES =================");
+
+		while (vehicles.size() < numOfVehicles) {
+			Road temp = map.getRoads().get(getRandomInt(0, map.getRoads().size()));// random road from the map
+			if (temp.getEnabled())
 				vehicles.add(new Vehicle(temp));
-		
 		}
+
 		allTimedElements.addAll(vehicles);
-		allTimedElements.addAll(map.getLights());
-		Vehicle.objectsCount=1;
+
+		for (TrafficLights light : map.getLights()) {
+			if (light.getTrafficLightsOn()) {
+				allTimedElements.add(light);
+			}
+		}
 	}
-	
-	
-	public void setPanel(JPanel panel) {
-		this.panel = panel;
-	}
-	
+
 	/**
 	 * @return the map
 	 */
@@ -101,50 +109,34 @@ public class Driving implements Utilities, Timer, Runnable{
 		this.allTimedElements = allTimedElements;
 	}
 
+	/**
+	 * method runs the game for given quantity of turns
+	 * 
+	 * @param turns
+	 */
 	public void drive(int turns) {
-		System.out.println("\n================= START DRIVING=================");
+		if (GameDriver.isPConsole())
+			System.out.println("\n================= START DRIVING=================");
 
-		drivingTime=0;
-		for (int i=0; i<turns;i++) {
+		drivingTime = 0;
+		for (int i = 0; i < turns; i++) {
 			incrementDrivingTime();
 		}
 	}
 
 	@Override
 	public void incrementDrivingTime() {
-		System.out.println("\n***************TURN "+drivingTime++ +"***************");
-		for(Timer element: allTimedElements) {
-			System.out.println(element);
+		if (GameDriver.isPConsole())
+			System.out.println("\n***************TURN " + drivingTime++ + "***************");
+		for (Timer element : allTimedElements) {
+			if (GameDriver.isPConsole())
+				System.out.println(element);
 			element.incrementDrivingTime();
-			System.out.println();
+			if (GameDriver.isPConsole())
+				System.out.println();
 		}
-		
-	}
-	
-	
-	@Override
-	public void run() {	
-	   	for(Timer timer: allTimedElements) {
-	   		Thread t = new Thread((Runnable) timer);
-	   		t.start();
-	   	}
-	   	
-		while(true) {
-	   		try {
-				Thread.sleep(100);
-				synchronized(this) {
-	                while (threadSuspend)
-	                	wait();
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	   		if (stop) return;
-	   		panel.repaint();
-   		}
-	}
-	
 
+	}
 
 	@Override
 	public String toString() {
@@ -152,26 +144,38 @@ public class Driving implements Utilities, Timer, Runnable{
 				+ allTimedElements + "]";
 	}
 
-
 	@Override
-	public synchronized void setSuspend() {
-	   	for(Timer timer: allTimedElements) 
-	   		timer.setSuspend();
-	   	threadSuspend = true;
+	public void run() {
+		threads = new Thread[allTimedElements.size()];
+		for (int i = 0; i < allTimedElements.size(); i++) {
+			threads[i] = new Thread((Runnable) allTimedElements.get(i),
+					allTimedElements.get(i).getClass().toString() + " " + i);
+		}
+		for (Thread thread : threads) {
+			thread.start();
+		}
+		while (GameDriver.isRunning()) {
+			while (GameDriver.getPause()) {
+				synchronized (GameDriver.class) {
+					try {
+						GameDriver.class.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			try {
+				Thread.sleep(GameDriver.getIterationTime());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			for (Road road : map.getRoads()) {
+				synchronized (road) {
+					road.notifyAll();
+				}
+			}
+			GameDriver.getFrame().refresh();
+		}
 	}
 
-	@Override
-	public synchronized void setResume() {
-	   	for(Timer timer: allTimedElements) 
-	   		timer.setResume();
-	   	threadSuspend = false;
-	   	notify();
-	}
-	
-	public void setStop() {
-		setResume();
-	   	for(Timer timer: allTimedElements) 
-	   		timer.setStop();
-	   	stop = true;
-	}
 }

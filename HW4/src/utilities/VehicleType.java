@@ -3,25 +3,26 @@
  */
 package utilities;
 
-
 /**
- * @author krsof
+ * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
  */
 public enum VehicleType {
-	car(90), bus(60), bicycle(40), motorcycle(120), truck(80), tram(50), semitrailer(85);
-	//car(9), bus(6), bicycle(4), motorcycle(12), truck(8), tram(5), semitrailer(8);
-	
-	
-	private int averageSpeed;
-	
-	
-	VehicleType(int speed) {
-		averageSpeed=speed; 
-		
+	car(9), bus(6), bicycle(4), motorcycle(12), truck(8), tram(5), semitrailer(8.5f);
+
+	private float averageSpeed;
+	private float speedMultiplier = 0.01f;
+
+	VehicleType(float speed) {
+		averageSpeed = speed * speedMultiplier;
+
 	}
 
-	public int getAverageSpeed() {
+	public float getAverageSpeed() {
 		return averageSpeed;
+	}
+
+	public void setSpeedMultiplier(float n) {
+		speedMultiplier = n;
 	}
 }

@@ -4,14 +4,11 @@
 package utilities;
 
 /**
- * @author krsof
+ * @author Sophie Krimberg
  *
  */
 public interface Timer {
 	public void incrementDrivingTime();
-	public void setSuspend();
-	public void setResume();
-	public void setStop();
 }
 
-//TODO timer extends utilities, delete utilities from all doubles (for bonus task only)
+//TODO Answer for bonus task 2: timer extends utilities, delete "implements utilities" from all classes.
