@@ -19,8 +19,8 @@ public class Road implements RouteParts {
 	private boolean greenLight;
 	private float maxSpeed;
 	VehicleType[] vehicleTypes;
-	double length;
-	boolean enable;
+	private double length;
+	private boolean enable;
 
 	/**
 	 * Constructor
@@ -33,7 +33,6 @@ public class Road implements RouteParts {
 		endJunction = end;
 		waitingVehicles = new ArrayList<Vehicle>();
 		greenLight = false;
-		maxSpeed = allowedSpeedOptions[getRandomInt(0, 7)];
 
 		int numOfTypes = getRandomInt(3, VehicleType.values().length);
 
@@ -44,6 +43,9 @@ public class Road implements RouteParts {
 		for (int i = 0; i < numOfTypes; i++) {
 			vehicleTypes[i] = types[arr.get(i)];
 		}
+
+		maxSpeed = allowedSpeedOptions[getRandomInt(0, 7)] * vehicleTypes[0].getSpeedMultiplier();
+
 		this.getStartJunction().getExitingRoads().add(this);
 		this.getEndJunction().getEnteringRoads().add(this);
 
@@ -187,7 +189,8 @@ public class Road implements RouteParts {
 	@Override
 	public double calcEstimatedTime(Object obj) {
 		Vehicle v = (Vehicle) obj;
-		float speed = Math.min(maxSpeed, v.getVehicleType().getAverageSpeed());
+//		float speed = Math.min(maxSpeed, v.getVehicleType().getAverageSpeed());
+		float speed = v.getVehicleType().getAverageSpeed();
 		return length / speed;
 	}
 
@@ -201,6 +204,7 @@ public class Road implements RouteParts {
 		vehicle.setCurrentRoutePart(this);
 		vehicle.setTimeOnCurrentPart(0);
 		vehicle.setLastRoad(this);
+		vehicle.resetUpdateBool();
 		if (GameDriver.isPConsole())
 			System.out.println(
 					"- is starting to move on " + this + ", time to finish: " + calcEstimatedTime(vehicle) + ".");

@@ -3,6 +3,8 @@
  */
 package utilities;
 
+import java.util.Random;
+
 /**
  * @author Sophie Krimberg, Nir Barel, Eilon Cohen
  *
@@ -14,7 +16,8 @@ public enum VehicleType {
 	private float speedMultiplier = 0.01f;
 
 	VehicleType(float speed) {
-		averageSpeed = speed * speedMultiplier;
+		Random rand = new Random();
+		averageSpeed = rand.nextFloat() * (speed * 1.5f) * speedMultiplier;
 
 	}
 
@@ -24,5 +27,9 @@ public enum VehicleType {
 
 	public void setSpeedMultiplier(float n) {
 		speedMultiplier = n;
+	}
+
+	public float getSpeedMultiplier() {
+		return speedMultiplier;
 	}
 }

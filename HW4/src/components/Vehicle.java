@@ -29,6 +29,7 @@ public class Vehicle implements Utilities, Timer, Runnable {
 	private Road lastRoad;
 	private String status;
 	private Color carColor = Color.BLACK;
+	private boolean updatedBigBrother = false;
 
 	/**
 	 * Random Constructor
@@ -201,6 +202,10 @@ public class Vehicle implements Utilities, Timer, Runnable {
 				}
 			}
 		}
+		if (!updatedBigBrother) {
+			BigBrother.getBigBrother().update(this);
+			updatedBigBrother = true;
+		}
 		currentRoutePart.checkOut(this);
 		currentRoute.findNextPart(this).checkIn(this);
 
@@ -274,4 +279,9 @@ public class Vehicle implements Utilities, Timer, Runnable {
 	public static void resetVehicleCount() {
 		Vehicle.objectsCount = 0;
 	}
+
+	public void resetUpdateBool() {
+		updatedBigBrother = false;
+	}
+
 }
