@@ -4,6 +4,10 @@
 package components;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import utilities.GameDriver;
 import utilities.Timer;
@@ -284,4 +288,27 @@ public class Vehicle implements Utilities, Timer, Runnable {
 		updatedBigBrother = false;
 	}
 
+	public void noticeReport(int vicId, String path) {
+		ReadWriteLock fileLock = Moked.getMoked().getFileLock();
+		Report report = new Report(-1, -1);
+		fileLock.readLock().lock();
+		try {
+			File textFile = new File(path);
+			Scanner scanner = new Scanner(textFile);
+			String currentLine;
+			while (scanner.hasNextLine()) {
+				currentLine = scanner.nextLine();
+				report = Report.constructFromString(currentLine);
+				if (report.getVehicleId() == id && report.isAuthorized() == false) {
+					break;
+				}
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			fileLock.readLock().unlock();
+		}
+		Moked.getMoked().approveReport(report.getReportId());
+	}
 }

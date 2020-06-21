@@ -1,5 +1,7 @@
 package components;
 
+import java.util.Random;
+
 public class BigBrother {
 
 	private static volatile BigBrother mySingleton = null;
@@ -23,13 +25,17 @@ public class BigBrother {
 
 	public void update(Vehicle vic) {
 		if (!checkLegalSpeed(vic)) {
-//			Moked.getMoked().submitReport(vic.getId());
-			System.out.println("" + vic.getId() + " oversped");
+			Moked.getMoked().submitReport(vic.getId());
+//			if (GameDriver.isPConsole()) {
+			System.out.println("Vehicle number " + vic.getId() + " oversped");
+//			}
 		}
 	}
 
 	private boolean checkLegalSpeed(Vehicle vic) {
-		return vic.getLastRoad().getLength() / vic.getTimeOnCurrentPart() <= vic.getLastRoad().getMaxSpeed();
+		Random rand = new Random();
+		double randomSpeed = (vic.getLastRoad().getLength() / vic.getTimeOnCurrentPart()) * rand.nextFloat() * 1.5f;
+		return randomSpeed <= vic.getLastRoad().getMaxSpeed();
 	}
 
 }
