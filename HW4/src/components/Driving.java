@@ -4,9 +4,11 @@
 package components;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import utilities.Builder;
 import utilities.CityBuilder;
+import utilities.Factory;
 import utilities.GameDriver;
 import utilities.Timer;
 import utilities.Utilities;
@@ -70,19 +72,22 @@ public class Driving implements Utilities, Timer, Runnable {
 			System.out.println("\n================= CREATING VEHICLES =================");
 
 		while (vehicles.size() < numOfVehicles) {
-			Road temp = map.getRoads().get(getRandomInt(0, map.getRoads().size()));// random road from the map
-			if (temp.getEnabled()) {
-				Vehicle vic = new Vehicle(temp);
-				if (builder.allowedType(vic.getVehicleType())) {
-					float randomSpeed = 0;
-					if (builder instanceof CityBuilder) {
-						randomSpeed = (float) (vic.getIndependantSpeed() * (Math.random() + 0.333f)); // 30%-130%
-					} else {
-						randomSpeed = (float) (vic.getIndependantSpeed() * (Math.random() + 0.5f)); // 50%-150%
-					}
-					vic.setIndependantSpeed(randomSpeed);
-					vehicles.add(new Vehicle(temp));
+			Random rand = new Random();
+			Object[][] combos = Factory.combinations;
+			int comboIndex = rand.nextInt(combos.length);
+			Object[] combo = combos[comboIndex];
+			Factory fac = Factory.getFactory(((Integer) (combo[0])).intValue());
+			fac.setMap(map);
+			Vehicle vic = fac.getVehicle((String) combo[1]);
+			if (builder.allowedType(vic.getVehicleType())) {
+				float randomSpeed = 0;
+				if (builder instanceof CityBuilder) {
+					randomSpeed = (float) (vic.getIndependantSpeed() * (Math.random() + 0.333f)); // 30%-130%
+				} else {
+					randomSpeed = (float) (vic.getIndependantSpeed() * (Math.random() + 0.5f)); // 50%-150%
 				}
+				vic.setIndependantSpeed(randomSpeed);
+				vehicles.add(vic);
 			}
 		}
 
@@ -218,6 +223,22 @@ public class Driving implements Utilities, Timer, Runnable {
 			}
 			GameDriver.getFrame().refresh();
 		}
+	}
+
+	public Vehicle getById(int id) {
+		for (int i = 0; i < vehicles.size(); i++) {
+			if (vehicles.get(i).getId() == id) {
+				return vehicles.get(i);
+			}
+		}
+		return vehicles.get(0);
+	}
+
+	public void addVehicle(Vehicle vic) {
+		vehicles.add(vic);
+		allTimedElements.add(0, vic);
+		new Thread(vic).start();
+
 	}
 
 }

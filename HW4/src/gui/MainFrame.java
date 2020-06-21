@@ -24,9 +24,11 @@ import javax.swing.event.ChangeListener;
 
 import components.Junction;
 import components.Moked;
+import components.Report;
 import components.Road;
 import components.Vehicle;
 import utilities.GameDriver;
+import utilities.Prototype;
 
 /**
  * 
@@ -42,6 +44,7 @@ public class MainFrame extends JFrame {
 	private int numOfVehicles = 25;
 	private int numOfJunctions = 11;
 	private JTable table;
+	private JTable reportsTable;
 
 	public MainFrame() {
 		super("Road system");
@@ -71,6 +74,7 @@ public class MainFrame extends JFrame {
 
 		pack();
 
+		setResizable(false);
 		setVisible(true);
 
 		HashMap<String, JMenuItem> menuButtons = menuBar.getButtons();
@@ -186,8 +190,36 @@ public class MainFrame extends JFrame {
 					}
 					table = new JTable(data, columns);
 					table.getColumnModel().getColumn(2).setMinWidth(300);
-					makeInfo();
+					makeInfo(table);
 				}
+			}
+		});
+		toolButtons.get("reports").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (GameDriver.getDriving() != null) {
+					ArrayList<Vehicle> vehicles = GameDriver.getDriving().getVehicles();
+					String[] columns = { "DATE", "VEHICLE ID", "REPORT #", "AUTHORIZED" };
+					ArrayList<Report> reports = Moked.getMoked().getAllReports();
+					String[][] data = new String[reports.size()][4];
+					int end = reports.size();
+					for (int i = 0; i < end; i++) {
+						data[i][0] = reports.get(i).getDate().toString();
+						data[i][1] = Integer.toString(reports.get(i).getVehicleId());
+						data[i][2] = Integer.toString(reports.get(i).getReportId());
+						data[i][3] = Boolean.toString(reports.get(i).isAuthorized());
+					}
+					reportsTable = new JTable(data, columns);
+					reportsTable.getColumnModel().getColumn(0).setMinWidth(200);
+					makeInfo(reportsTable);
+				}
+			}
+		});
+
+		toolButtons.get("clone").addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				makeClone();
 			}
 		});
 	}
@@ -201,7 +233,7 @@ public class MainFrame extends JFrame {
 		repaint();
 	}
 
-	private void makeInfo() {
+	private void makeInfo(JTable table) {
 		JOptionPane optionPane = new JOptionPane();
 		optionPane.setMessage(new Object[] { new JScrollPane(table) });
 		optionPane.setPreferredSize(new Dimension(500, 500));
@@ -262,6 +294,24 @@ public class MainFrame extends JFrame {
 
 	public void setStartListener(ActionListener listener) {
 		toolBar.getButtons().get("start").addActionListener(listener);
+	}
+
+	public void setBuildListener(ActionListener listener) {
+		toolBar.getButtons().get("build").addActionListener(listener);
+	}
+
+	public int builderDialog() {
+		Object[] options = { "Build a city map", "Build a country map" };
+		int n = JOptionPane.showOptionDialog(this, "Choose a map type to build", "Map builder",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+		return n;
+	}
+
+	private void makeClone() {
+		String s = (String) JOptionPane.showInputDialog("Insert ID");
+		int id = Integer.parseInt(s);
+		Vehicle vic = Prototype.cloneVehicle(GameDriver.getDriving().getById(id));
+		GameDriver.getDriving().addVehicle(vic);
 	}
 
 }

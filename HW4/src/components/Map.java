@@ -6,6 +6,7 @@ package components;
 import java.util.ArrayList;
 
 import utilities.GameDriver;
+import utilities.JFactory;
 import utilities.Utilities;
 
 /**
@@ -48,14 +49,12 @@ public class Map implements Utilities {
 
 	}
 
-	public Map(int junctionsNum, boolean city) { // City / Country map
-		float lightedRoadsRatio, junctionConnectivity;
-		if (city) {
-			lightedRoadsRatio = 1;
-			junctionConnectivity = 1;
+	public Map(int junctionsNum, String builder) { // City / Country map
+		float junctionConnectivityRatio;
+		if (builder.toLowerCase().equals("city")) {
+			junctionConnectivityRatio = 1;
 		} else {
-			lightedRoadsRatio = 0.33f;
-			junctionConnectivity = 0.5f;
+			junctionConnectivityRatio = 0.5f;
 		}
 		junctions = new ArrayList<Junction>();
 		roads = new ArrayList<Road>();
@@ -64,16 +63,10 @@ public class Map implements Utilities {
 			System.out.println("\n================= CREATING JUNCTIONS=================");
 		// create lighted and non-lighted junctions
 		for (int i = 0; i < junctionsNum; i++) {
-			if (Math.random() > lightedRoadsRatio) {
-				junctions.add(new Junction());
-			} else {
-				LightedJunction junc = new LightedJunction();
-				junctions.add(junc);
-				lights.add(junc.getLights());
-			}
+			junctions.add(JFactory.getJunction(builder));
 		}
 
-		setAllRoads(junctionConnectivity);
+		setAllRoads(junctionConnectivityRatio);
 		turnLightsOn();
 		if (GameDriver.isPConsole())
 			System.out.println("\n================= GAME MAP HAS BEEN CREATED =================\n");

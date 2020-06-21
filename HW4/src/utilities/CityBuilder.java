@@ -11,7 +11,7 @@ public class CityBuilder implements Builder {
 
 	@Override
 	public Map getMap() {
-		return new Map(12, true);
+		return new Map(12, "city");
 	}
 
 	public static CityBuilder getCityBuilder() {

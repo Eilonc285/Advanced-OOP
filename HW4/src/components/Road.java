@@ -21,6 +21,7 @@ public class Road implements RouteParts {
 	VehicleType[] vehicleTypes;
 	private double length;
 	private boolean enable;
+	private static boolean alwaysEnabled = true;
 
 	/**
 	 * Constructor
@@ -51,6 +52,9 @@ public class Road implements RouteParts {
 
 		setLength();
 		enable = !(getRandomBoolean() && getRandomBoolean() && getRandomBoolean());
+		if (alwaysEnabled) {
+			enable = true;
+		}
 		successMessage(this.toString());
 	}
 

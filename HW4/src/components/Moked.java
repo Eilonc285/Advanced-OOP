@@ -112,6 +112,9 @@ public class Moked {
 		fileLock.readLock().lock();
 		try {
 			File reports = new File(path);
+			if (!reports.exists()) {
+				return true;
+			}
 			FileReader reportsReader = new FileReader(path);
 			BufferedReader bReader = new BufferedReader(reportsReader);
 			String currentLine = "";
@@ -134,5 +137,32 @@ public class Moked {
 
 		}
 		return false;
+	}
+
+	public ArrayList<Report> getAllReports() {
+		fileLock.readLock().lock();
+		ArrayList<Report> reports = new ArrayList<Report>();
+		File f = new File(path);
+		if (!f.exists())
+			return reports;
+		FileReader reportsReader;
+		try {
+			reportsReader = new FileReader(path);
+			BufferedReader bReader = new BufferedReader(reportsReader);
+			String currentLine = "";
+			while ((currentLine = bReader.readLine()) != null) {
+				Report report = Report.constructFromString(currentLine);
+				reports.add(report);
+			}
+			bReader.close();
+			reportsReader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			fileLock.readLock().unlock();
+		}
+		return reports;
 	}
 }

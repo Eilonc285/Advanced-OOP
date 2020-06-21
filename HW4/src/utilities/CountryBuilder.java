@@ -11,7 +11,7 @@ public class CountryBuilder implements Builder {
 
 	@Override
 	public Map getMap() {
-		return new Map(6, false);
+		return new Map(6, "country");
 	}
 
 	public static CountryBuilder getCountryBuilder() {

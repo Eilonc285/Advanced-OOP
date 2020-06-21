@@ -10,7 +10,7 @@ public class JFactory {
 	public JFactory() {
 	}
 
-	public Junction getJunction(String x) {
+	public static Junction getJunction(String x) {
 		String input = x.toLowerCase();
 		if (input.equals("city")) {
 			return new LightedJunction();

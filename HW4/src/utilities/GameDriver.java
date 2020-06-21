@@ -78,5 +78,30 @@ public class GameDriver {
 				new Thread(driving).start();
 			}
 		});
+		myFrame.setBuildListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				running = false; // kill previous threads
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				} finally {
+					running = true;
+				}
+				int choice = myFrame.builderDialog();
+				Builder builder;
+				if (choice == 0) {
+					builder = CityBuilder.getCityBuilder();
+				} else {
+					builder = CountryBuilder.getCountryBuilder();
+				}
+				driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles(), builder);
+				pause = false;
+				Vehicle.resetVehicleCount();
+				new Thread(driving).start();
+			}
+		});
 	}
+
 }
