@@ -107,7 +107,7 @@ public class Moked {
 		return fileLock;
 	}
 
-	private boolean verifyReports() {
+	public boolean verifyReports() {
 		boolean allReportsAuthorized = true;
 		fileLock.readLock().lock();
 		try {

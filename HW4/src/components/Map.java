@@ -41,7 +41,39 @@ public class Map implements Utilities {
 			}
 		}
 
-		setAllRoads();
+		setAllRoads(1);
+		turnLightsOn();
+		if (GameDriver.isPConsole())
+			System.out.println("\n================= GAME MAP HAS BEEN CREATED =================\n");
+
+	}
+
+	public Map(int junctionsNum, boolean city) { // City / Country map
+		float lightedRoadsRatio, junctionConnectivity;
+		if (city) {
+			lightedRoadsRatio = 1;
+			junctionConnectivity = 1;
+		} else {
+			lightedRoadsRatio = 0.33f;
+			junctionConnectivity = 0.5f;
+		}
+		junctions = new ArrayList<Junction>();
+		roads = new ArrayList<Road>();
+		lights = new ArrayList<TrafficLights>();
+		if (GameDriver.isPConsole())
+			System.out.println("\n================= CREATING JUNCTIONS=================");
+		// create lighted and non-lighted junctions
+		for (int i = 0; i < junctionsNum; i++) {
+			if (Math.random() > lightedRoadsRatio) {
+				junctions.add(new Junction());
+			} else {
+				LightedJunction junc = new LightedJunction();
+				junctions.add(junc);
+				lights.add(junc.getLights());
+			}
+		}
+
+		setAllRoads(junctionConnectivity);
 		turnLightsOn();
 		if (GameDriver.isPConsole())
 			System.out.println("\n================= GAME MAP HAS BEEN CREATED =================\n");
@@ -65,18 +97,20 @@ public class Map implements Utilities {
 	 * creates roads between all the junctions on the map
 	 * 
 	 */
-	public void setAllRoads() {
+	public void setAllRoads(float junctionConnectivity) {
 		if (GameDriver.isPConsole())
 			System.out.println("\n================= CREATING ROADS=================");
 
 		for (int i = 0; i < junctions.size(); i++) {
-			for (int j = 0; j < junctions.size(); j++) {
+			for (int j = i; j < junctions.size(); j++) {
 				if (i == j) {
-
+					continue;
+				}
+				if (Math.random() > junctionConnectivity) {
 					continue;
 				}
 				roads.add(new Road(junctions.get(i), junctions.get(j)));
-
+				roads.add(new Road(junctions.get(j), junctions.get(i)));
 			}
 		}
 	}

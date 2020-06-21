@@ -5,6 +5,8 @@ package components;
 
 import java.util.ArrayList;
 
+import utilities.Builder;
+import utilities.CityBuilder;
 import utilities.GameDriver;
 import utilities.Timer;
 import utilities.Utilities;
@@ -40,8 +42,48 @@ public class Driving implements Utilities, Timer, Runnable {
 
 		while (vehicles.size() < numOfVehicles) {
 			Road temp = map.getRoads().get(getRandomInt(0, map.getRoads().size()));// random road from the map
-			if (temp.getEnabled())
-				vehicles.add(new Vehicle(temp));
+			if (temp.getEnabled()) {
+				Vehicle vic = new Vehicle(temp);
+				float randomSpeed = (float) (vic.getIndependantSpeed() * (Math.random() + 0.5f)); // 50%-150% speed.
+				vic.setIndependantSpeed(randomSpeed);
+				vehicles.add(vic);
+			}
+		}
+
+		allTimedElements.addAll(vehicles);
+
+		for (TrafficLights light : map.getLights()) {
+			if (light.getTrafficLightsOn()) {
+				allTimedElements.add(light);
+			}
+		}
+	}
+
+	public Driving(int junctionsNum, int numOfVehicles, Builder builder) {
+
+		vehicles = new ArrayList<Vehicle>();
+		allTimedElements = new ArrayList<Timer>();
+		drivingTime = 0;
+		map = builder.getMap();
+
+		if (GameDriver.isPConsole())
+			System.out.println("\n================= CREATING VEHICLES =================");
+
+		while (vehicles.size() < numOfVehicles) {
+			Road temp = map.getRoads().get(getRandomInt(0, map.getRoads().size()));// random road from the map
+			if (temp.getEnabled()) {
+				Vehicle vic = new Vehicle(temp);
+				if (builder.allowedType(vic.getVehicleType())) {
+					float randomSpeed = 0;
+					if (builder instanceof CityBuilder) {
+						randomSpeed = (float) (vic.getIndependantSpeed() * (Math.random() + 0.333f)); // 30%-130%
+					} else {
+						randomSpeed = (float) (vic.getIndependantSpeed() * (Math.random() + 0.5f)); // 50%-150%
+					}
+					vic.setIndependantSpeed(randomSpeed);
+					vehicles.add(new Vehicle(temp));
+				}
+			}
 		}
 
 		allTimedElements.addAll(vehicles);

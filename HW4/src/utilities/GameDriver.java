@@ -21,6 +21,7 @@ public class GameDriver {
 	private static Driving driving;
 	private static MainFrame myFrame;
 	private static boolean pConsole = false;
+	private static boolean userMessages = false;
 	private static boolean pause = true;
 
 	public static boolean getPause() {
@@ -51,15 +52,26 @@ public class GameDriver {
 		return pConsole;
 	}
 
+	public static boolean isUserMessages() {
+		return userMessages;
+	}
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		myFrame = new MainFrame();
 		myFrame.setStartListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				running = false; // kill previous threads
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				} finally {
+					running = true;
+				}
 				driving = new Driving(myFrame.getNumOfJunctions(), myFrame.getNumOfVehicles());
 				pause = false;
 				Vehicle.resetVehicleCount();

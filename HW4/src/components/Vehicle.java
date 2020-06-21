@@ -4,9 +4,10 @@
 package components;
 
 import java.awt.Color;
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.concurrent.locks.ReadWriteLock;
 
 import utilities.GameDriver;
@@ -25,6 +26,7 @@ import utilities.VehicleType;
 public class Vehicle implements Utilities, Timer, Runnable {
 	private int id;
 	private VehicleType vehicleType;
+	private float independantSpeed;
 	private Route currentRoute;
 	private RouteParts currentRoutePart;
 	private long timeFromRouteStart;
@@ -44,6 +46,7 @@ public class Vehicle implements Utilities, Timer, Runnable {
 
 		id = objectsCount++;
 		vehicleType = currentLocation.getVehicleTypes()[getRandomInt(0, currentLocation.getVehicleTypes().length - 1)];
+		independantSpeed = vehicleType.getAverageSpeed();
 		if (GameDriver.isPConsole())
 			System.out.println();
 		successMessage(this.toString());
@@ -51,6 +54,11 @@ public class Vehicle implements Utilities, Timer, Runnable {
 		lastRoad = currentLocation;
 		status = null;
 
+	}
+
+	public Vehicle(Road currentLocation, VehicleType vehicleType) {
+		this(currentLocation);
+		this.vehicleType = vehicleType;
 	}
 
 	/**
@@ -174,6 +182,14 @@ public class Vehicle implements Utilities, Timer, Runnable {
 		return objectsCount;
 	}
 
+	public float getIndependantSpeed() {
+		return independantSpeed;
+	}
+
+	public void setIndependantSpeed(float independantSpeed) {
+		this.independantSpeed = independantSpeed;
+	}
+
 	@Override
 	public void incrementDrivingTime() {
 		timeFromRouteStart++;
@@ -293,18 +309,20 @@ public class Vehicle implements Utilities, Timer, Runnable {
 		Report report = new Report(-1, -1);
 		fileLock.readLock().lock();
 		try {
-			File textFile = new File(path);
-			Scanner scanner = new Scanner(textFile);
+			FileReader reportsReader = new FileReader(path);
+			BufferedReader bReader = new BufferedReader(reportsReader);
 			String currentLine;
-			while (scanner.hasNextLine()) {
-				currentLine = scanner.nextLine();
+			while ((currentLine = bReader.readLine()) != null) {
 				report = Report.constructFromString(currentLine);
 				if (report.getVehicleId() == id && report.isAuthorized() == false) {
 					break;
 				}
 			}
-			scanner.close();
+			bReader.close();
+			reportsReader.close();
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			fileLock.readLock().unlock();

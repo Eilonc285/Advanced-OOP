@@ -2,6 +2,8 @@ package components;
 
 import java.util.Random;
 
+import utilities.GameDriver;
+
 public class BigBrother {
 
 	private static volatile BigBrother mySingleton = null;
@@ -26,9 +28,9 @@ public class BigBrother {
 	public void update(Vehicle vic) {
 		if (!checkLegalSpeed(vic)) {
 			Moked.getMoked().submitReport(vic.getId());
-//			if (GameDriver.isPConsole()) {
-			System.out.println("Vehicle number " + vic.getId() + " oversped");
-//			}
+			if (GameDriver.isPConsole()) {
+				System.out.println("Vehicle number " + vic.getId() + " oversped");
+			}
 		}
 	}
 

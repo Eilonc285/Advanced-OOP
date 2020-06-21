@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,6 +23,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import components.Junction;
+import components.Moked;
 import components.Road;
 import components.Vehicle;
 import utilities.GameDriver;
@@ -44,7 +47,23 @@ public class MainFrame extends JFrame {
 		super("Road system");
 		setSize(800, 700);
 		setLayout(new BorderLayout());
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent we) {
+				if (Moked.getMoked().verifyReports()) {
+					System.exit(0);
+				}
+				String ObjButtons[] = { "Yes", "No" };
+				int PromptResult = JOptionPane.showOptionDialog(null, "Some reports are not authorized. Exit anyway?",
+						"Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ObjButtons,
+						ObjButtons[1]);
+				if (PromptResult == JOptionPane.YES_OPTION) {
+					System.exit(0);
+				}
+			}
+		});
 
 		add(menuBar, BorderLayout.NORTH);
 		add(canvas, BorderLayout.CENTER);
